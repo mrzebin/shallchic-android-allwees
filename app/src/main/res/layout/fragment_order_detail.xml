@@ -127,7 +127,7 @@
                                     android:id="@+id/iv_orderDBottom"
                                     android:layout_width="match_parent"
                                     android:layout_height="@dimen/item_pspace50"
-                                    android:src="@mipmap/ic_common_homeheadgb_bottom"
+                                    android:src="@mipmap/allwees_ic_common_homeheadgb_bottom"
                                     android:scaleType="fitXY"
                                     android:layout_marginBottom="@dimen/item_pspace25"
                                     app:layout_constraintStart_toStartOf="parent"

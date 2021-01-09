@@ -9,7 +9,7 @@ import com.hb.basemodel.utils.SPManager;
  * create by zb
  */
 public class BaseUrlConfig{
-    public static boolean DEBUG      = false;
+    public static boolean DEBUG      = true;
     public static String WEB_URL     = DEBUG ? debugUrl.WEB_URL_DEBUG: releaseUrl.WEB_RELEASE_URL;
 
     public static String getRootHost(){

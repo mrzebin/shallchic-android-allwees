@@ -8,7 +8,7 @@ ext{
             versionCode       : 13,
             //版本号文件也要修改 AppConfig.VERSION
             versionName              : "1.0.2",
-            //androidx               
+            //androidx
             lifecycleExtensions      : 'androidx.lifecycle:lifecycle-extensions:2.1.0',
             annotation               : 'androidx.annotation:annotation:1.1.0',
             fragment                 : 'androidx.fragment:fragment:1.1.0',

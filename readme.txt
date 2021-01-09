@@ -10,5 +10,3 @@ Mvp架构
 查看签名信息:keytool -list -v -keystore rf.jks 详情查看build.gradle
 
 
-账号:hubin
-密码:hubin/Hb2019111#
