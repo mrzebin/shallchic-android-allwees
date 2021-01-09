@@ -1,0 +1,3 @@
+include ':baseModel'
+include ':app'
+rootProject.name = "shallchic-android2"

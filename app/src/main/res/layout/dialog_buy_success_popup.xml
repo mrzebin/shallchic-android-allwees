@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_round_white_frame"
+        android:paddingTop="@dimen/item_pspace20"
+        android:paddingBottom="@dimen/item_pspace20"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+        <ImageView
+            android:id="@+id/iv_thumb"
+            android:layout_width="@dimen/item_pspace100"
+            android:layout_height="@dimen/item_pspace100"
+            android:src="@mipmap/allwees_ic_default_goods"
+            android:scaleType="centerCrop"
+            >
+        </ImageView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/item_pspace20"
+            android:text="@string/goods_detail_add_to_cart"
+            >
+        </TextView>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_pspace20">
+    </View>
+</LinearLayout>

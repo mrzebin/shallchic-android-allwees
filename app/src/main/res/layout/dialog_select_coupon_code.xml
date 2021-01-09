@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.qmuiteam.qmui.widget.roundwidget.QMUIRoundLinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:qmui_backgroundColor="@color/app_background_default"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_10"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/available_c"
+            android:textSize="@dimen/app_text_word13"
+            android:textStyle="bold"
+            android:layout_centerHorizontal="true"
+            >
+        </TextView>
+
+        <ImageView
+            android:id="@+id/iv_closeCDialog"
+            android:layout_width="@dimen/item_pspace12"
+            android:layout_height="@dimen/item_pspace12"
+            android:scaleType="fitXY"
+            android:src="@mipmap/icon_close"
+            android:layout_marginEnd="@dimen/item_pspace10"
+            android:layout_alignParentEnd="true"
+            >
+        </ImageView>
+    </RelativeLayout>
+    <com.hb.basemodel.utils.RecycerLoadMoreScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:nestedScrollingEnabled="false"
+        android:scrollbars="none"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:descendantFocusability="blocksDescendants"
+            >
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rlv_couponSheet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                >
+            </androidx.recyclerview.widget.RecyclerView>
+            <TextView
+                android:id="@+id/tv_emptyHint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/your_have_n"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="@dimen/item_pspace20"
+                >
+            </TextView>
+        </RelativeLayout>
+
+    </com.hb.basemodel.utils.RecycerLoadMoreScrollView>
+
+
+
+</com.qmuiteam.qmui.widget.roundwidget.QMUIRoundLinearLayout>

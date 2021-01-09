@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="toast">16sp</dimen>
+    <!--宽高-->
+    <!---->
+    <dimen name="app_main_bottom">56dp</dimen>
+    <dimen name="app_line">0.5dp</dimen>
+
+    <!--APP 正常字体大小-->
+    <dimen name="app_text_normal">14sp</dimen>
+    <dimen name="app_text_word12">12sp</dimen>
+    <dimen name="app_text_word11">11sp</dimen>
+    <dimen name="app_text_word14">14sp</dimen>
+    <dimen name="app_text_word13">13sp</dimen>
+    <dimen name="app_text_word15">15sp</dimen>
+    <dimen name="app_text_word16">16sp</dimen>
+    <dimen name="app_text_word17">17sp</dimen>
+    <dimen name="app_text_word18">18sp</dimen>
+    <dimen name="app_text_word20">20sp</dimen>
+    <dimen name="app_text_word24">24sp</dimen>
+    <dimen name="app_text_word25">25sp</dimen>
+    <dimen name="app_text_word28">28sp</dimen>
+    <dimen name="app_text_word40">40sp</dimen>
+    <!--ToolBar上的字体大小-->
+    <dimen name="app_text_toobar">17sp</dimen>
+
+    <!--APP 的左边距-->
+    <dimen name="item_pspace0.5">0.5dp</dimen>
+    <dimen name="item_pspace1">1dp</dimen>
+    <dimen name="item_pspace2">2dp</dimen>
+    <dimen name="item_pspace3">3dp</dimen>
+    <dimen name="item_paace4">4dp</dimen>
+    <dimen name="item_pspace5">5dp</dimen>
+    <dimen name="item_pspace14">14dp</dimen>
+    <dimen name="item_pspace30">30dp</dimen>
+    <dimen name="item_pspace31">31dp</dimen>
+    <dimen name="item_pspace32">32dp</dimen>
+    <dimen name="item_pspace34">34dp</dimen>
+    <dimen name="item_pspace35">35dp</dimen>
+    <dimen name="item_pspace24">24dp</dimen>
+    <dimen name="item_pspace20">20dp</dimen>
+    <dimen name="item_pspace21">21dp</dimen>
+    <dimen name="item_pspace22">22dp</dimen>
+    <dimen name="item_pspace23">23dp</dimen>
+    <dimen name="item_pspace27">27dp</dimen>
+    <dimen name="item_pspace25">25dp</dimen>
+    <dimen name="item_pspace26">26dp</dimen>
+    <dimen name="item_pspace50">50dp</dimen>
+    <dimen name="item_pspace80">80dp</dimen>
+    <dimen name="item_pspace96">96dp</dimen>
+    <dimen name="item_pspace120">120dp</dimen>
+    <dimen name="item_pspace130">130dp</dimen>
+    <dimen name="item_180">180dp</dimen>
+    <dimen name="item_pspace300">300dp</dimen>
+    <dimen name="item_pspace350">350dp</dimen>
+    <dimen name="item_pspace375">375dp</dimen>
+    <dimen name="item_pspace459">459dp</dimen>
+    <!--Toolbar右边Button的边距-->
+    <dimen name="item_pspace_10">-10dp</dimen>
+    <dimen name="item_pspace28">28dp</dimen>
+    <dimen name="item_pspace60">60dp</dimen>
+    <!--朋友圈尺寸定义 p 开头的是朋友圈的-->
+    <dimen name="item_avatar">48dp</dimen>
+    <dimen name="item_pspace4">4dp</dimen>
+    <dimen name="item_pspace6">6dp</dimen>
+    <dimen name="item_pspace8">8dp</dimen>
+    <dimen name="item_pspace9">9dp</dimen>
+    <dimen name="item_pspace10">10dp</dimen>
+    <dimen name="item_pspace11">11dp</dimen>
+    <dimen name="item_pspace12">12dp</dimen>
+    <dimen name="item_pspace13">13dp</dimen>
+    <dimen name="item_pspace15">15dp</dimen>
+    <dimen name="item_pspace16">16dp</dimen>
+    <dimen name="item_pspace18">18dp</dimen>
+    <dimen name="item_pspace19">19dp</dimen>
+    <dimen name="item_pspace33">33dp</dimen>
+    <dimen name="item_pspace44">44dp</dimen>
+    <dimen name="item_pspace45">45dp</dimen>
+    <dimen name="item_pspace40">40dp</dimen>
+    <dimen name="item_pspace58">58dp</dimen>
+    <dimen name="item_pspace85">85dp</dimen>
+    <dimen name="item_pspace88">88dp</dimen>
+    <dimen name="item_pspace100">100dp</dimen>
+    <dimen name="item_pspace115">115dp</dimen>
+    <dimen name="item_pspace118">118dp</dimen>
+    <dimen name="item_pspace125">125dp</dimen>
+    <dimen name="item_pspace148">148dp</dimen>
+    <dimen name="item_pspace_160">160dp</dimen>
+    <dimen name="item_pspace_172">172dp</dimen>
+    <dimen name="item_pspace_175">175dp</dimen>
+    <dimen name="item_topbar">40dp</dimen>
+
+    <!--图片相册选择-->
+    <dimen name="image_size">120dp</dimen>
+    <dimen name="space_size">2dp</dimen>
+    <dimen name="folder_cover_size">72dp</dimen>
+
+    <!--产品详情页标题字体-->
+    <dimen name="app_text_dtitle">17sp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+
+
+    <dimen name="app_item_height">46dp</dimen>
+    <!--===============================alertview=========================================-->
+    <!--标题文字大小-->
+    <dimen name="textSize_alert_title">22sp</dimen>
+    <dimen name="textSize_actionsheet_title">14sp</dimen>
+    <!--标题文字高度-->
+    <dimen name="height_alert_title">60dp</dimen>
+    <dimen name="height_actionsheet_title">40dp</dimen>
+    <!--消息文字大小-->
+    <dimen name="textSize_alert_msg">15sp</dimen>
+    <dimen name="textSize_actionsheet_msg">14sp</dimen>
+    <!--消息距离底部间距-->
+    <dimen name="marginBottom_alert_msg">25dp</dimen>
+    <dimen name="marginBottom_actionsheet_msg">14dp</dimen>
+    <!--窗口模式左右两边到屏幕的间距-->
+    <dimen name="margin_alert_left_right">40dp</dimen>
+    <dimen name="margin_actionsheet_left_right">10dp</dimen>
+    <!--线条粗细-->
+    <dimen name="size_divier">1dp</dimen>
+    <!--按钮的高度-->
+    <dimen name="height_alert_button">48dp</dimen>
+    <!--按钮文字大小-->
+    <dimen name="textSize_alert_button">16sp</dimen>
+    <!--圆角-->
+    <dimen name="radius_alertview">15px</dimen>
+
+    <dimen name="app_edge">12dp</dimen>
+    <dimen name="top_bar_height">44dp</dimen>
+    <!--程序按钮字体大小-->
+    <dimen name="app_btn_text_19sp">19sp</dimen>
+    <!--程序文字大小-->
+    <dimen name="app_text_12sp">12sp</dimen>
+    <dimen name="app_text_9sp">9sp</dimen>
+    <dimen name="app_text_11sp">11sp</dimen>
+    <dimen name="app_text_14sp">14sp</dimen>
+    <dimen name="app_text_15sp">15sp</dimen>
+    <dimen name="app_text_18sp">18sp</dimen>
+    <dimen name="app_text_16sp">16sp</dimen>
+    <dimen name="app_text_17sp">17sp</dimen>
+
+    <dimen name="padding_or_margin_horizontal">12dp</dimen>
+    <dimen name="padding_or_margin_vertical">16dp</dimen>
+    <dimen name="line_thin">0.5dp</dimen>
+    <dimen name="line_big">10dp</dimen>
+
+
+</resources>

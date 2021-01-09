@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:layout_margin="@dimen/item_pspace5"
+    >
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:qmui_radius="@dimen/item_pspace12"
+        app:qmui_backgroundColor="@color/white"
+        android:visibility="visible"
+        android:gravity="center"
+        >
+         <com.hb.basemodel.uicomponent.roundimageview.RoundedImageView
+            android:id="@+id/tv_superClassify"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_180"
+            android:src="@mipmap/allwees_ic_default_goods"
+            android:scaleType="centerCrop"
+            app:riv_oval="false"
+            app:riv_corner_radius_top_left="@dimen/item_pspace10"
+            app:riv_corner_radius_top_right="@dimen/item_pspace10"
+            >
+        </com.hb.basemodel.uicomponent.roundimageview.RoundedImageView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/item_pspace10"
+            >
+            <TextView
+                android:id="@+id/tv_discountPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/app_text_15sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                >
+            </TextView>
+            <TextView
+                android:id="@+id/tv_discountDes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/color_999"
+                android:textSize="@dimen/app_text_12sp"
+                android:textDirection="ltr"
+                android:layout_marginTop="@dimen/item_pspace6"
+                app:layout_constraintTop_toBottomOf="@id/tv_discountPrice"
+                app:layout_constraintStart_toStartOf="parent"
+                >
+            </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/str_boughtt"
+                android:textColor="@color/color_999"
+                android:textSize="@dimen/app_text_12sp"
+                android:paddingStart="@dimen/item_pspace3"
+                android:layout_marginTop="@dimen/item_pspace6"
+                app:layout_constraintBaseline_toBaselineOf="@id/tv_discountDes"
+                app:layout_constraintStart_toEndOf="@id/tv_discountDes"
+                >
+            </TextView>
+
+            <ImageView
+                android:id="@+id/iv_cartTip"
+                android:layout_width="@dimen/item_pspace20"
+                android:layout_height="@dimen/item_pspace20"
+                android:src="@mipmap/ic_cart_nomal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                >
+            </ImageView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.qmuiteam.qmui.widget.roundwidget.QMUIRoundLinearLayout>
+
+</LinearLayout>
+
+
+
+
+

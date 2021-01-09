@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_cartPartLike"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/color_f3f3"
+    android:visibility="visible"
+    >
+
+    <include layout="@layout/layout_cart_empty" />
+    <LinearLayout
+        android:id="@+id/ll_cartLike"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cart_might_you_like"
+            android:textSize="@dimen/app_text_14sp"
+            android:layout_marginStart="@dimen/item_pspace20"
+            >
+        </TextView>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/item_pspace20"
+            android:descendantFocusability="blocksDescendants"
+            android:paddingStart="@dimen/item_pspace5"
+            android:paddingEnd="@dimen/item_pspace5"
+            >
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rlv_cartMightLike"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </androidx.recyclerview.widget.RecyclerView>
+        </RelativeLayout>
+
+        <include layout="@layout/layout_no_more" />
+    </LinearLayout>
+</LinearLayout>
+

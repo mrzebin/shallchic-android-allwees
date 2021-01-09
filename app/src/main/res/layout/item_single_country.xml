@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="@dimen/item_pspace10"
+    android:gravity="center_vertical"
+    android:descendantFocusability="blocksDescendants"
+    >
+    <ImageView
+        android:id="@+id/iv_nationalFlag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+    </ImageView>
+
+    <TextView
+        android:id="@+id/tv_nationalName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="@dimen/item_pspace13"
+        android:layout_marginStart="@dimen/item_pspace10"
+        android:text=""
+        >
+    </TextView>
+
+    <ImageView
+        android:id="@+id/iv_sureCountry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:src="@mipmap/ic_select_unpayment"
+        >
+    </ImageView>
+
+</LinearLayout>

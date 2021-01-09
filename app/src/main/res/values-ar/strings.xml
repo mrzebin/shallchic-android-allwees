@@ -1,0 +1,601 @@
+<resources>
+    <string name="app_name">AllWees</string>
+    <string name="cashus">US$0.00</string>
+    <string name="reward">100 نقاط</string>
+    <string name="empty_data">البيانات فارغة</string>
+    <string name="welcome_title">مرحبا بكم في شالشينك</string>
+    <string name="str_hint_email">البريد الإلكتروني</string>
+    <string name="str_hint_password">كلمه المرور</string>
+    <string name="str_hint_firstn">الاسم الأول</string>
+    <string name="str_permission_miss">لا يتم منح الإذن من قبل المستخدم.</string>
+    <string name="str_hint_lastn">اسم العائلة</string>
+    <string name="str_forget_p">هل نسيت كلمة المرور؟</string>
+    <string name="rc_authorities_fileprovider">.FileProvider</string>
+    <string name="app_please_up_method">الرجاء تحديد طريقة التحميل</string>
+    <string name="app_please_choice_type">الرجاء تحديد سبب العودة</string>
+    <string name="me_unlogin_hint">تسجيل/تسجيل الدخول</string>
+    <string name="hint_province_empty">يرجى تعبئة في المحافظة</string>
+    <string name="goods_detail_share_tilte">انظروا ما وجدت على Allwees للحصول على سعر لطيف!</string>
+
+
+    <!--Popular页面-->
+    <string name="home_classify_p_gd">نوعية جيدة</string>
+    <string name="home_classify_p_dr">30أيام العودة</string>
+    <string name="home_classify_p_fs">شحن مجاني</string>
+    <string name="home_classify_p_new_user_free_gifts">هدية مجانية للمستخدم الجديد</string>
+    <string name="home_classify_p_jfy">فقط لك</string>
+    <string name="home_classify_p_fs_title">فلاش بيع</string>
+    <string name="home_classify_flash_flash">فلاش</string>
+    <string name="home_classify_sale_flash">البيع</string>
+
+
+
+    <!--flash_sale-->
+    <string name="flash_sale_title">فلاش بيع</string>
+    <string name="flash_sale_state">للبيع</string>
+    <string name="flash_sale_comming">القادمه</string>
+    <string name="flash_sale_soon">قريبا</string>
+
+    <!--deliver double-->
+    <string name="deliver_double_title">شراء واحد مقابل واحد</string>
+
+
+    <!--分类页面-->
+    <string name="category_title">الفئه</string>
+
+    <!--购物车页面-->
+    <string name="cart_title">عربه</string>
+    <string name="cart_more_to"> أكثر للاستمتاع الشحن مجانا</string>
+    <string name="cart_empty_hint">عربة التسوق فارغة</string>
+    <string name="cart_continue_shipping">مواصلة التسوق</string>
+    <string name="cart_might_you_like">ربما اعجبك</string>
+    <string name="cart_enjoy_shipping">أكثر للاستمتاع الشحن مجانا</string>
+    <string name="str_add">اضافه</string>
+    <string name="str_upper_add">اضافه</string>
+    <string name="cart_shipping">الشحن</string>
+    <string name="cart_shipto">السفينة إلى</string>
+    <string name="cart_item_in_cart">العناصر في العربة</string>
+    <string name="cart_order_summary">ملخص الطلب</string>
+    <string name="cart_hint_enter_promo_code">أدخل الرمز الترويجي</string>
+    <string name="cart_view_avaliable_c">عرض كوبونات </string>
+    <string name="cart_view_free_one_hint">مؤهل للشراء 1 الحصول على 1 مجانا اضافية</string>
+    <string name="cart_view_no_csah">عفوا، هذا الرمز غير صالح</string>
+    <string name="cart_item_total">مجموع السلعة</string>
+    <string name="cart_item_deduction_price">خصم</string>
+    <string name="cart_ot">مجموع الطلب</string>
+    <string name="cart_scbu">AllWees الرصيد النقدي الولايات المتحدة</string>
+    <string name="cart_dfrar">30 يوما عودة مجانية واسترداد</string>
+    <string name="cart_checkout">سحب</string>
+    <string name="cart_item_shipping">الشحن:</string>
+    <string name="cart_pcr">الرمز الترويجي:</string>
+    <string name="cart_hint_coupon_empty">لا يمكن أن يكون رمز القسيمة فارغًا</string>
+    <string name="str_resend">ارسال</string>
+
+
+    <!--wishlist-->
+    <string name="wishlist_title">الاماني</string>
+    <string name="wishlist_empty_hint">لحفظ العناصر المفضلة لديك، المفضلة</string>
+
+
+    <!--add more-->
+    <string name="more_goods">المزيد من السلع</string>
+
+
+    <!--
+        我的页面
+    -->
+    <string name="me_myOrder">طلبي</string>
+    <string name="me_view_all">عرض الكل</string>
+    <string name="me_sc">الشالتشيك</string>
+    <string name="me_rewards">المكافات</string>
+    <string name="me_dlb">تسجيل الدخول اليومية بونز</string>
+    <string name="me_points">نقاط</string>
+
+
+    <string-array name="reward_items">
+        <item>لوحه القياده</item>
+        <item>تخليص</item>
+        <item>المعلومات</item>
+    </string-array>
+
+    <string-array name="reward_d_items">
+        <item>متاح</item>
+        <item>استخدام</item>
+        <item>التاريخ</item>
+    </string-array>
+
+
+    <!--freeGift-->
+    <string name="free_gift_res_use">استخدام</string>
+    <string name="free_gift_res_use_in">المستخدمة في</string>
+    <string name="free_gift_res_expire">انتهت</string>
+    <string name="free_gift_hint_choose">الرجاء اختيار هدية</string>
+
+    <!--reward-->
+    <string name="reward_res_point">نقاط</string>
+
+    <!--
+        Settings
+    -->
+    <string name="setting_title">اعدادات</string>
+    <string name="str_zero">0</string>
+
+
+
+    <!--goodsDetail-->
+    <string name="goods_detail_title">التفاصيل</string>
+    <string name="goods_detail_ea">الوصول المقدر:</string>
+    <string name="goods_detail_drar">30 يوما العودة واسترداد</string>
+    <string name="goods_detail_cas">الألوان والأحجام</string>
+    <string name="goods_detail_des">وصف</string>
+    <string name="goods_detaildo">خيارات التسليم</string>
+    <string name="goods_seyml">شيء آخر قد يعجبك</string>
+    <string name="goods_buy">شراء</string>
+    <string name="goods_atc">أضف إلى السلة</string>
+    <string name="goods_standard_ship">شحن قياسي</string>
+    <string name="goods_detail_es">الشحن المقدر:</string>
+    <string name="goods_detail_selected"> المحدد </string>
+    <string name="goods_detail_size">حجم</string>
+    <string name="goods_detail_color">لون</string>
+    <string name="goods_detail_qty">كميه</string>
+    <string name="goods_detail_add_to_cart">تمت إضافة الصنف إلى السلة</string>
+    <string name="goods_detail_shop_sc">تسوق الشالتشيك الثقة</string>
+    <string name="goods_detail_we_p">نحن نقدم ضمانات لجميع مشتريات AllWees</string>
+    <string name="goods_detail_dr">إرجاع لمدة 30 يومًا</string>
+    <string name="goods_detail_day">أيام</string>
+    <string name="goods_detail_all_item_c">يمكن إرجاع جميع العناصر لاسترداد في غضون 30 يوما من التسليم</string>
+    <string name="goods_detail_quick_sp">سريعة، عملية بسيطة</string>
+    <string name="goods_detail_well_guide">كذلك دليل لكم من خلال بضع خطوات سهلة للعودة البند الخاص بك.</string>
+    <string name="goods_detail_allwees_cs">دعم الCuses AllWees</string>
+    <string name="goods_detail_our_cus">لدينا فريق خدمة العملاء هو دائما هنا، إذا كنت بحاجة إلى مساعدة.</string>
+    <string name="goods_detail_see_tf">راجع سياسة الإرجاع الكاملة للحصول على التفاصيل الكاملة</string>
+    <string name="goods_detail_sorry_hint">أنا آسف أننا لا يمكن العثور على السلع</string>
+    <string name="goods_detail_skip">سياسة الإرجاع</string>
+
+
+    <!--free gift-->
+    <string name="free_gift_title">هدايا مجانية للمستخدم الجديد</string>
+    <string name="free_gift_save_w">حفظ مع قسيمة المستخدم الجديد</string>
+    <string name="str_off">قباله</string>
+    <string name="str_get">بوابه!</string>
+    <string name="str_received">تلقي</string>
+    <string name="str_valid_in">صالح في</string>
+    <string name="str_used">استخدام</string>
+    <string name="free_gift_for_new">هدايا مجانية للمستخدم الجديد</string>
+    <string name="free_recommend">التوصيه</string>
+    <string name="free_gift_please_choose">الرجاء اختيار هدية</string>
+
+    <string name="forget_p_title">نسيان كلمة المرور</string>
+    <string name="forget_p_hint_email_nil">البريد الإلكتروني فارغ</string>
+    <string name="forget_p_send_email_success">إرسال البريد الإلكتروني نجاح</string>
+
+
+    <string name="account_setting">إعدادات الحساب</string>
+    <string name="account_update_portrait">تحديث ملف التعريف</string>
+    <string name="account_change_ps">تغيير كلمة المرور</string>
+    <string name="account_change_email">تغيير البريد الإلكتروني</string>
+
+
+    <!--province or city-->
+    <string name="pc_title">ولاية/مقاطعة</string>
+    <string name="pc_city_title">المدينه</string>
+
+
+
+    <string-array name="free_bottom_segment">
+        <item>ادناه $5</item>
+        <item>المؤثرات</item>
+    </string-array>
+
+
+
+
+    <!--schall cash-->
+    <string name="sc_cash_available_b">الرصيد المتوفر</string>
+    <string name="sc_cash_title">شالتشيك كاش</string>
+    <string-array name="sc_cash_segment">
+        <item>معلومات</item>
+        <item>هيغوري</item>
+    </string-array>
+
+
+    <!--payment-->
+    <string name="pm_title">الدفع</string>
+    <string name="pm_cofirm_pay">تأكيد الدفع</string>
+    <string name="pm_prefix_tag_total">مجموع:</string>
+    <string name="pay_unit">AED</string>
+    <string name="pm_prefix_tag_product_total">إجمالي المنتج</string>
+    <string name="pm_prefix_tag_shipping">الشحن</string>
+    <string name="pm_prefix_tag_Discount">الخصم</string>
+    <string name="pm_credit_card_title">بطاقة الائتمان أو الخصم</string>
+    <string name="pm_credit_paypal_title">Paypal</string>
+    <string name="pm_credit_send_title">النقدية عند التسليم</string>
+    <string name="pm_use_paypal_des">إذا لم يكن لديك حساب PayPal، يمكنك أيضا الدفع عن طريق PayPal مع بطاقة الائتمان أو بطاقة الخصم البنك.
+(بما في ذلك البطاقات المحلية)</string>
+    <string name="request_type">نوع الطلب</string>
+    <string name="receiving_type">نوع الاستلام</string>
+    <string name="pm_cod_prefix"> التسوق</string>
+    <string name="pm_cod_suffix"> أكثر لاستخدام COD</string>
+
+    <!--payState-->
+    <string name="ps_hint_1">طلبك في طريقه وتم إرسال البريد الإلكتروني للتشكل إلى:</string>
+
+
+    <!--search goods-->
+    <string name="search_goods_hint_search">البحث</string>
+    <string name="search_recent_kinds">عمليات البحث الأخيرة</string>
+    <string name="search_trending_group">عمليات البحث الرائجة</string>
+
+
+    <!--add card to inforamtion-->
+    <string name="pm_add_card_title">إضافة معلومات البطاقة</string>
+    <string name="pm_add_card_cn">رقم البطاقة</string>
+    <string name="pm_add_card_ed">تاريخ انتهاء الصلاحية</string>
+    <string name="pm_add_card_sc">رمز الأمان</string>
+    <string name="pm_add_card_sfnp">توفير للدفعة التالية</string>
+    <string name="pm_add_card_pt">إجمالي المنتج</string>
+    <string name="pm_add_card_shipping">الشحن</string>
+    <string name="pm_add_card_discount">الخصم</string>
+    <string name="pm_add_card_total">مجموع:</string>
+    <string name="pm_add_card_pn">ادفع الآن</string>
+
+
+
+
+
+    <!--
+      MyOrders
+  -->
+    <string name="order_title">أوامري</string>
+    <string name="order_total">مجموع</string>
+
+    <string-array name="order_tab_segment">
+        <item>جميع</item>
+        <item>مدفوع</item>
+        <item>شحنها</item>
+        <item>تسليم</item>
+        <item>استعراض</item>
+        <item>استرداد</item>
+    </string-array>
+
+
+
+    <!--order Detail-->
+    <string name="order_detail_title">تفاصيل الطلب</string>
+    <string name="order_detail_it">مجموع السلعة</string>
+    <string name="order_detail_oi">معلومات الطلب</string>
+    <string name="order_detail_pcl">الرمز الترويجي:</string>
+    <string name="order_detail_pc_price">سعر القسيمة</string>
+    <string name="order_detail_cash">النقديه</string>
+    <string name="order_detail_on">لا طلب</string>
+    <string name="order_detail_od">تاريخ الطلب</string>
+    <string name="order_detail_pm">طريقة الدفع</string>
+    <string name="order_detail_pd">تاريخ الدفع</string>
+    <string name="order_dialog_track_no">لا تتبع:</string>
+    <string name="str_cancel">إلغاء الأمر</string>
+    <string name="select_q">حدد الكمية</string>
+    <string name="str_sure">متاكد</string>
+    <string name="available_c">كوبونات متاحة</string>
+    <string name="your_have_n">ليس لديك كوبونات بعد</string>
+
+
+    <!--forget passowrd-->
+    <string name="fp_hint_emila">أدخل عنوان البريد الإلكتروني الخاص بك وأيضا إرسال إعادة تعيين الارتباط\n لكلمة المرور الخاصة بك.</string>
+    <string name="fp_enter_email">أدخل عنوان البريد الإلكتروني</string>
+    <string name="fp_send_rl">إرسال رابط إعادة التعيين</string>
+
+
+    <string name="buy">شراء</string>
+
+
+    <!--refund Detail-->
+    <string name="methedcamera">الكاميرا</string>
+    <string name="methedblbum">الالبوم</string>
+    <string name="refund_success">نجاح استرداد الأموال</string>
+    <string name="refund_upload_to_fail">فشل في تحميل</string>
+    <string-array name="refund_method">
+        <item>الكاميرا</item>
+        <item>الالبوم</item>
+    </string-array>
+
+
+    <!--cancel order-->
+    <string name="cancel_success">تم إلغاء الأمر بنجاح</string>
+    <string name="cancel_fail">فشل إلغاء الأمر</string>
+
+
+    <!--dialog-->
+    <string name="hint_success">النجاح</string>
+    <string name="hint_fail">تفشل</string>
+    <string name="prompt_money_add_card" />
+
+
+
+
+    <string-array name="refund_reason">
+        <item>لم يتم استلام العناصر</item>
+        <item>لم يتم شحنها بنود اتفاق</item>
+        <item>لا يمكن تعقب الشحن</item>
+        <item>حزمة فارغة، العناصر المفقودة في حزمة</item>
+        <item>الاخري</item>
+    </string-array>
+
+
+    <!--取消订单 对应的code编码:6,7,8,9,10,0-->
+    <string-array name="cancel_reason">
+        <item>جعل النظام عن طريق الخطأ</item>
+        <item>تحرير العنوان/رقم الهاتف</item>
+        <item>إضافة/إزالة عناصر</item>
+        <item>إعداد الوقت طويل جدا</item>
+        <item>شراء من أماكن أخرى</item>
+        <item>أسباب أخرى</item>
+    </string-array>
+
+    <!--
+     Login
+     -->
+    <string name="login_free_valueoff">50% من هدية مجانية القسيمة</string>
+    <string name="login_in">تسجيل الدخول</string>
+    <string name="login_tos">شروط الخدمة</string>
+    <string name="login_and"> و </string>
+    <string name="login_pp">سياسة الخصوصية</string>
+    <string name="login_su">الاشتراك</string>
+    <string name="login_fail">فشل تسجيل الدخول</string>
+    <string name="login_success">نجاح تسجيل الدخول</string>
+    <string name="str_input_warn">يرجى تحسين المعلومات</string>
+    <string name="str_please_provide_information">يرجى تقديم معلومات في جميع الحقول المطلوبة</string>
+
+    <string-array name="login_tab_segment">
+        <item>تسجيل الدخول</item>
+        <item>الاشتراك</item>
+    </string-array>
+
+
+
+
+
+
+
+
+    <!--empty-->
+    <string name="empty_no_order">ليس لديكِ أوامر بعد!</string>
+    <string name="refresh">تحديث</string>
+
+
+    <!--基本-->
+    <string name="str_more">اكثر</string>
+    <string name="str_nomore">كفاية</string>
+    <string name="str_free">الحره</string>
+    <string name="str_upper_free">الحره</string>
+    <string name="str_boughtt">اشترى هذا </string>
+    <string name="str_view_more">عرض المزيد</string>
+    <string name="str_apply">تطبيق</string>
+    <string name="str_delete">حذف</string>
+    <string name="str_no">لا</string>
+    <string name="str_yes">نعم</string>
+    <string name="str_item">البند</string>
+    <string name="str_total">مجموع:</string>
+    <string name="str_qty">الكميه:</string>
+    <string name="str_nd">لا توجد بيانات</string>
+    <string name="str_cs">نجاح النسخ</string>
+    <string name="dialog_title_exit">هل أنت متأكد؟</string>
+    <string name="dialog_message_exit">هل تريد تسجيل الخروج؟</string>
+    <string name="str_nin">ملاحظة هو لا شيء</string>
+    <string name="str_success">النجاح</string>
+    <string name="hint_please_keep_one">يرجى الاحتفاظ بعنوان واحد على الأقل.</string>
+    <string name="hint_delete_address_item">هل تريد بالتأكيد حذف هذا العنوان؟</string>
+    <string name="str_ok">موافق</string>
+
+
+    <!--address book-->
+    <string name="address_b_title">دفتر العناوين</string>
+    <string name="address_b_uta">المستخدم هذا العنوان</string>
+    <string name="address_b_ana">+ إضافة عنوان جديد</string>
+    <string name="address_b_edit">تحرير</string>
+    <string name="address_b_delete">حذف</string>
+    <string name="address_b_us">الولايات المتحدة الأمريكية</string>
+    <string name="address_b_op">الاختياري</string>
+
+
+
+    <!--address shipping-->
+    <string name="address_s_first_name">*الاسم الأول:</string>
+    <string name="address_s_last_name">*الاسم الأخير:</string>
+    <string name="address_s_street_l">* الشارع:</string>
+    <string name="address_s_address_l">سطر العنوان1:</string>
+    <string name="address_s_address_2">سطر العنوان2:</string>
+    <string name="address_s_address_d">*تفاصيل العنوان</string>
+    <string name="address_s_address_ln">معلم قريب</string>
+    <string name="address_s_country">البلد:</string>
+    <string name="address_s_state_p">* ولاية / مقاطعة:</string>
+
+    <string name="address_s_united_s">الولايات المتحدة الأمريكية</string>
+    <string name="address_s_city">* المدينة:</string>
+    <string name="address_s_zip_code">الرمز البريدي:</string>
+    <string name="address_s_note">ملاحظه:</string>
+    <string name="address_s_phone_n">رقم الهاتف:</string>
+    <string name="address_s_save">حفظ</string>
+    <string name="address_s_title">عنوان الشحن</string>
+    <string name="address_s_country_or_region">البلد/المنطقة:</string>
+
+
+
+    <string name="refund">استرداد</string>
+    <string name="receive_type">نوع الاستلام</string>
+    <string name="item_not_receive">لم يتم استلام العناصر</string>
+    <string name="return_note">ملاحظة الإرجاع</string>
+    <string name="add_some_pic">إضافة بعض الصور</string>
+    <string name="str_submit">إرسال</string>
+    <string name="earned_s">المكتسب منذ</string>
+
+
+    <string name="reward_hint_1">كسب نقاط في كل مرة كنت إكمال الأنشطة كريوس من خلال التطبيق.</string>
+    <string name="reward_hint_2">استبدال النقاط الخاصة بك للحصول على كوبونات والحصول على خصومات على الشراء.</string>
+    <string name="reward_hint_3">كيف يمكنني كسب النقاط؟</string>
+    <string name="upper_point">نقاط</string>
+    <string name="upper_action">العمل</string>
+    <string name="reward_hint_4">إجراء عملية شراء</string>
+    <string name="reward_hint_5">مراجعة عملية شراء</string>
+    <string name="reward_hint_6">تحميل صورة مع مراجعتك</string>
+    <string name="reward_hint_7">كيف يمكنني استخدام نقاطي؟</string>
+    <string name="reward_hint_8">استبدال النقاط الخاصة بك للحصول على كوبونات والحصول على خصومات إضافية.
+انقر على علامة التبويب استرداد للبدء.</string>
+    <string name="reward_hint_9">كيف يمكنني استخدام القسائم الخاصة بي؟</string>
+    <string name="reward_hint_10">تطبيق القسيمة الخاصة بك عن طريق نسخ رمز المرتبطة به وتطبيقه عند الخروج.
+الكوبونات قابلة للتكديس و القسيمة الأعلى قيمة يتم تطبيقها أولاً.</string>
+    <string name="reward_hint_11">هل تنتهي صلاحية نقاطي؟</string>
+    <string name="reward_hint_12">لا، نقاطك متاحة دائماً لك لاستردادها.</string>
+    <string name="reward_hint_13">استخدم نقاطك!</string>
+    <string name="reward_hint_14">استخدام النقاط الخاصة بك لاسترداد القسائم واستخدامها \n مع الشراء المقبل (الحد الأقصى للخصم من \\SAR 10.00)</string>
+    <string name="reward_hint_15">الرصيد المتوفر:</string>
+    <string name="reward_hint_16">لا، نقاطك متاحة دائماً لك لاستردادها.</string>
+
+    <string name="country_region">البلد/المنطقة</string>
+    <string name="done">القيام به</string>
+    <string name="rate_5">5%</string>
+    <string name="off_your_p">خارج النظام الحالي الخاص بك</string>
+    <string name="daily_login_b">مكافأة تسجيل الدخول اليومية - الولايات المتحدة</string>
+    <string name="expires_one">تنتهي 1 ديسمبر</string>
+    <string name="daily_login_b_m">مكافأة تسجيل الدخول اليومية - 50 دولار أمريكي كحد أقصى</string>
+    <string name="upper_off">قباله</string>
+    <string name="entire_p">شراء كامل</string>
+
+    <string name="logistic">السوقيات</string>
+    <string name="upper_refund">استرداد</string>
+    <string name="lower_receive">تتلقي</string>
+    <string name="upper_review">استعراض</string>
+    <string name="upper_cancel">إلغاء الأمر</string>
+    <string name="continue_shopping">مواصلة التسوق</string>
+    <string name="you_dont_coupon">ليس لديك كوبونات!</string>
+    <string name="nodata">لا توجد بيانات!</string>
+
+    <string name="upper_refresh">تحديث</string>
+    <string name="empty_no_search_data">عفوا!
+لا شيء مطابق للبحث</string>
+
+    <string name="you_have_no">ليس لديك أي إشعار الآن</string>
+    <string name="no_net_hint">أووب!
+تحقق مما إذا كان هاتفك متصل بالإنترنت</string>
+    <string name="payment_successful">نجاح الدفع</string>
+    <string name="view_the_order">عرض الأمر</string>
+    <string name="bakc_to_home">العودة إلى المنزل</string>
+    <string name="str_symbol">SAR</string>
+
+
+    <string name="sc_info_1">يمكنك استخدام الرصيد غير المنازن لشراء أي شيء على AllWees.</string>
+    <string name="sc_info_2">هل يمكن استرداد الأموال المضافة إلى AllWees Cash أو إخراجها؟</string>
+    <string name="sc_info_3">لا، مرة واحدة يتم إضافة المال إلى AllWees النقدية، فإنه لا يمكن ردها أو أخذ بها.</string>
+    <string name="sc_info_4">ماذا يمكنني شراء مع AllWees النقدية</string>
+    <string name="sc_info_5">شالتشيك النقدية ينطبق على أي بند على AllWees.</string>
+    <string name="sc_info_6">هل تنتهي صلاحية الأموال؟</string>
+    <string name="sc_info_7">AllWees النقدية تنتهي أبدا (ما لم يذكر خلاف ذلك).</string>
+    <string name="sc_info_8">أين تطبق AllWees Cash؟</string>
+    <string name="sc_info_9">يتم تطبيق الأموال تلقائيًا عند الخروج.</string>
+    <string name="sc_info_10">ماذا لو لم يكن لدي ما يكفي AllWees النقدية عند تسجيل الخروج؟</string>
+    <string name="sc_info_11">سوف نستخدم المتبقية في حسابك على AllWees Cash ونتخلف عن الدفع لباقي طريقة الدفع المفضلة لديك.</string>
+    <string name="sc_info_12">هل العناصر التي تم شراؤها مع AllWees Cash قابلة للاسترداد؟</string>
+    <string name="sc_info_13">نعم، سيتم استرداد الأموال مرة أخرى إلى رصيدك المتاح من الشالتشيك كاش.</string>
+
+
+    <string name="language_english">English</string>
+    <string name="upper_Add">اضافه</string>
+
+    <string name="please_enter_digit_vc">أدخل رمز التحقق من 4 أرقام</string>
+    <string name="prefix_vc_can">يمكنك محاولة</string>
+    <string name="suffix_vc_can">احصل على رمز التحقق الصوتي.</string>
+    <string name="str_confirm">تاكيد</string>
+    <string name="hint_pm_vc_sms">للسلامة طلبك.
+يرجى إدخال الرمز الذي تلقيته مع رسالة SMS لدينا</string>
+    <string name="hint_email_valid">البريد الإلكتروني غير صالح</string>
+    <string name="hint_ps_length">يجب أن تحتوي كلمة المرور على 8 إلى 16 حرفًا مع كل من الحروف الهجائية والأرقام!</string>
+
+
+    <!--language-->
+    <string name="language_setting">اللغة</string>
+    <string-array name="language_items">
+        <item>English</item>
+        <item>العربية</item>
+    </string-array>
+
+
+    <!--updateDialog-->
+    <string name="dialog_update_tip">تلميح التحديث</string>
+    <string name="dialog_ok_tip">موافق</string>
+    <string name="dialog_cancel_tip">إلغاء الأمر</string>
+
+
+    <string name="legal_title">القانونية والشروط</string>
+    <string name="notify_title">الاخطارات</string>
+
+
+
+
+    <string-array name="language_code">
+        <item>en</item>
+        <item>ar</item>
+    </string-array>
+
+<!--    <string-array name="setItem">-->
+<!--        <item>إعدادات الحساب</item>-->
+<!--        <item>إدارة العنوان</item>-->
+<!--        <item>القانونية والشروط</item>-->
+<!--        <item>اتصل بنا</item>-->
+<!--        <item>من نحن</item>-->
+<!--        <item>الخروج</item>-->
+<!--    </string-array>-->
+
+        <string name="setting_language">اللغة</string>
+        <string name="setting_account_set">إعدادات الحساب</string>
+        <string name="setting_manage_address">إدارة العنوان</string>
+        <string name="setting_legal_and_terms">القانونية والشروط</string>
+        <string name="setting_contact_us">اتصل بنا</string>
+        <string name="setting_about_us">من نحن</string>
+        <string name="setting_logout">الخروج</string>
+
+        <string-array name="setItem">
+            <item>إدارة العنوان</item>
+            <item>القانونية والشروط</item>
+            <item>اتصل بنا</item>
+            <item>من نحن</item>
+            <item>الخروج</item>
+        </string-array>
+
+
+    <string-array name="me_orderFuns">
+        <item>مدفوع</item>
+        <item>شحنها</item>
+        <item>استعراض</item>
+        <item>المبالغ المسترده</item>
+    </string-array>
+
+    <string-array name="me_earn">
+<!--        <item>Earn $100</item>-->
+        <item>AllWees النقدية</item>
+        <item>المكافات</item>
+<!--        <item>Daily Login Bonus</item>-->
+    </string-array>
+
+    <string-array name="me_helpers">
+        <item>الاخطارات</item>
+        <item>مركز المساعدة</item>
+        <item>اعدادات</item>
+    </string-array>
+
+    <string-array name="lt">
+        <item>شروط الاستخدام</item>
+        <item>سياسة الخصوصية</item>
+        <item>سياسة الشحن</item>
+        <item>سياسة الإرجاع</item>
+        <item>سياسة الدفع</item>
+    </string-array>
+
+    <string name="exit_hint">اضغط على إجراء الخروج مرة أخرى</string>
+
+    <string name="pull_loading_hint">سحب لأسفل لتحديث</string>
+    <string name="release_to_refresh">الإصدار للتحديث</string>
+    <string name="loadding">يتم الآن التحميل...</string>
+    <string name="load_finish">إنهاء التحميل</string>
+    <string name="load_fail">فشل التحميل</string>
+    <string name="toast_search_empty"> لا يمكن أن يكون البحث فارغًا</string>
+
+</resources>

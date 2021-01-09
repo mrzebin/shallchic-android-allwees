@@ -1,0 +1,64 @@
+{
+  "categories" : [
+    {
+      "no" : "P01",
+      "name" : "شعبيه",
+      "type" : 2
+    },
+    {
+      "no" : "05",
+      "name" : "أزياء نسائية",
+      "img" : "https://prod-files-o.allwees.com/category/2019/40dd7d6dd0b04890856acf75890a60f3.png",
+      "type" : 1
+    }, {
+      "no" : "03",
+      "name" : "الجمال و المكياج",
+      "img" : "https://prod-files-o.allwees.com/category/2019/0d366102aa124eba91271d45e4969012.png",
+      "type" : 1
+    }, {
+      "no" : "10",
+      "name" : "أحذية نسائية",
+      "img" : "https://prod-files-o.allwees.com/category/2019/43784edbd3154801841ad3badbc3aa19.png",
+      "type" : 1
+    }, {
+      "no" : "01",
+      "name" : "محافظ نسائية",
+      "img" : "https://prod-files-o.allwees.com/category/2019/0943f85c0c67484090f19e7b1a9c5b3f.png",
+      "type" : 1
+    }, {
+      "no" : "07",
+      "name" : "اكسسوارات",
+      "img" : "https://prod-files-o.allwees.com/category/2019/89b118146a72497a98be672726ea72d6.png",
+      "type" : 1
+    }, {
+      "no" : "14",
+      "name" : "أزياء رجالية",
+      "img" : "https://prod-files-o.allwees.com/category/2019/afac552af9f94612b7d18604e788c675.png",
+      "type" : 1
+    }, {
+      "no" : "04",
+      "name" : "الساعات",
+      "img" : "https://prod-files-o.allwees.com/category/2019/1e3eee1c7803477c80d737ec52f4143a.png",
+      "type" : 1
+    }, {
+      "no" : "06",
+      "name" : "هوايات و رياضة",
+      "img" : "https://prod-files-o.allwees.com/category/2020/5360afbe94bd44988f5e743945828aa4.png",
+      "type" : 1
+    }, {
+      "no" : "15",
+      "name" : "الأطفال والأطفال",
+      "img" : "https://prod-files-o.allwees.com/m/2020/-1/3f421eb492dd4e6baefe22eeb62b026b.png",
+      "type" : 1
+    }, {
+      "no" : "20",
+      "name" : "منتجات عقد المنزل",
+      "img" : "https://prod-files-o.allwees.com/m/2020/-1/ddf11505ce7d46ed9d30bb0be6825b14.png",
+      "type" : 1
+    }, {
+      "no" : "21",
+      "name" : "أحذية رياضية",
+      "img" : "https://prod-files-o.allwees.com/m/2020/-1/03c1e6f4b33744a49e509224dc80e51f.png",
+      "type" : 1
+    } ]
+}

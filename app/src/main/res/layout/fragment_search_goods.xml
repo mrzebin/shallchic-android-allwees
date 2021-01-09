@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background_default"
+    android:orientation="vertical"
+    >
+    <LinearLayout
+        android:id="@+id/ll_inflate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/item_pspace15"
+        android:paddingEnd="@dimen/item_pspace15"
+        >
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@mipmap/ic_black_back"
+            android:layout_marginEnd="@dimen/item_pspace10"
+            android:visibility="gone"
+            >
+         </ImageView>
+
+        <com.hb.basemodel.view.DelEditView
+            android:id="@+id/ll_delete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:del_MarginLeft="5"
+            app:del_MarginRight="5"
+            app:del_deleteAble = "true"
+            app:del_deleteSrc ="@drawable/ic_clear"
+            app:del_etHint = "@string/search_goods_hint_search"
+            app:del_etTextColor = "@color/color_333"
+            app:del_etTextSize="@dimen/app_text_word13"
+            app:del_etHeight="@dimen/item_pspace35"
+            app:delIsSingleLine="true"
+            app:del_LeftIconSrc="@drawable/icon_search"
+            app:del_maxEms="20"
+            app:del_background = "@drawable/bg_search_goods_input_style"
+            app:del_searchIme="3"
+            >
+        </com.hb.basemodel.view.DelEditView>
+        <TextView
+            android:id="@+id/tv_cancelSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/upper_cancel"
+            android:textColor="@color/color_999"
+            android:textSize="@dimen/app_text_word13"
+            android:paddingTop="@dimen/item_pspace5"
+            android:paddingBottom="@dimen/item_pspace5"
+            android:paddingStart="@dimen/item_pspace10"
+            >
+        </TextView>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_pspace0.5"
+        android:background="@color/app_line_color"
+        android:layout_marginTop="@dimen/item_pspace5"
+        >
+    </View>
+
+    <LinearLayout
+        android:id="@+id/ll_searchHistory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible"
+        >
+        <LinearLayout
+            android:id="@+id/ll_recentBranch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_recent_kinds"
+                android:layout_marginStart="@dimen/item_pspace15"
+                android:layout_marginTop="@dimen/item_pspace15"
+                >
+            </TextView>
+
+            <com.project.app.ui.widget.RecentSearchsGroup
+                android:id="@+id/group_recent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/item_pspace10"
+                android:layout_marginEnd="@dimen/item_pspace10"
+                android:layout_marginTop="@dimen/item_pspace5"
+                >
+            </com.project.app.ui.widget.RecentSearchsGroup>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_trendingBranch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/item_pspace10"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_trending_group"
+                android:layout_marginStart="@dimen/item_pspace15"
+                >
+            </TextView>
+            <com.project.app.ui.widget.SearchTrendingGroup
+                android:id="@+id/group_trending"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/item_pspace10"
+                android:layout_marginEnd="@dimen/item_pspace10"
+                android:layout_marginTop="@dimen/item_pspace5"
+                >
+            </com.project.app.ui.widget.SearchTrendingGroup>
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.scwang.smart.refresh.layout.SmartRefreshLayout
+        android:id="@+id/srf_search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="@dimen/item_pspace5"
+        android:paddingEnd="@dimen/item_pspace5"
+        android:visibility="gone"
+        >
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rlv_searchGoods"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+        </androidx.recyclerview.widget.RecyclerView>
+    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
+
+    <include
+        layout="@layout/layout_search_empty">
+    </include>
+
+
+</LinearLayout>

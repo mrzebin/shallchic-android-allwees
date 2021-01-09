@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.hb.basemodel.uicomponent.roundview.RoundLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:rv_cornerRadius_TL="10dp"
+    app:rv_cornerRadius_TR="10dp"
+    >
+
+    <com.hb.basemodel.uicomponent.roundview.RoundRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:padding="15dp"
+        app:rv_backgroundColor="@color/white"
+        app:rv_cornerRadius_TL="10dp"
+        app:rv_cornerRadius_TR="10dp">
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:text="@string/str_cancel"
+            android:textColor="@color/color_999"
+            android:textSize="@dimen/app_text_word14" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/select_q"
+            android:textColor="@color/app_color_333333"
+            android:textSize="@dimen/app_text_word15" />
+
+        <TextView
+            android:id="@+id/tv_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:text="@string/str_sure"
+            android:textColor="@color/allwees_theme_color"
+            android:textSize="@dimen/app_text_word14" />
+
+    </com.hb.basemodel.uicomponent.roundview.RoundRelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_ccc" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/app_background_default"
+        android:orientation="horizontal">
+
+        <com.hb.basemodel.wheelview.WheelView
+            android:id="@+id/wv_selectCount"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </LinearLayout>
+
+</com.hb.basemodel.uicomponent.roundview.RoundLinearLayout>

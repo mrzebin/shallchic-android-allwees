@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/app_background_default"
+    >
+    <FrameLayout
+        android:id="@+id/fl_inflate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        >
+    </FrameLayout>
+    <com.qmuiteam.qmui.widget.QMUITopBarLayout
+        android:id="@+id/qmTopBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_pspace40"
+        android:background="@color/app_background_default"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fl_inflate"
+        >
+    </com.qmuiteam.qmui.widget.QMUITopBarLayout>
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/srf_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/qmTopBar"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="visible"
+        >
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_cGoods"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/qmTopBar"
+            app:layout_constraintStart_toStartOf="parent"
+            >
+        </androidx.recyclerview.widget.RecyclerView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</LinearLayout>

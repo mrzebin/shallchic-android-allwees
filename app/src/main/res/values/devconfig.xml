@@ -1,0 +1,12 @@
+<resources>
+    <!--facebook-->
+    <string name="facebook_app_id">633932567270534</string>
+    <string name="facebook_login_protocol_scheme">fb633932567270534</string>
+
+    <!--afkey-->
+    <string name="af_dev_key">SpBNtkMvgCDE69Dor7QD6m</string>
+
+    <!--local application id-->
+    <string name="application_id">com.allwees.app</string>
+
+</resources>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:qmui_backgroundColor="@color/white"
+        app:qmui_radius="@dimen/item_pspace8"
+        >
+        <TextView
+            android:id="@+id/tv_shopAddMore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="@dimen/item_pspace15"
+            android:paddingBottom="@dimen/item_pspace15"
+            android:singleLine="true"
+            android:ellipsize="end"
+            >
+        </TextView>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_pspace1"
+            android:background="@color/app_line_color"
+            >
+        </View>
+        <TextView
+            android:id="@+id/tv_shopOk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_ok"
+            android:textColor="@color/color_2fb"
+            android:textSize="@dimen/item_pspace18"
+            android:layout_gravity="center"
+            android:paddingTop="@dimen/item_pspace15"
+            android:paddingBottom="@dimen/item_pspace15"
+            android:paddingStart="@dimen/item_pspace20"
+            android:paddingRight="@dimen/item_pspace20"
+            >
+        </TextView>
+    </com.qmuiteam.qmui.widget.roundwidget.QMUIRoundLinearLayout>
+
+</LinearLayout>

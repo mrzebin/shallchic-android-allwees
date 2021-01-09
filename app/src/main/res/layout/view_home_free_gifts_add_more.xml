@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+    <com.hb.basemodel.uicomponent.roundview.RoundLinearLayout
+        android:id="@+id/rll_home_goMoreGift"
+        android:layout_width="@dimen/item_pspace115"
+        android:layout_height="@dimen/item_pspace125"
+        android:layout_marginStart="@dimen/dp_10"
+        android:gravity="center"
+        app:rv_cornerRadius="@dimen/item_pspace8"
+        app:rv_backgroundColor="@color/color_f3f3"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawablePadding="@dimen/item_pspace5"
+            android:gravity="center"
+            android:text="@string/str_boughtt"
+            android:textSize="@dimen/app_text_word13" />
+
+    </com.hb.basemodel.uicomponent.roundview.RoundLinearLayout>
+
+</LinearLayout>

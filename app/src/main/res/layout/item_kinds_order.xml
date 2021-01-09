@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/item_pspace8"
+        android:layout_marginStart="@dimen/item_pspace10"
+        android:layout_marginEnd="@dimen/item_pspace10"
+        android:layout_marginTop="@dimen/item_pspace10"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:qmui_backgroundColor="@color/white"
+        app:qmui_radius="@dimen/item_pspace8"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusableInTouchMode="true"
+            android:focusable="true"
+            >
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rlv_spriteItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </androidx.recyclerview.widget.RecyclerView>
+        </RelativeLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/item_pspace10"
+            >
+            <TextView
+                android:id="@+id/tv_placeOrderTotalC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="@dimen/app_text_word13"
+                android:singleLine="true"
+                android:ellipsize="end"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                >
+            </TextView>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                >
+                <TextView
+                    android:id="@+id/tv_placeSPriceT"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cart_item_shipping"
+                    android:textSize="@dimen/app_text_word13"
+                    android:textColor="@color/color_999"
+                    >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/tv_orderShippingP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="@dimen/app_text_word15"
+                    android:textStyle="bold"
+                    >
+                </TextView>
+            </LinearLayout>
+            <TextView
+                android:id="@+id/tv_placeTotalPTag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/app_text_word13"
+                android:text="@string/str_total"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tv_placeTotalPrice"
+                >
+            </TextView>
+            <TextView
+                android:id="@+id/tv_placeTotalPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="@dimen/app_text_word15"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                >
+            </TextView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.qmuiteam.qmui.widget.roundwidget.QMUIRoundLinearLayout>
+
+
+
+
+
+
+
+</LinearLayout>

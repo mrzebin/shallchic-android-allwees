@@ -1,0 +1,36 @@
+* {
+  font-family: "proximanova", sans-serif;
+}
+.policy {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.policy a{
+  color: #2fb7ec;
+}
+.policy img{
+  width: 30%;
+  margin-bottom: .5rem;
+}
+.policy .main-img{
+  width: 100%;
+}
+.policy .main-img img{
+  width: 100%;
+}
+
+.policy p {
+    word-break: break-all;
+    margin: 0.5rem 0;
+    font-size: 14px;
+}
+.policy h2 {
+    font-size: 18px;
+    margin: 0;
+    color: #111;
+}
+.policy h3 {
+    font-size: 16px;
+    margin: 1rem 0;
+    color: #333;
+}

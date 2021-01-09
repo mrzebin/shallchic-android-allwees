@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/rl_noCart"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="visible"
+    android:gravity="center_horizontal"
+    android:paddingTop="@dimen/item_pspace30"
+    android:paddingBottom="@dimen/item_pspace20"
+    android:background="@color/white">
+    <ImageView
+        android:id="@+id/iv_scenery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_payment_success"
+        >
+    </ImageView>
+    <TextView
+        android:id="@+id/iv_senery_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/payment_successful"
+        android:textSize="@dimen/app_text_15sp"
+        android:textColor="@color/allwees_theme_color"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/item_pspace10"
+        android:layout_marginTop="@dimen/item_pspace10">
+    </TextView>
+
+    <TextView
+        android:id="@+id/tv_payDetail_dec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/app_text_word12"
+        android:gravity="center"
+        android:paddingStart="@dimen/item_pspace10"
+        android:paddingEnd="@dimen/item_pspace10"
+        >
+    </TextView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/item_pspace20"
+        android:paddingStart="@dimen/item_pspace30"
+        android:paddingEnd="@dimen/item_pspace30"
+        >
+        <TextView
+            android:id="@+id/tv_lookOtherOrder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/view_the_order"
+            android:textColor="@color/allwees_theme_color"
+            android:textSize="@dimen/app_text_word13"
+            android:gravity="center"
+            android:background="@drawable/bg_theme_frame_border"
+            >
+        </TextView>
+        
+        <View
+            android:layout_width="@dimen/item_pspace30"
+            android:layout_height="1dp">
+        </View>
+        
+        <TextView
+            android:id="@+id/tv_paySBackHome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/bakc_to_home"
+            android:textColor="@color/white"
+            android:textSize="@dimen/app_text_word13"
+            android:gravity="center"
+            android:background="@drawable/bg_theme_frame_bold_border"
+            >
+        </TextView>
+    </LinearLayout>
+</LinearLayout>
+

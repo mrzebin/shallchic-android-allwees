@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/app_background_default"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_pspace40"
+        android:background="@color/app_background_default"
+        android:paddingStart="@dimen/item_pspace10"
+        android:paddingEnd="@dimen/item_pspace10"
+        >
+        <ImageView
+            android:id="@+id/iv_tb_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/item_pspace10"
+            android:paddingEnd="@dimen/item_pspace10"
+            android:src="@mipmap/ic_black_back"
+            android:layout_centerVertical="true"
+            >
+        </ImageView>
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_000000"
+            android:text="@string/country_region"
+            android:textSize="@dimen/app_text_18sp"
+            android:textStyle="bold"
+            android:layout_centerInParent="true"
+            >
+        </TextView>
+
+        <TextView
+            android:id="@+id/tv_sureChoiceC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/app_text_word13"
+            android:text="@string/done"
+            android:textColor="@color/color_999"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:clickable="false"
+            >
+        </TextView>
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_pspace0.5"
+        android:background="@color/app_line_color"
+        >
+    </View>
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/srl_country"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@color/app_background_default"
+                android:descendantFocusability="blocksDescendants"
+                >
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rlv_country"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </androidx.recyclerview.widget.RecyclerView>
+            </RelativeLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</LinearLayout>

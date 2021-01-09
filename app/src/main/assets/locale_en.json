@@ -1,0 +1,14 @@
+{
+	"country" : {
+	  "language" : "en",
+	  "nameEn" : "United States",
+	  "region" : "53950000" 
+	},
+	"ip" : "122.233.186.241",
+	"host" : "https://test01api.allwees.com",
+	"currency" : {
+	  "symbol" : "$",
+	  "abbr" : "USD"
+	},
+	"cdn" : "https://cdn-test.allwees.com"
+}

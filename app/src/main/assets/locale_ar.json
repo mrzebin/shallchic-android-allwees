@@ -1,0 +1,14 @@
+{
+    "country" : {
+      "language" : "ar",
+      "nameEn" : "المملكة العربية السعودية",
+      "region" : "48650000"
+    },
+    "ip" : "122.233.186.241",
+    "host" : "https://sa-api.allwees.com",
+    "currency" : {
+      "symbol" : "SAR",
+      "abbr" : "SAR"
+    },
+    "cdn" : "https://cdn-ae.allwees.com"
+  }

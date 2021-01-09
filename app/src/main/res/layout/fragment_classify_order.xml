@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.qmuiteam.qmui.widget.QMUIWindowInsetLayout2 xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/srl_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.hb.basemodel.utils.RecycerLoadMoreScrollView
+            android:id="@+id/rlsv_load"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none"
+            android:nestedScrollingEnabled="false"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@color/app_background_default">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rlv_order"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:qmui_is_target="true"/>
+                </RelativeLayout>
+
+                <include layout="@layout/layout_no_more" />
+            </LinearLayout>
+        </com.hb.basemodel.utils.RecycerLoadMoreScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</com.qmuiteam.qmui.widget.QMUIWindowInsetLayout2>

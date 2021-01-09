@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <padding
+        android:top="@dimen/item_pspace3"
+        android:bottom="@dimen/item_pspace3"
+        android:left="@dimen/item_pspace15"
+        android:right="@dimen/item_pspace15" />
+    <stroke
+        android:dashGap="@dimen/item_pspace8"
+        android:width="@dimen/item_pspace1"
+        android:color="@color/color_999"
+        android:dashWidth="@dimen/item_pspace10" />
+</shape>

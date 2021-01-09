@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/app_background_default">
+    <RelativeLayout
+        android:id="@+id/rl_topTitle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_pspace40"
+        android:paddingStart="@dimen/item_pspace10"
+        android:paddingEnd="@dimen/item_pspace10"
+        >
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/ic_black_back"
+            >
+        </ImageView>
+        <TextView
+            android:id="@+id/tv_topTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/app_text_16sp"
+            android:layout_centerInParent="true"
+            android:text="@string/str_cancel"
+            >
+        </TextView>
+    </RelativeLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_pspace1"
+        android:background="@color/color_eee"
+        android:layout_below="@id/rl_topTitle"
+        >
+    </View>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/item_pspace40"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/item_pspace10"
+        android:paddingEnd="@dimen/item_pspace10"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/item_pspace10"
+            android:paddingBottom="@dimen/item_pspace10"
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/request_type"
+                android:textSize="@dimen/app_text_word15" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="@dimen/item_pspace5"
+                android:gravity="end"
+                android:text="@string/str_cancel"
+                android:textColor="@color/color_999"
+                android:textSize="@dimen/app_text_word15"
+                app:drawableEndCompat="@mipmap/ic_gray_right_arrow" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_pspace0.5"
+            android:background="@color/app_line_color"
+            >
+        </View>
+
+        <LinearLayout
+            android:id="@+id/ll_choiceRefundType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingTop="@dimen/item_pspace10"
+            android:paddingBottom="@dimen/item_pspace10"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/receiving_type"
+                android:textSize="@dimen/app_text_word15" />
+
+            <TextView
+                android:id="@+id/tv_cancelType"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:drawablePadding="@dimen/item_pspace5"
+                android:gravity="end"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:layout_weight="1"
+                android:text="@string/item_not_receive"
+                android:textColor="@color/color_999"
+                android:textSize="@dimen/app_text_word15"
+                app:drawableEndCompat="@mipmap/ic_gray_right_arrow" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_pspace0.5"
+            android:background="@color/color_eee"
+            >
+        </View>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/item_pspace10"
+            android:paddingTop="@dimen/item_pspace10"
+            android:text="@string/return_note" />
+
+        <EditText
+            android:id="@+id/et_reNote"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_pspace100"
+            android:background="@drawable/bg_frame_gray"
+            android:gravity="start|top"
+            android:cursorVisible="true"
+            android:padding="@dimen/item_pspace5"
+
+            android:autofillHints="">
+        </EditText>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_postRefund"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_pspace40"
+        android:layout_marginStart="@dimen/item_pspace10"
+        android:layout_marginEnd="@dimen/item_pspace10"
+        android:layout_marginBottom="@dimen/item_pspace20"
+        android:layout_alignParentBottom="true"
+        android:text="@string/str_submit"
+        android:textColor="@color/white"
+        android:textSize="@dimen/app_text_16sp"
+        android:layout_marginTop="@dimen/item_pspace20"
+        android:background="@drawable/select_login"
+        >
+    </Button>
+
+
+
+</RelativeLayout>

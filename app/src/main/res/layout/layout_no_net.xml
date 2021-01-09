@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/cl_noNet"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="visible"
+    >
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_empty_no_wifi"
+        android:layout_marginBottom="@dimen/item_pspace30"
+        app:layout_constraintBottom_toTopOf="@id/qrb_refreshNet"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+    </ImageView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/app_text_word13"
+        android:text="@string/no_net_hint"
+        android:textColor="@color/color_999"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/item_pspace10"
+        app:layout_constraintBottom_toTopOf="@id/qrb_refreshNet"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+    </TextView>
+
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+        android:id="@+id/qrb_refreshNet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/upper_refresh"
+        android:textSize="@dimen/app_text_word13"
+        android:textColor="@color/white"
+        android:paddingTop="@dimen/item_pspace8"
+        android:paddingBottom="@dimen/item_pspace8"
+        android:paddingStart="@dimen/item_pspace40"
+        android:paddingEnd="@dimen/item_pspace40"
+        app:qmui_borderWidth="0dp"
+        app:qmui_radius="@dimen/item_pspace8"
+        app:qmui_backgroundColor="@color/allwees_theme_color"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+    </com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

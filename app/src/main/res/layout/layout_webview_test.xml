@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/rl_noCart"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="visible"
+    android:gravity="center_horizontal"
+    android:paddingTop="@dimen/item_pspace20"
+    android:paddingBottom="@dimen/item_pspace20">
+    <com.qmuiteam.qmui.widget.webview.QMUIWebView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </com.qmuiteam.qmui.widget.webview.QMUIWebView>
+
+</LinearLayout>
+

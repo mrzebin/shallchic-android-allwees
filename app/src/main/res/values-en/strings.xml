@@ -1,0 +1,582 @@
+<resources>
+    <string name="app_name">AllWees</string>
+    <string name="cashus">US$0.00</string>
+    <string name="reward">100 Points</string>
+    <string name="empty_data">data is empty</string>
+    <string name="welcome_title">Welcome to ShallChinc</string>
+    <string name="str_hint_email">Email</string>
+    <string name="str_hint_password">Password</string>
+    <string name="str_hint_firstn">First Name</string>
+    <string name="str_permission_miss">Permission is not granted by user.</string>
+    <string name="str_hint_lastn">Last Name</string>
+    <string name="str_forget_p">Forget Password?</string>
+    <string name="rc_authorities_fileprovider">.FileProvider</string>
+    <string name="app_please_up_method">Please select upload method</string>
+    <string name="app_please_choice_type">Please select reason for return</string>
+    <string name="me_unlogin_hint">Sign up/Log in</string>
+    <string name="hint_province_empty">Please fill in province</string>
+
+    <!--Popular页面-->
+    <string name="home_classify_p_gd">good Quatity</string>
+    <string name="home_classify_p_dr">Days Return 30</string>
+    <string name="home_classify_p_fs">Free Shipping</string>
+    <string name="home_classify_p_new_user_free_gifts">New User Free Gift</string>
+    <string name="home_classify_p_jfy">Just for you</string>
+    <string name="home_classify_p_fs_title">Flash Sale</string>
+    <string name="home_classify_flash_flash">Flash</string>
+    <string name="home_classify_sale_flash">Sale</string>
+
+    <!--flash_sale-->
+    <string name="flash_sale_title">Flash Sale</string>
+    <string name="flash_sale_state">On sale</string>
+    <string name="flash_sale_comming">Comming</string>
+    <string name="flash_sale_soon">soon</string>
+
+    <!--deliver double-->
+    <string name="deliver_double_title">BUY 1 GET 1 FREE</string>
+
+    <!--分类页面-->
+    <string name="category_title">Category</string>
+
+    <!--购物车-->
+    <string name="cart_title">Cart</string>
+    <string name="cart_more_to"> more to enjoy free shipping</string>
+    <string name="cart_empty_hint">Your cart is empty</string>
+    <string name="cart_continue_shipping">Continue Shopping</string>
+    <string name="cart_might_you_like">You might like…</string>
+    <string name="cart_enjoy_shipping">more to enjoy free shipping</string>
+    <string name="cart_shipping">Shipping</string>
+    <string name="cart_shipto">ship to</string>
+    <string name="cart_item_in_cart">Items In Cart</string>
+    <string name="cart_order_summary">Order Summary</string>
+    <string name="cart_hint_enter_promo_code">Enter Promo Code</string>
+    <string name="cart_view_avaliable_c">View available coupons</string>
+    <string name="cart_view_free_one_hint">Qualified for buy 1 get 1 extra free</string>
+    <string name="cart_view_no_csah">Opps,this code is invalid</string>
+    <string name="cart_item_total">Item Total</string>
+    <string name="cart_item_deduction_price">Deduction</string>
+    <string name="cart_ot">Order Total</string>
+    <string name="cart_scbu">AllWees Cash Balance US</string>
+    <string name="cart_dfrar">30 Days Free Return and Refund</string>
+    <string name="cart_checkout">Check out</string>
+    <string name="cart_item_shipping">Shipping:</string>
+    <string name="cart_pcr">Promo Code:</string>
+    <string name="cart_hint_coupon_empty">Coupon code cannot be empty</string>
+    <string name="str_resend">Resend</string>
+
+
+    <!--wishlist-->
+    <string name="wishlist_title">Wishlist</string>
+    <string name="wishlist_empty_hint">to save your favorite items,favorite</string>
+
+
+    <!--add more-->
+    <string name="more_goods">More Goods</string>
+
+    <!--
+       我的页面
+    -->
+    <string name="me_myOrder">My order</string>
+    <string name="me_view_all">View all</string>
+    <string name="me_sc">AllWees</string>
+    <string name="me_rewards">Rewards</string>
+    <string name="me_dlb">Daily Login Bouns</string>
+    <string name="me_points">Points</string>
+
+    <string-array name="reward_items">
+        <item>Dashboard</item>
+        <item>Redeem</item>
+        <item>infomation</item>
+    </string-array>
+
+
+    <string-array name="reward_d_items">
+        <item>Available</item>
+        <item>Used</item>
+        <item>History</item>
+    </string-array>
+
+
+    <!--freeGift-->
+    <string name="free_gift_res_use">Used</string>
+    <string name="free_gift_res_use_in">Used in</string>
+    <string name="free_gift_res_expire">Expired</string>
+    <string name="free_gift_hint_choose">Please choose a gift</string>
+
+
+
+    <!--reward-->
+    <string name="reward_res_point">Points</string>
+
+
+
+    <!--
+        Settings
+    -->
+    <string name="setting_title">Settings</string>
+    <string name="str_zero">0</string>
+
+
+
+    <!--goodsDetail-->
+    <string name="goods_detail_title">Details</string>
+    <string name="goods_detail_ea">Estimated Arrival:</string>
+    <string name="goods_detail_drar">30 Days Return and Refund</string>
+    <string name="goods_detail_cas">Colors and Sizes</string>
+    <string name="goods_detail_des">Description</string>
+    <string name="goods_detaildo">Delivery Options</string>
+    <string name="goods_seyml">Something Else You Might Like</string>
+    <string name="goods_buy">Buy</string>
+    <string name="goods_atc">Add to Cart</string>
+    <string name="goods_standard_ship">Standard Shipping</string>
+    <string name="goods_detail_es">Estimated Shipping:</string>
+    <string name="goods_detail_selected">Selected </string>
+    <string name="goods_detail_size">Size</string>
+    <string name="goods_detail_color">Color</string>
+    <string name="goods_detail_qty">Quantity</string>
+    <string name="goods_detail_add_to_cart">Item has been added to cart</string>
+    <string name="goods_detail_shop_sc">Shop AllWees Confidence</string>
+    <string name="goods_detail_we_p">we provide guarantees to all AllWees purchases</string>
+    <string name="goods_detail_dr">30-Day Returns</string>
+    <string name="goods_detail_day">days</string>
+    <string name="goods_detail_all_item_c">All items can be returned for a refund within \n 30 days of delivery</string>
+    <string name="goods_detail_quick_sp">QUICK,Simple Process</string>
+    <string name="goods_detail_well_guide">Well guide you through a few easy steps to return your item.</string>
+    <string name="goods_detail_allwees_cs">AllWees Customes Support</string>
+    <string name="goods_detail_our_cus">Our customer service team is always here,if\n you need help.</string>
+    <string name="goods_detail_see_tf">See the full Return Policy for complete details</string>
+    <string name="goods_detail_sorry_hint">I am sorry we can not find the goods</string>
+    <string name="goods_detail_skip">Return Policy</string>
+    <string name="goods_detail_share_tilte">Look what I found on Allwees for a nice price!</string>
+
+    <!--free gift-->
+    <string name="free_gift_title">Free Gifts For New User</string>
+    <string name="free_gift_save_w">Save With The New User Coupon</string>
+    <string name="str_off">OFF</string>
+    <string name="str_get">GET!</string>
+    <string name="str_received">Received</string>
+    <string name="str_valid_in">Valid in</string>
+    <string name="str_used">Used</string>
+    <string name="free_gift_for_new">Free Gifts For New User</string>
+    <string name="free_recommend">Recommendation</string>
+    <string name="free_gift_please_choose">Please choose a gift</string>
+
+
+    <string name="forget_p_title">Forget Password</string>
+    <string name="forget_p_hint_email_nil">email is null</string>
+    <string name="forget_p_send_email_success">Send email Success</string>
+
+
+    <!--account-->
+    <string name="account_setting">Account Settings</string>
+    <string name="account_update_portrait">Update Profile</string>
+    <string name="account_change_ps">Change Password</string>
+    <string name="account_change_email">Change Eamil</string>
+
+
+    <string-array name="free_bottom_segment">
+        <item>Below $5</item>
+        <item>Influencer is</item>
+    </string-array>
+
+    <!--payment-->
+    <string name="pm_title">Payment</string>
+    <string name="pm_cofirm_pay">confirm Pay</string>
+    <string name="pm_prefix_tag_total">Total:</string>
+    <string name="pay_unit">AED</string>
+    <string name="pm_prefix_tag_product_total">Product Total</string>
+    <string name="pm_prefix_tag_shipping">Shipping</string>
+    <string name="pm_prefix_tag_Discount">Discount</string>
+    <string name="pm_credit_card_title">Credit or Debit Card</string>
+    <string name="pm_credit_paypal_title">Paypal</string>
+    <string name="pm_credit_send_title">Cash On Delivery</string>
+    <string name="pm_use_paypal_des">If you do not have a Paypal account,you can also pay via Paypal with your credit card or bank debit card.(including local cards)</string>
+    <string name="request_type">request type</string>
+    <string name="receiving_type">receiving type</string>
+    <string name="pm_cod_prefix">Shopping </string>
+    <string name="pm_cod_suffix"> more to use COD</string>
+
+    <!--payState-->
+    <string name="ps_hint_1">Your order is on its way and the conformation email has been sent to:</string>
+
+
+    <!--search goods-->
+    <string name="search_goods_hint_search">Search</string>
+    <string name="search_recent_kinds">Recent Searches</string>
+    <string name="search_trending_group">Trending Searches</string>
+
+
+
+
+    <!--add card to inforamtion-->
+    <string name="pm_add_card_title">Add Card Information</string>
+    <string name="pm_add_card_cn">Card Number</string>
+    <string name="pm_add_card_ed">Expire Date</string>
+    <string name="pm_add_card_sc">Security Code</string>
+    <string name="pm_add_card_sfnp">Save for next payment</string>
+    <string name="pm_add_card_pt">Product Total</string>
+    <string name="pm_add_card_shipping">Shipping</string>
+    <string name="pm_add_card_discount">Discount</string>
+    <string name="pm_add_card_total">Total:</string>
+    <string name="pm_add_card_pn">Pay Now</string>
+
+    <!--schall cash-->
+    <string name="sc_cash_available_b">Available Balance</string>
+    <string name="sc_cash_title">SchallChic Cash</string>
+    <string-array name="sc_cash_segment">
+        <item>Info</item>
+        <item>Hisgory</item>
+    </string-array>
+
+
+
+    <!--
+        MyOrders
+    -->
+    <string name="order_title">MyOrders</string>
+    <string name="order_total">Total</string>
+
+
+    <string-array name="order_tab_segment">
+        <item>All</item>
+        <item>Paid</item>
+        <item>Shipped</item>
+        <item>Delivered</item>
+        <item>Review</item>
+        <item>Refund</item>
+    </string-array>
+
+    <!--order Detail-->
+    <string name="order_detail_title">Order Details</string>
+    <string name="order_detail_it">Item Total</string>
+    <string name="order_detail_oi">Order information</string>
+    <string name="order_detail_pcl">Promo Code:</string>
+    <string name="order_detail_pc_price">Coupon price</string>
+    <string name="order_detail_cash">Cash</string>
+    <string name="order_detail_on">Order No</string>
+    <string name="order_detail_od">Order Date</string>
+    <string name="order_detail_pm">Payment Method</string>
+    <string name="order_detail_pd">Payment Date</string>
+    <string name="order_dialog_track_no">Tracking No:</string>
+    <string name="str_cancel">cancel</string>
+    <string name="select_q">Select Quantity</string>
+    <string name="available_c">Available Coupons</string>
+    <string name="your_have_n">You have no coupons yet</string>
+
+
+    <!--refund Detail-->
+    <string name="methedcamera">camera</string>
+    <string name="methedblbum">album</string>
+    <string name="refund_success">refund success</string>
+    <string name="refund_upload_to_fail">fail to upload</string>
+
+
+    <!--cancel order-->
+    <string name="cancel_success">Order cancelled successfully</string>
+    <string name="cancel_fail">Cancellation of order failed</string>
+
+
+
+    <!--forget passowrd-->
+    <string name="fp_hint_emila">Enter your e-mail address and well send a reset link\nfor your password.</string>
+    <string name="fp_enter_email">Enter e-mail address</string>
+    <string name="fp_send_rl">send Reset Link</string>
+    <string name="buy">Buy</string>
+
+
+    <!--dialog-->
+    <string name="hint_success">success</string>
+    <string name="hint_fail">fail</string>
+    <string name="prompt_money_add_card" />
+
+
+    <string-array name="refund_method">
+        <item>camera</item>
+        <item>album</item>
+    </string-array>
+
+    <string-array name="refund_reason">
+        <item>items not received</item>
+        <item>items not shipped as agreement</item>
+        <item>shipping cannot be tracked</item>
+        <item>empty package,items missing in package</item>
+        <item>other</item>
+    </string-array>
+
+    <!--取消订单 对应的code编码:6,7,8,9,10,0-->
+    <string-array name="cancel_reason">
+        <item>made order by mistake</item>
+        <item>editing address/phone number</item>
+        <item>add/remove items</item>
+        <item>preparing time too long</item>
+        <item>buy from other places</item>
+        <item>other reasons</item>
+    </string-array>
+
+
+
+
+
+    <!--
+        Login
+    -->
+    <string name="login_free_valueoff">5% off coupon free gift</string>
+    <string name="login_in">Log in</string>
+    <string name="login_tos">Terms of service</string>
+    <string name="login_and"> and </string>
+    <string name="login_pp">Privacy Policy</string>
+    <string name="login_su">Sign up</string>
+    <string name="login_fail">login fail</string>
+    <string name="login_success">login success</string>
+
+
+    <string-array name="login_tab_segment">
+        <item>Log in</item>
+        <item>Sign up</item>
+    </string-array>
+
+
+    <!--empty-->
+    <string name="empty_no_order">You have no orders yet!</string>
+    <string name="refresh">refresh</string>
+    <string name="upper_refresh">Refresh</string>
+    <string name="empty_no_search_data">Oops!Nothing matched your search</string>
+
+
+    <!--基本-->
+    <string name="str_more">More</string>
+    <string name="str_nomore">no more</string>
+    <string name="str_upper_free">Free</string>
+    <string name="str_free">free</string>`
+    <string name="str_boughtt"> bought this</string>
+    <string name="str_view_more">View More</string>
+    <string name="str_add">add </string>
+    <string name="str_upper_add">add </string>
+    <string name="str_apply">Apply</string>
+    <string name="str_delete">delete</string>
+    <string name="str_no">no</string>
+    <string name="str_yes">yes</string>
+    <string name="str_item">item</string>
+    <string name="str_total">Total:</string>
+    <string name="str_qty">Qty:</string>
+    <string name="str_nd">no data</string>
+    <string name="str_cs">copy success</string>
+    <string name="hint_please_keep_one">Please keep at least one address.</string>
+    <string name="hint_delete_address_item">Are you sure to delete this address?</string>
+    <string name="str_input_warn">Please perfect the information</string>
+    <string name="str_please_provide_information">Please provide information in all required fields</string>
+    <string name="str_nin">note is nil</string>
+    <string name="str_success">success</string>
+    <string name="str_ok">OK</string>
+    <string name="str_sure">sure</string>
+    <string name="str_symbol">$</string>
+
+
+    <string name="dialog_title_exit">Are you sure?</string>
+    <string name="dialog_message_exit">Do you want to logout?</string>
+
+
+    <!--address book-->
+    <string name="address_b_title">Address Book</string>
+    <string name="address_b_uta">User This Address</string>
+    <string name="address_b_ana">+ Add New Address</string>
+    <string name="address_b_edit">edit</string>
+    <string name="address_b_delete">delete</string>
+    <string name="address_b_us">United States</string>
+    <string name="address_b_op">Optional</string>
+
+
+    <!--address shipping-->
+    <string name="address_s_first_name">*First Name:</string>
+    <string name="address_s_last_name">*Last Name:</string>
+    <string name="address_s_street_l">*Street:</string>
+    <string name="address_s_address_l">*Address Line1:</string>
+    <string name="address_s_address_2">Address Line2:</string>
+    <string name="address_s_address_d">*Address Details</string>
+    <string name="address_s_address_ln">Landmark nearby</string>
+    <string name="address_s_country">Country:</string>
+    <string name="address_s_state_p">*State/Province:</string>
+    <string name="address_s_united_s">United States</string>
+    <string name="address_s_city">*City:</string>
+    <string name="address_s_zip_code">Zip Code:</string>
+    <string name="address_s_note">Note:</string>
+    <string name="address_s_phone_n">*Phone Number:</string>
+    <string name="address_s_save">Save</string>
+    <string name="address_s_title">Shipping Address</string>
+    <string name="address_s_country_or_region">Country/Region:</string>
+
+
+    <string name="refund">refund</string>
+    <string name="receive_type">receiving type</string>
+    <string name="item_not_receive">items not received</string>
+    <string name="return_note">return note</string>
+    <string name="add_some_pic">Add some pictures</string>
+    <string name="str_submit">Submit</string>
+    <string name="earned_s">earned Since</string>
+
+    <string name="reward_hint_1">Earn points each time you complete carious activities through the app.</string>
+    <string name="reward_hint_2">Redeem your points for coupons and get discounts on your purchase.</string>
+    <string name="reward_hint_3">How do I earn points?</string>
+    <string name="upper_point">POINTS</string>
+    <string name="upper_action">ACTION</string>
+    <string name="reward_hint_4">Make a purchase</string>
+    <string name="reward_hint_5">Review a purchase</string>
+    <string name="reward_hint_6">Upload a photo with your review</string>
+    <string name="reward_hint_7">How do I use my points?</string>
+    <string name="reward_hint_8">Redeem your points for coupons and get extra discounts. Tap on the Redeem tab to get started.</string>
+    <string name="reward_hint_9">how do I use my coupons?</string>
+    <string name="reward_hint_10">Apply your coupon by copying the code associated with it and apply it at checkout. Coupons are ono-stackable and the highest valued coupon is applied first.</string>
+    <string name="reward_hint_11">Do my points expire?</string>
+    <string name="reward_hint_12">No, your points are always available for you to redeem.</string>
+    <string name="reward_hint_13">Use your points!</string>
+    <string name="reward_hint_14">Use your points to redeem coupons and use them with your next purchase(Maximum discount of\nUS$10.00)</string>
+    <string name="reward_hint_15">Available Balance:</string>
+    <string name="reward_hint_16">No, your points are always available for you to redeem.</string>
+
+    <string name="country_region">Country/Region</string>
+    <string name="done">Done</string>
+    <string name="rate_5">5%</string>
+    <string name="off_your_p">Off your present order</string>
+    <string name="daily_login_b">Daily Login Bonus - US</string>
+    <string name="expires_one">expires Dec 1</string>
+    <string name="daily_login_b_m">Daily Login Bonus - US$50 max</string>
+    <string name="upper_off">OFF</string>
+    <string name="entire_p">Entire Purchase</string>
+
+    <string name="logistic">Logistics</string>
+    <string name="upper_refund">Refund</string>
+    <string name="lower_receive">receive</string>
+    <string name="upper_review">Review</string>
+    <string name="upper_cancel">Cancel</string>
+
+    <string name="continue_shopping">Continue Shopping</string>
+    <string name="you_dont_coupon">You do not have coupons!</string>
+    <string name="nodata">no data!</string>
+    <string name="you_have_no">You have no notification now</string>
+    <string name="no_net_hint">Ooop! Check if your phone isconnected to the internet</string>
+    <string name="payment_successful">Payment Successful</string>
+    <string name="view_the_order">View the Order</string>
+    <string name="bakc_to_home">Back to Home</string>
+
+    <string name="sc_info_1">You can use the available balance to buy anything on AllWees.</string>
+    <string name="sc_info_2">Can money added to AllWees Cash be refunded or taken out?</string>
+    <string name="sc_info_3">No, once money is added to AllWees Cash, it can not be refunded or taken out.</string>
+    <string name="sc_info_4">What can I buy with AllWees Cash?</string>
+    <string name="sc_info_5">AllWees Cash is applicable towards any item on AllWees.</string>
+    <string name="sc_info_6">Do funds expire?</string>
+    <string name="sc_info_7">AllWees Cash never expires (unless otherwise noted).</string>
+    <string name="sc_info_8">Where do you apply AllWees Cash?</string>
+    <string name="sc_info_9">Funds are automatically applied at checkout.</string>
+    <string name="sc_info_10">What if I do not have enough AllWees Cash when checking out?</string>
+    <string name="sc_info_11">We will use the remaining balabce in your AllWees Cash account and default the rest of the payment to your preferred payment method.</string>
+    <string name="sc_info_12">Are items bought with AllWees Cash refundable?</string>
+    <string name="sc_info_13">Yes, funds will be refunded back to your AllWees Cash available balance.</string>
+
+
+    <string name="please_enter_digit_vc">Enter 4-digit Verify Code</string>
+    <string name="hint_enter_phone">Enter Phone</string>
+    <string name="prefix_vc_can">You can try to</string>
+    <string name="suffix_vc_can">Acquire the Voice Verification code.</string>
+    <string name="str_confirm">Confirm</string>
+    <string name="hint_pm_vc_sms">For the safety your order.Please input the code which you received with our SMS</string>
+    <string name="hint_email_valid">Email is invalid</string>
+    <string name="hint_ps_length">The password must contain 8 to 16 characters with both alphabets and numbers!</string>
+
+
+    <string name="language_english">English</string>
+    <string name="upper_Add">Add</string>
+
+
+    <!--language-->
+    <string name="language_setting">Language</string>
+
+
+    <!--updateDialog-->
+    <string name="dialog_update_tip">Update tip</string>
+    <string name="dialog_ok_tip">ok</string>
+    <string name="dialog_cancel_tip">cancel</string>
+
+    <string name="legal_title">Legal and Terms</string>
+    <string name="notify_title">Notifications</string>
+
+
+    <string-array name="language_items">
+        <item>English</item>
+        <item>العربية</item>
+    </string-array>
+
+    <string-array name="language_code">
+        <item>en</item>
+        <item>ar</item>
+    </string-array>
+
+    <!--    <string-array name="setItem">-->
+    <!--        <item>Language</item>-->
+    <!--        <item>Account Settings</item>-->
+    <!--        <item>Manage address</item>-->
+    <!--        <item>Legal and Terms</item>-->
+    <!--        <item>About us</item>-->
+    <!--        <item>Logout</item>-->
+    <!--    </string-array>-->
+
+
+    <string name="setting_language">Language</string>
+    <string name="setting_account_set">Account Settings</string>
+    <string name="setting_manage_address">Manage address</string>
+    <string name="setting_legal_and_terms">Legal and Terms</string>
+    <string name="setting_contact_us">Contact Us</string>
+    <string name="setting_about_us">About Us</string>
+    <string name="setting_logout">Logout</string>
+
+
+    <!--province or city-->
+    <string name="pc_title">State/Province</string>
+    <string name="pc_city_title">City</string>
+
+    <string-array name="setItem">
+        <item>Account Settings</item>
+        <item>Manage address</item>
+        <item>Legal and Terms</item>
+        <item>About us</item>
+        <item>Logout</item>
+    </string-array>
+
+    <string-array name="me_orderFuns">
+        <item>Paid</item>
+        <item>Shipped</item>
+        <item>Review</item>
+        <item>Refunds</item>
+    </string-array>
+
+    <string-array name="me_earn">
+        <!--        <item>Earn $100</item>-->
+        <item>AllWees Cash</item>
+        <item>Rewards</item>
+        <!--        <item>Daily Login Bonus</item>-->
+    </string-array>
+
+    <string-array name="me_helpers">
+        <item>Notifications</item>
+        <item>Help Center</item>
+        <item>settings</item>
+    </string-array>
+
+
+    <string-array name="lt">
+        <item>Terms Of Service</item>
+        <item>Privacy Policy</item>
+        <item>Shipping Policy</item>
+        <item>Return Policy</item>
+        <item>Payment policy</item>
+    </string-array>
+
+    <string name="exit_hint">Press again to exit the program</string>
+
+    <string name="pull_loading_hint">Pull down to refresh</string>
+    <string name="release_to_refresh">Release to refresh</string>
+    <string name="loadding">Loadding...</string>
+    <string name="load_finish">Load finish</string>
+    <string name="load_fail">Load fail</string>
+    <string name="toast_search_empty">search cannot be empty</string>
+
+</resources>

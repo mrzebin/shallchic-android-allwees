@@ -1,0 +1,104 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android' //编译kotlin代码
+//apply plugin: 'kotlin-android-extensions'   //可选 代码支持通过view id获取对象，不再需要findViewById
+apply plugin: 'kotlin-parcelize'   //可选 代码支持通过view id获取对象，不再需要findViewById
+apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.gms.google-services'  //// Google Services plugin
+
+
+android {
+    compileSdkVersion rootProject.ext.cfgs.compileSdkVersion
+
+    defaultConfig {
+        applicationId cfgs.applicationId
+        minSdkVersion rootProject.ext.cfgs.minSdkVersion
+        targetSdkVersion rootProject.ext.cfgs.targetSdkVersion
+        versionCode rootProject.ext.cfgs.versionCode
+        versionName rootProject.ext.cfgs.versionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+
+    signingConfigs{
+        release {
+                keyAlias 'ruifang'
+                keyPassword 'rf2019666'
+                storeFile file('.\\rf.jks')
+                storePassword 'rf2019666'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions{
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation "androidx.appcompat:appcompat:1.2.0"
+    implementation "androidx.constraintlayout:constraintlayout:2.0.4"
+    implementation "com.jakewharton:butterknife:10.2.1"
+    implementation "androidx.multidex:multidex:2.0.1"
+
+    implementation project(path: ':baseModel')
+    kapt "com.jakewharton:butterknife-compiler:10.2.1"
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    //qmui组件
+    implementation "com.qmuiteam:qmui:2.0.0-alpha10"
+    implementation "com.qmuiteam:arch:2.0.0-alpha10"
+    kapt "com.qmuiteam:arch-compiler:2.0.0-alpha10"
+    //依赖kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    implementation rootProject.ext.cfgs.eventBus
+    implementation rootProject.ext.cfgs.smartRefreshLayout
+    implementation rootProject.ext.cfgs.smartHeaderRefreshLayout
+    //baseQuickAdapter
+    implementation rootProject.ext.cfgs.baseRecyclerViewAdapter
+    implementation  rootProject.ext.cfgs.gson
+    //viewpager2
+    implementation rootProject.ext.cfgs.viewpager2
+
+    //AWS
+    def aws_version = "2.16.+"
+    implementation "com.amazonaws:aws-android-sdk-s3:$aws_version"
+    implementation ("com.amazonaws:aws-android-sdk-mobile-client:$aws_version") { transitive = true }
+    //鲁班压缩
+    implementation rootProject.ext.cfgs.luban
+    //banner轮播
+    implementation rootProject.ext.cfgs.youthBanner
+
+    implementation platform('com.google.firebase:firebase-bom:25.12.0')
+    // Firebase Analytics (Java)
+    implementation rootProject.ext.cfgs.firebaseAnalytics
+    //deeplink
+    implementation 'com.facebook.android:facebook-applinks:[6,7)'
+    //facebook login
+//    implementation 'com.facebook.android:facebook-android-sdk:4.+'
+    //解析facebook的解析串
+//    implementation 'com.facebook.android:facebook-login:[8.1)'
+    implementation 'com.facebook.android:facebook-android-sdk:[6,7)'
+
+    //集成af
+    implementation 'com.appsflyer:af-android-sdk:6.0.0'
+    implementation 'com.android.installreferrer:installreferrer:1.1'
+
+    //html解析
+    implementation 'org.jsoup:jsoup:1.7.2'
+
+}

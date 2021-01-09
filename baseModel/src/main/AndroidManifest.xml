@@ -1,0 +1,8 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.hb.basemodel">
+
+    <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
+    <meta-data
+        android:name="com.bumptech.glide.integration.okhttp3.OkHttpGlideModule"
+        android:value="GlideModule" />
+</manifest>

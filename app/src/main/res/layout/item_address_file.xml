@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:padding="@dimen/item_pspace10"
+    android:layout_marginBottom="@dimen/item_pspace10"
+    >
+    <com.project.app.ui.widget.CheckView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:checked="false"
+        app:ev_type="0"
+        app:ev_bgColor="@color/white"
+        app:ev_strokeColor="@color/allwees_theme_color"
+        app:ev_checkedColor="@color/colorAccent"
+        app:ev_size="30dp"
+        app:ev_strokeWidth="6dp"
+        android:visibility="gone"
+        >
+    </com.project.app.ui.widget.CheckView>
+
+    <ImageView
+        android:id="@+id/iv_retriveLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_address_location"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        >
+    </ImageView>
+
+    <CheckBox
+        android:id="@+id/cb_selectA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:button="@drawable/cb_switch_address_style"
+        android:checked="false"
+        >
+    </CheckBox>
+
+    <TextView
+        android:id="@+id/tv_aPeopleName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="firstname"
+        android:textSize="@dimen/app_text_word13"
+        android:textStyle="bold"
+        android:layout_marginStart="@dimen/item_pspace15"
+        app:layout_constraintStart_toEndOf="@id/cb_selectA"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+    </TextView>
+
+    <TextView
+        android:id="@+id/tv_firstAM"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="@dimen/app_text_word13"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:layout_marginTop="@dimen/item_pspace5"
+        app:layout_constraintTop_toBottomOf="@id/tv_aPeopleName"
+        app:layout_constraintStart_toStartOf="@id/tv_aPeopleName"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+    </TextView>
+
+    <TextView
+        android:id="@+id/tv_cpSet"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:text=""
+        android:textSize="@dimen/app_text_word13"
+        android:layout_marginTop="@dimen/item_pspace5"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintTop_toBottomOf="@id/tv_firstAM"
+        app:layout_constraintStart_toStartOf="@id/tv_firstAM"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+    </TextView>
+
+    <TextView
+        android:id="@+id/tv_cpPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:text=""
+        android:textDirection="ltr"
+        android:layout_marginTop="@dimen/item_pspace5"
+        android:textSize="@dimen/app_text_word13"
+        app:layout_constraintTop_toBottomOf="@id/tv_cpSet"
+        app:layout_constraintStart_toStartOf="@id/tv_cpSet"
+        app:layout_constraintHorizontal_weight="1"
+        >
+    </TextView>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="@id/tv_cpPhone"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+        <TextView
+            android:id="@+id/tv_editAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawablePadding="@dimen/item_pspace3"
+            android:drawableStart="@mipmap/allwees_ic_edit_address"
+            android:text="@string/address_b_edit"
+            android:textColor="@color/allwees_theme_color"
+            android:textSize="@dimen/app_text_word12" />
+
+        <TextView
+            android:id="@+id/tv_DeleteAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_delete"
+            android:textColor="@color/allwees_theme_color"
+            android:textSize="@dimen/app_text_word12"
+            android:drawableStart="@mipmap/allwees_ic_delete_address"
+            android:drawablePadding="@dimen/item_pspace3"
+            android:layout_marginStart="@dimen/item_pspace10"
+            >
+        </TextView>
+    </LinearLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

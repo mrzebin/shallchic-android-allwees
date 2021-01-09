@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background_default"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    android:layerType="hardware"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_pspace40"
+        android:paddingStart="@dimen/item_pspace10"
+        android:paddingEnd="@dimen/item_pspace10"
+        android:background="@color/app_background_default"
+        >
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/ic_black_back"
+            >
+        </ImageView>
+        <TextView
+            android:id="@+id/tv_topTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/app_text_16sp"
+            android:layout_centerInParent="true"
+            android:text=""
+            >
+        </TextView>
+    </RelativeLayout>
+    <com.hb.basemodel.view.NumberProgressBar
+        android:id="@+id/progress_bar"
+        style="@style/NumberProgressBar_Default"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" />
+
+    <WebView
+        android:id="@+id/wb_explore"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layerType="software"
+        />
+</LinearLayout>

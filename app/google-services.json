@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1038774595035",
+    "firebase_url": "https://allwees-254009.firebaseio.com",
+    "project_id": "allwees-254009",
+    "storage_bucket": "allwees-254009.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1038774595035:android:0ac78f0065f1abaedacbfe",
+        "android_client_info": {
+          "package_name": "com.project.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1038774595035-49842r41785kh8c54q0b1men3g9aujjo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoxRqhZZV_7kUUiRWvkpatHVyg8JHkMTY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1038774595035-49842r41785kh8c54q0b1men3g9aujjo.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1038774595035-esk2rruhgaq3m7bk37nftd2dr15fa1rl.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.project.app",
+                "app_store_id": "1482764991"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

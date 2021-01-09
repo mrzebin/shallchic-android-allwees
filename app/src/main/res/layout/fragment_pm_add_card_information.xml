@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+    <com.hb.basemodel.utils.RecycerLoadMoreScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fadeScrollbars="true"
+        android:scrollbars="none"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_pspace40"
+                android:paddingStart="@dimen/item_pspace10"
+                android:paddingEnd="@dimen/item_pspace10"
+                android:background="@color/white"
+                >
+                <ImageView
+                    android:id="@+id/iv_back"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/ic_black_back"
+                    >
+                </ImageView>
+                <TextView
+                    android:id="@+id/tv_topTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/app_text_16sp"
+                    android:layout_centerInParent="true"
+                    android:text="@string/pm_add_card_title"
+                    >
+                </TextView>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_pspace0.5"
+                android:background="@color/app_background_default"
+                >
+            </View>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/item_pspace10"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    >
+
+                </TextView>
+
+
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </com.hb.basemodel.utils.RecycerLoadMoreScrollView>
+
+    <TextView
+        android:id="@+id/tv_pm_confirmPay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/pm_cofirm_pay"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:layout_marginStart="@dimen/item_pspace20"
+        android:layout_marginEnd="@dimen/item_pspace20"
+        android:background="@drawable/select_confirm_pay"
+        android:layout_marginBottom="@dimen/item_pspace10"
+        >
+    </TextView>
+
+</LinearLayout>

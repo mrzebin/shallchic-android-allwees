@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/white"
+    android:padding="@dimen/item_pspace10"
+    >
+    <com.qmuiteam.qmui.widget.QMUIRadiusImageView
+        android:id="@+id/qriv_scHeader"
+        android:layout_width="@dimen/item_pspace30"
+        android:layout_height="@dimen/item_pspace30"
+        android:src="@mipmap/allwees_ic_default_header"
+        android:scaleType="fitXY"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:qmui_border_width="0dp"
+        >
+    </com.qmuiteam.qmui.widget.QMUIRadiusImageView>
+
+    <TextView
+        android:id="@+id/tv_scH_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/upper_refund"
+        android:textSize="@dimen/item_pspace16"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginStart="@dimen/item_pspace20"
+        app:layout_constraintStart_toEndOf="@+id/qriv_scHeader"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+    </TextView>
+
+    <TextView
+        android:id="@+id/tv_scH_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/item_pspace13"
+        android:textColor="@color/color_ccc"
+        android:layout_marginTop="@dimen/item_pspace3"
+        app:layout_constraintTop_toBottomOf="@id/tv_scH_state"
+        app:layout_constraintStart_toStartOf="@id/tv_scH_state"
+        >
+    </TextView>
+
+    <TextView
+        android:id="@+id/tv_sc_money"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/item_pspace13"
+        android:textColor="@color/allwees_theme_color"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+    </TextView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_pspace1"
+        android:background="@color/app_line_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        >
+    </View>
+</androidx.constraintlayout.widget.ConstraintLayout>

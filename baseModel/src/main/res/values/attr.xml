@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="app_primary_color" format="color" /> <!-- topbar -->
+    <attr name="app_content_bg_color" format="color" /> <!-- content-->
+
+    <!-- progress涉及的style -->
+    <declare-styleable name="NumberProgressBar">
+        <attr name="progress" format="integer" />
+        <attr name="max" format="integer" />
+        <attr name="progress_unreached_color" format="color" />
+        <attr name="progress_reached_color" format="color" />
+        <attr name="progress_reached_bar_height" format="dimension" />
+        <attr name="progress_unreached_bar_height" format="dimension" />
+        <attr name="progress_text_size" format="dimension" />
+        <attr name="progress_text_color" format="color" />
+        <attr name="progress_text_offset" format="dimension" />
+        <attr name="progress_text_visibility" format="enum">
+            <enum name="visible" value="0" />
+            <enum name="invisible" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="ProgressWheel">
+        <attr name="matProg_progressIndeterminate" format="boolean" />
+        <attr name="matProg_barColor" format="color" />
+        <attr name="matProg_rimColor" format="color" />
+        <attr name="matProg_rimWidth" format="dimension" />
+        <attr name="matProg_spinSpeed" format="float" />
+        <attr name="matProg_barSpinCycleTime" format="integer" />
+        <attr name="matProg_circleRadius" format="dimension" />
+        <attr name="matProg_fillRadius" format="boolean" />
+        <attr name="matProg_barWidth" format="dimension" />
+        <attr name="matProg_linearProgress" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="SuperEditView">
+        <!--TODO 左侧Icon相关-->
+        <attr name="sLeftIconSrc" format="reference" />
+        <!--<attr name="sLeftIconWidth"  />-->
+        <!--<attr name="sLeftViewGravity" />-->
+        <!--<attr name="sLeftIconHeight" />-->
+        <!--<attr name="sLeftIconMarginLeft" />-->
+        <!--<attr name="sLeftIconMarginTop" />-->
+        <attr name="sLeftIconMarginRight" format="dimension" />
+        <!--<attr name="sLeftIconMarginBottom" />-->
+        <!--<attr name="sLeftIconMargin" />-->
+
+        <!--TODO 中间EditText相关-->
+        <!--<attr name="sEditMarginTop" />-->
+        <!--<attr name="sEditMarginLeft" />-->
+        <!--<attr name="sEditMarginBottom" />-->
+        <!--<attr name="sEditMarginRight" />-->
+        <!--<attr name="sEditMarginParentTop" />-->
+        <!--<attr name="sEditMarginParentLeft" />-->
+        <!--<attr name="sEditMarginParentRight" />-->
+        <!--<attr name="sEditMarginParentBottom" />-->
+        <attr name="sEditHint" format="string" />
+        <attr name="sEditHintTextColor" format="color" />
+        <attr name="sEditTextString" format="string" />
+        <attr name="sEditBackground" format="reference" />
+        <attr name="sEditTextColor" format="color" />
+        <attr name="sEditTextSize" format="dimension" />
+        <attr name="android:singleLine" />
+        <attr name="android:maxLength" />
+        <attr name="android:inputType" />
+
+        <!--TODO 清除按钮相关-->
+        <attr name="sDeletable" format="boolean" />
+        <attr name="sDeleteIconSrc" format="reference" />
+
+        <!--TODO 隐藏文本按钮相关-->
+        <attr name="sShowSwitch" format="boolean" />
+        <attr name="sHideIconSrc" format="reference" />
+        <attr name="sShowIconSrc" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="DelEditView">
+        <!--左侧icon相关-->
+        <attr name="del_LeftIconSrc" format="reference"></attr>
+        <attr name="del_MarginLeft" format="integer"></attr>
+        <attr name="del_MarginRight" format="integer"></attr>
+
+        <!--中间相关-->
+        <attr name="del_etHint" format="string"></attr>
+        <attr name="del_etTextSize" format="dimension"></attr>
+        <attr name="del_etTextColor" format="color"></attr>
+        <attr name="delIsSingleLine" format="boolean"></attr>
+        <attr name="del_etInputType" format="string"></attr>
+        <attr name="del_etBackground" format="color"></attr>
+        <attr name="del_maxEms" format="integer"></attr>
+        <attr name="del_etHeight" format="dimension"></attr>
+        <attr name="del_background" format="color"></attr>
+        <!--搜索相关-->
+        <attr name="del_searchIme" format="integer"></attr>
+
+        <!--清除按键相关-->
+        <attr name="del_deleteAble" format="boolean"></attr>
+        <attr name="del_deleteSrc" format="reference"></attr>
+    </declare-styleable>
+
+
+</resources>

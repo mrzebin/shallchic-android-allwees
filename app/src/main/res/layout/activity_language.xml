@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.qmuiteam.qmui.widget.QMUIWindowInsetLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/app_background_default">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+        <LinearLayout
+            android:id="@+id/ll_inflate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_pspace40"
+            android:paddingStart="@dimen/item_pspace10"
+            android:paddingEnd="@dimen/item_pspace10"
+            >
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/ic_black_back"
+                >
+            </ImageView>
+            <TextView
+                android:id="@+id/tv_topTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/app_text_16sp"
+                android:layout_centerInParent="true"
+                android:text="@string/language_setting"
+                >
+            </TextView>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:descendantFocusability="blocksDescendants"
+            >
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rlv_language"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </androidx.recyclerview.widget.RecyclerView>
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+</com.qmuiteam.qmui.widget.QMUIWindowInsetLayout>

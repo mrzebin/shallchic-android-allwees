@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="@dimen/item_pspace15"
+    android:paddingEnd="@dimen/item_pspace15"
+    android:background="@color/white"
+    >
+    <LinearLayout
+        android:id="@+id/ll_inflateSb"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        >
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_loginClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_black_common_close"
+        android:paddingTop="@dimen/item_pspace20"
+        android:paddingStart="@dimen/item_pspace15"
+        android:paddingEnd="@dimen/item_pspace20"
+        app:layout_constraintTop_toBottomOf="@+id/ll_inflateSb"
+        app:layout_constraintStart_toStartOf="parent"
+        >
+    </ImageView>
+
+    <TextView
+        android:id="@+id/tv_loginTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/welcome_title"
+        android:textSize="20sp"
+        android:layout_marginTop="@dimen/item_pspace30"
+        android:layout_marginStart="@dimen/item_pspace10"
+        app:layout_constraintTop_toBottomOf="@id/iv_loginClose"
+        app:layout_constraintStart_toStartOf="parent"
+        >
+    </TextView>
+
+    <TextView
+        android:id="@+id/tv_hint_coupon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login_free_valueoff"
+        android:textSize="@dimen/app_text_word13"
+        android:layout_marginTop="@dimen/item_pspace10"
+        android:drawableStart="@mipmap/ic_login_newusergifts"
+        android:drawablePadding="@dimen/item_pspace5"
+        app:layout_constraintStart_toStartOf="@id/tv_loginTitle"
+        app:layout_constraintTop_toBottomOf="@id/tv_loginTitle"
+        >
+    </TextView>
+
+    <com.qmuiteam.qmui.widget.tab.QMUITabSegment2
+        android:id="@+id/qmTab_switchFun"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginTop="@dimen/item_pspace50"
+        app:layout_constraintTop_toBottomOf="@id/tv_loginTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        >
+    </com.qmuiteam.qmui.widget.tab.QMUITabSegment2>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp_loginContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:visibility="visible"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/item_pspace20"
+        app:layout_constraintTop_toBottomOf="@id/qmTab_switchFun"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+    </androidx.viewpager2.widget.ViewPager2>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

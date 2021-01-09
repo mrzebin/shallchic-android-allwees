@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.qmuiteam.qmui.widget.roundwidget.QMUIRoundLinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:qmui_radius="@dimen/item_pspace10"
+    app:qmui_backgroundColor="@color/white"
+    >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/select_q"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:paddingTop="@dimen/item_pspace10"
+        android:paddingBottom="@dimen/item_pspace10"
+        >
+    </TextView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rlv_selectCount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </androidx.recyclerview.widget.RecyclerView>
+
+</com.qmuiteam.qmui.widget.roundwidget.QMUIRoundLinearLayout>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/item_pspace20"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:qmui_backgroundColor="@color/white"
+        app:qmui_radius="@dimen/item_pspace8"
+        >
+       <androidx.constraintlayout.widget.ConstraintLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/tv_placeOrderT"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/app_text_word13"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text=""
+                >
+            </TextView>
+            <TextView
+                android:id="@+id/tv_placeOrderS"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/app_text_word13"
+                android:textColor="@color/allwees_theme_color"
+                android:text=""
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                >
+            </TextView>
+
+           <com.qmuiteam.qmui.widget.QMUIRadiusImageView
+               android:id="@+id/iv_placeOrderG"
+               android:layout_width="@dimen/item_pspace88"
+               android:layout_height="@dimen/item_pspace88"
+               android:src="@mipmap/allwees_ic_default_goods"
+               android:layout_marginTop="@dimen/item_pspace10"
+               app:qmui_corner_radius="@dimen/item_pspace5"
+               app:qmui_border_width="0dp"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toBottomOf="@+id/tv_placeOrderT"
+               >
+           </com.qmuiteam.qmui.widget.QMUIRadiusImageView>
+
+           <TextView
+               android:id="@+id/tv_placeOrderDec"
+               android:layout_width="0dp"
+               android:layout_height="wrap_content"
+               android:text=""
+               android:textSize="@dimen/app_text_word15"
+               android:maxLines="2"
+               android:layout_marginStart="@dimen/item_pspace8"
+               android:layout_marginEnd="@dimen/item_pspace10"
+               app:layout_constraintHorizontal_weight="1"
+               app:layout_constraintTop_toTopOf="@+id/iv_placeOrderG"
+               app:layout_constraintStart_toEndOf="@+id/iv_placeOrderG"
+               app:layout_constraintEnd_toStartOf="@id/tv_placeOrderM"
+               >
+           </TextView>
+
+           <TextView
+               android:id="@+id/tv_placeOrderM"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textSize="@dimen/app_text_word12"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintTop_toTopOf="@id/iv_placeOrderG"
+               >
+           </TextView>
+
+           <TextView
+               android:id="@+id/tv_placeOrderC"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text=""
+               android:textColor="@color/color_999"
+               android:textSize="@dimen/app_text_word12"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintTop_toBottomOf="@id/tv_placeOrderM"
+               >
+           </TextView>
+
+           <TextView
+               android:id="@+id/tv_placeOrderSc"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text=""
+               android:textSize="@dimen/app_text_word13"
+               android:textColor="@color/color_999"
+               android:singleLine="true"
+               android:ellipsize="end"
+               android:layout_marginTop="@dimen/item_pspace5"
+               app:layout_constraintTop_toBottomOf="@id/tv_placeOrderDec"
+               app:layout_constraintStart_toStartOf="@id/tv_placeOrderDec"
+               >
+           </TextView>
+       </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.qmuiteam.qmui.widget.roundwidget.QMUIRoundLinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

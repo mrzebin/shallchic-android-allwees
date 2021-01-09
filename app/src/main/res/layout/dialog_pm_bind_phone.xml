@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:qmui_backgroundColor="@color/white"
+        app:qmui_radius="@dimen/item_pspace8"
+        >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_close_dialogVc"
+                android:layout_width="@dimen/item_pspace12"
+                android:layout_height="@dimen/item_pspace12"
+                android:src="@mipmap/icon_close"
+                android:layout_marginTop="@dimen/item_pspace10"
+                android:layout_marginEnd="@dimen/item_pspace10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                >
+            </ImageView>
+
+            <TextView
+                android:id="@+id/tv_dialogVc_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/please_enter_digit_vc"
+                app:layout_constraintTop_toBottomOf="@id/iv_close_dialogVc"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                >
+            </TextView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/item_pspace15"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/tv_dialogVc_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/item_pspace5"
+                    android:paddingBottom="@dimen/item_pspace5"
+                    >
+                    <ImageView
+                        android:layout_width="@dimen/item_pspace15"
+                        android:layout_height="@dimen/item_pspace15"
+                        android:src="@mipmap/ic_pm_mobile"
+                        android:layout_gravity="center_vertical"
+                        >
+                    </ImageView>
+                    <TextView
+                        android:id="@+id/tv_pm_targetPhone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/app_text_word13"
+                        android:hint="@string/hint_enter_phone"
+                        android:background="@null"
+                        android:maxLength="16"
+                        android:textDirection="ltr"
+                        android:inputType="number"
+                        android:gravity="start"
+                        android:layout_gravity="center_vertical"
+                        android:drawablePadding="@dimen/item_pspace10"
+                        android:theme="@style/et_login_style"
+                        android:layout_marginStart="@dimen/item_pspace5"
+                        >
+                    </TextView>
+
+                    <ImageView
+                        android:layout_width="@dimen/item_pspace15"
+                        android:layout_height="@dimen/item_pspace15"
+                        android:src="@mipmap/ic_pm_modify"
+                        android:layout_gravity="center_vertical"
+                        android:visibility="gone"
+                        >
+                    </ImageView>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/app_line_color"
+                    >
+                </View>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/item_pspace15"
+                    >
+                    <ImageView
+                        android:layout_width="@dimen/item_pspace15"
+                        android:layout_height="@dimen/item_pspace15"
+                        android:src="@mipmap/ic_pay_safe"
+                        android:layout_gravity="center_vertical"
+                        >
+                    </ImageView>
+
+                    <EditText
+                        android:id="@+id/et_vrifyCode"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:inputType="number"
+                        android:textSize="@dimen/app_text_word13"
+                        android:paddingTop="@dimen/item_pspace5"
+                        android:paddingBottom="@dimen/item_pspace5"
+                        android:hint="@string/please_enter_digit_vc"
+                        android:background="@null"
+                        android:singleLine="true"
+                        android:maxLength="8"
+                        android:drawablePadding="@dimen/item_pspace10"
+                        android:theme="@style/et_login_style"
+                        android:layout_marginStart="@dimen/item_pspace5"
+                        android:autofillHints="">
+                    </EditText>
+
+                    <TextView
+                        android:id="@+id/tv_sendVc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/item_pspace10"
+                        android:paddingEnd="@dimen/item_pspace10"
+                        android:text="@string/str_resend"
+                        android:textSize="@dimen/app_text_word13"
+                        android:textColor="@color/allwees_theme_color"
+                        android:layout_gravity="center_vertical"
+                        >
+                    </TextView>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/app_line_color"
+                    >
+                </View>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/item_pspace8"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/prefix_vc_can"
+                        android:textSize="@dimen/app_text_word12"
+                        >
+                    </TextView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/suffix_vc_can"
+                        android:textSize="@dimen/app_text_word12"
+                        android:textColor="@color/allwees_theme_color"
+                        >
+                    </TextView>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_confirmP"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/item_pspace20"
+                    android:text="@string/str_confirm"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:clickable="false"
+                    android:background="@drawable/select_pm_confim"
+                    >
+                </TextView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hint_pm_vc_sms"
+                    android:textSize="@dimen/app_text_word12"
+                    android:textColor="@color/color_999"
+                    android:gravity="center"
+                    >
+                </TextView>
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+    </com.qmuiteam.qmui.widget.roundwidget.QMUIRoundLinearLayout>
+
+</LinearLayout>

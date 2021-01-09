@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"  ?>
+<com.qmuiteam.qmui.widget.QMUIWindowInsetLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:background="@color/white"
+    android:layout_marginTop="@dimen/item_pspace20"
+    android:paddingStart="@dimen/item_pspace15"
+    android:paddingEnd="@dimen/item_pspace15">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:textSize="@dimen/item_pspace20"
+            android:paddingStart="@dimen/item_pspace10"
+            >
+        </TextView>
+
+        <Button
+            android:id="@+id/btn_switchLocale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/item_pspace20"
+            >
+        </Button>
+    </LinearLayout>
+
+</com.qmuiteam.qmui.widget.QMUIWindowInsetLayout>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CheckView">
+        <attr name="android:checked" />
+        <attr name="ev_type" format="integer"/>
+        <attr name="ev_strokeColor" format="color" />
+        <attr name="ev_bgColor" format="color" />
+        <attr name="ev_checkedColor" format="color" />
+        <attr name="ev_size" format="dimension" />
+        <attr name="ev_strokeWidth" format="dimension" />
+    </declare-styleable>
+</resources>

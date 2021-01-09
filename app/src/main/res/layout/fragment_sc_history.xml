@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.qmuiteam.qmui.widget.QMUIWindowInsetLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/app_background_default">
+    <com.hb.basemodel.utils.RecycerLoadMoreScrollView
+        android:id="@+id/rlm_moreCsHistory"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:nestedScrollingEnabled="false"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:descendantFocusability="blocksDescendants"
+            >
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rlv_historyCs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </androidx.recyclerview.widget.RecyclerView>
+        </RelativeLayout>
+    </com.hb.basemodel.utils.RecycerLoadMoreScrollView>
+
+
+</com.qmuiteam.qmui.widget.QMUIWindowInsetLayout>
