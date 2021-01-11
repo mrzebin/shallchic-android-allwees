@@ -405,7 +405,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="@string/cart_view_avaliable_c"
                                     android:textSize="@dimen/item_pspace12"
-                                    android:textColor="@color/color_30c0ff"
+                                    android:textColor="@color/allwees_theme_color"
                                     >
                                 </TextView>
                                 <TextView
@@ -684,10 +684,9 @@
                                 android:drawablePadding="@dimen/item_pspace5"
                                 android:padding="@dimen/item_pspace10"
                                 android:text="@string/cart_dfrar"
-                                android:textColor="@color/color_30c0ff"
+                                android:textColor="@color/allwees_theme_color"
                                 android:textSize="@dimen/app_text_word12" />
                         </LinearLayout>
-
 <!--                        <include layout="@layout/layout_might_like_cart"></include>-->
 <!--                        <include layout="@layout/layout_me_cart_inner"></include>-->
                     </FrameLayout>

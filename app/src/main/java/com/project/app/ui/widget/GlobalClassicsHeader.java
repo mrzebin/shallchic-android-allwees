@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.Space;
 import android.widget.TextView;
 
+import com.project.app.R;
 import com.scwang.smart.drawable.ProgressDrawable;
 import com.scwang.smart.refresh.classics.ArrowDrawable;
 import com.scwang.smart.refresh.layout.api.RefreshHeader;
@@ -17,7 +18,6 @@ import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.constant.RefreshState;
 import com.scwang.smart.refresh.layout.constant.SpinnerStyle;
 import com.scwang.smart.refresh.layout.util.SmartUtil;
-import com.project.app.R;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -48,6 +48,7 @@ public class GlobalClassicsHeader extends LinearLayout implements RefreshHeader 
         mProgressView = new ImageView(context);
         mProgressView.setImageDrawable(mProgressDrawable);
         mArrowView.setImageDrawable(new ArrowDrawable());
+//        mArrowView.setImageDrawable(context.getResources().getDrawable(R.mipmap.ic_refresh_arrow));
         addView(mProgressView, SmartUtil.dp2px(20), SmartUtil.dp2px(20));
         addView(mArrowView, SmartUtil.dp2px(20), SmartUtil.dp2px(20));
         addView(new Space(context), SmartUtil.dp2px(20), SmartUtil.dp2px(20));

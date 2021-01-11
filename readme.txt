@@ -6,7 +6,5 @@ https://git.shallchic.com/android/shallchic-android2
 语言适配:english(ar)英文/阿拉伯文
 Mvp架构
 
-
 查看签名信息:keytool -list -v -keystore rf.jks 详情查看build.gradle
-
 
