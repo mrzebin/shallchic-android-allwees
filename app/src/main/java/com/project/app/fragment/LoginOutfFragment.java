@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.facebook.AccessToken;
@@ -32,7 +33,6 @@ import com.project.app.base.BaseMvpQmuiFragment;
 import com.project.app.contract.LoginContract;
 import com.project.app.presenter.LoginPresenter;
 import com.project.app.utils.LocaleUtil;
-import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -57,7 +57,7 @@ public class LoginOutfFragment extends BaseMvpQmuiFragment<LoginPresenter> imple
     @BindView(R.id.et_registPassword)
     SuperEditView et_registPassword;
     @BindView(R.id.btn_registPost)
-    QMUIRoundButton btn_registPost;
+    Button btn_registPost;
     @BindView(R.id.iv_thirdLogin_facebook)
     ImageView iv_thirdLogin_facebook;
     @BindView(R.id.login_button)
@@ -113,7 +113,6 @@ public class LoginOutfFragment extends BaseMvpQmuiFragment<LoginPresenter> imple
 
             }
         });
-        btn_registPost.setChangeAlphaWhenPress(true);
     }
 
     private boolean inputValid(){
@@ -154,16 +153,12 @@ public class LoginOutfFragment extends BaseMvpQmuiFragment<LoginPresenter> imple
             ToastUtil.showToast(validHint);
             return false;
         }
-//        if(mRegistPassword.length() <8){
-//            ToastUtil.showToast("The password must contain 8 to 16 \n characters with both alphabets and numbers!");
-//            return false;
-//        }
 
-//        if(!RxRegTool.isPassword(mRegistPassword)){
-//            ToastUtil.showToast("The password must contain 8 to 16\n" +
-//                    "Passwords 8 to 16 Numbers mixed with letters cannot have first letters as Numbers");
-//            return false;
-//        }
+        if(mRegistPassword.length() <6){
+            String invalidPs = getContext().getResources().getString(R.string.hint_ps_length);
+            ToastUtil.showToast(invalidPs);
+            return false;
+        }
         return true;
     }
 
@@ -186,8 +181,7 @@ public class LoginOutfFragment extends BaseMvpQmuiFragment<LoginPresenter> imple
                 goP.putString("type","1");
                 goP.putString("webUrl",skipUrl);
                 goP.putString("title",mGoPrivacyp);
-                Intent intent = HolderActivity.of(getContext(), WebExplorerFragment.class,goP);
-                getContext().startActivity(intent);
+                HolderActivity.startFragment(getContext(),WebExplorerFragment.class,goP);
                 break;
             case R.id.iv_thirdLogin_facebook:
                 if(!TextUtils.isEmpty(mFbToken)){
@@ -227,11 +221,11 @@ public class LoginOutfFragment extends BaseMvpQmuiFragment<LoginPresenter> imple
 
     private void registApp() {
         Map<String,String> requestParams = new HashMap<>();
-        String appName = AppUtils.getAppName(getContext());
-        String appVersion = AppUtils.getVersionCode(getContext()) + "";
-        String bundleId = AppConfig.BUNDID;
-        String deviceId = SPManager.sGetString(Constant.SP_DEVICE_ID_FLAG);
-        String deviceModel = SPManager.sGetString(Constant.SP_DEVICE_MODEL);
+        String appName      = AppUtils.getAppName(getContext());
+        String appVersion   = AppUtils.getVersionCode(getContext()) + "";
+        String bundleId     = AppConfig.BUNDID;
+        String deviceId     = SPManager.sGetString(Constant.SP_DEVICE_ID_FLAG);
+        String deviceModel  = SPManager.sGetString(Constant.SP_DEVICE_MODEL);
         String deviceSource = Constant.DEVICE_RESOURCE;
         String shareCode    = Constant.SHARE_CODE;
         String sourceType   = Constant.APP_SOURCE_TYPE;
@@ -263,7 +257,7 @@ public class LoginOutfFragment extends BaseMvpQmuiFragment<LoginPresenter> imple
                 "_APP_" + deviceSource  +
                 "_APP_" + deviceId +
                 "_APP_"  + time;
-        
+
         requestParams.put("signature",MD5.secret(recretLink));
         mPresenter.regist(requestParams);
     }

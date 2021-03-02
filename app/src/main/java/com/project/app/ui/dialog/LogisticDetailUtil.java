@@ -18,11 +18,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hb.basemodel.utils.DataUtil;
-import com.qmuiteam.qmui.util.QMUIDisplayHelper;
-import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.project.app.R;
 import com.project.app.adapter.LogisticTrackAdapter;
 import com.project.app.bean.LogisticTrackBean;
+import com.qmuiteam.qmui.util.QMUIDisplayHelper;
+import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 
 import java.util.ArrayList;
 import java.util.List;

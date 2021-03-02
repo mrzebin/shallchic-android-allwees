@@ -16,6 +16,9 @@ public class WishListPresenter extends BasePresenter<WishlistContract.View> impl
 
     @Override
     public void fetchWishList(int page, int pageSize) {
+        if(mView == null){
+            return;
+        }
         if(!NetStateUtils.isHasNet()){
             mView.fetchNetWorkState(false);
             return;
@@ -23,10 +26,18 @@ public class WishListPresenter extends BasePresenter<WishlistContract.View> impl
         model.fetchWishList(page,pageSize,new BaseModelResponeListener<WishDataBean>() {
             @Override
             public void onSuccess(WishDataBean data) {
+                if(mView == null){
+                    return;
+                }
+                mView.stopLoading();
                 mView.fetchSuccess(data);
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
+                mView.stopLoading();
                 mView.fetchFail(msg);
             }
         });

@@ -1,4 +1,4 @@
-package com.project.app.bean
+package com.project.app.bean;
 
 class OrderDetailBean {
     var uuid:String = ""
@@ -11,12 +11,13 @@ class OrderDetailBean {
     var amtCash:Double =0.0
     var amtProduct:Double = 0.0
     var amtProductCoupon:Double = 0.0
+    var amtProductDiscount:Double = 0.0
     var platformAmt:Double = 0.0
     var amtShipping:Double = 0.0
     var currency:String = ""
     var state:String = ""
     var shippingAddressUuid:String = ""
-    var shippingAddress:ShippingAddress ?= null
+    var shippingAddress:ShippingAddress = ShippingAddress()
     var paymentType:String = ""
     var paymentUuid:String = ""
     var paymentExpiredAt:Long = 0
@@ -42,6 +43,10 @@ class OrderDetailBean {
     var downTime:Long = 0
     var stateDesc:String = ""
     var amtDeduction:Double = 0.0
+    var cashBackAmt:Double = 0.0
+    var codCost:Double = 0.0
+    var duty:Double = 0.0
+    var commission:Double = 0.0
 
     class ShippingAddress{
         var firstName:String = ""
@@ -61,9 +66,9 @@ class OrderDetailBean {
     class Items{
         var uuid:String = ""
         var productUuid:String = ""
-        var product:Product ?= null
+        var product:Product = Product()
         var skuUuid:String = ""
-        var sku:Sku ?= null
+        var sku:Sku = Sku()
         var reviewAble:Boolean = false
         var refundAble:Boolean = false
         var receiveAble:Boolean = false

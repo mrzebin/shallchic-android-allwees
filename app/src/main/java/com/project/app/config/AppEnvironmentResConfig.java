@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class AppEnvironmentResConfig {
     private Context mContext;
-    private static AppEnvironmentResConfig mInstance;
+    private static com.project.app.config.AppEnvironmentResConfig mInstance;
     public  static Map<String,String> mToastCacheMap;
 
     public AppEnvironmentResConfig(Context context){
@@ -19,9 +19,9 @@ public class AppEnvironmentResConfig {
         initRes();
     }
 
-    public static AppEnvironmentResConfig getInstance(Context context){
+    public static com.project.app.config.AppEnvironmentResConfig getInstance(Context context){
         if(mInstance == null){
-            mInstance = new AppEnvironmentResConfig(context);
+            mInstance = new com.project.app.config.AppEnvironmentResConfig(context);
         }
         return mInstance;
     }

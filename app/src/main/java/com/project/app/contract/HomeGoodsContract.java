@@ -12,7 +12,7 @@ public interface HomeGoodsContract {
         void fetchSpecifyGoodsInfo(String no);
     }
 
-    interface View extends BaseView{
+    interface View extends BaseView {
         void fetchSpecifyGi(CategoryBean result);
         void fetchFail(String failReason);
     }

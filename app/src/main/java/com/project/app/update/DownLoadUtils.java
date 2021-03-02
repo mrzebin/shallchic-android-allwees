@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 
-
 import com.hb.basemodel.config.Constant;
 import com.hb.basemodel.utils.SPManager;
 
@@ -18,7 +17,7 @@ import java.io.File;
 public class DownLoadUtils {
     private Context mContext;
     private DownloadManager mDownloadManager;
-    private static volatile DownLoadUtils instance;
+    private static volatile com.project.app.update.DownLoadUtils instance;
 
     private DownLoadUtils(Context context) {
         this.mContext = context.getApplicationContext();
@@ -30,11 +29,11 @@ public class DownLoadUtils {
      * @param context
      * @return
      */
-    public static DownLoadUtils getInstance(Context context) {
+    public static com.project.app.update.DownLoadUtils getInstance(Context context) {
         if(instance == null) {
-            synchronized (DownLoadUtils.class) {
+            synchronized (com.project.app.update.DownLoadUtils.class) {
                 if(instance == null) {
-                    instance = new DownLoadUtils(context);
+                    instance = new com.project.app.update.DownLoadUtils(context);
                     return instance;
                 }
             }
@@ -65,15 +64,15 @@ public class DownLoadUtils {
 //        downloadRequest.setDestinationInExternalFilesDir(mContext, Environment.getExternalStorageDirectory().getAbsolutePath()+"/cancer", appName + ".apk");
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
-            File rootDirFile = mContext.getExternalFilesDir("AllWees");
+            File rootDirFile = mContext.getExternalFilesDir("ShallChic");
             if(!rootDirFile.exists()){
                 rootDirFile.mkdirs();
             }
             downloadRequest.setDestinationUri(Uri.fromFile(new File(rootDirFile,appName)));
             SPManager.sPutString(Constant.SP_DOWNLOAD_ROOT,rootDirFile.getAbsolutePath() + "/" + appName);
         }else{
-            downloadRequest.setDestinationUri(Uri.fromFile(new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/AllWees/"+ appName)));
-            SPManager.sPutString(Constant.SP_DOWNLOAD_ROOT,Environment.getExternalStorageDirectory().getAbsolutePath()+"/AllWees/" + appName );
+            downloadRequest.setDestinationUri(Uri.fromFile(new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/ShallChic/"+ appName)));
+            SPManager.sPutString(Constant.SP_DOWNLOAD_ROOT,Environment.getExternalStorageDirectory().getAbsolutePath()+"/ShallChic/" + appName );
         }
         // 设置一些基本显示信息
         downloadRequest.setTitle(title);

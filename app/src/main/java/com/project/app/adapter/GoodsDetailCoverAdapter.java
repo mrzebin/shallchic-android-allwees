@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.hb.basemodel.config.Constant;
 import com.hb.basemodel.image.ImageLoader;
 import com.qmuiteam.qmui.util.QMUIDisplayHelper;
 import com.project.app.R;
@@ -49,7 +48,7 @@ public class GoodsDetailCoverAdapter extends PagerAdapter {
 
         String loadUrl = mCoverList.get(position);
         if(!TextUtils.isEmpty(loadUrl)){
-            ImageLoader.getInstance().displayImage(iv_cover,loadUrl + Constant.mGlobalThumbnailStyle,R.mipmap.allwees_ic_default_goods);
+            ImageLoader.getInstance().displayImage(iv_cover,loadUrl,R.mipmap.allwees_ic_default_goods);
         }else{
             iv_cover.setImageDrawable(mContext.getDrawable(R.mipmap.allwees_ic_default_goods));
         }

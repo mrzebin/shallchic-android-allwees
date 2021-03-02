@@ -18,7 +18,7 @@ public class RewardModel implements RewardContract.Model {
     }
 
     @Override
-    public void fetchRedeemInfo(int page,int pageSize,BaseModelResponeListener listener) {
+    public void fetchRedeemInfo(int page, int pageSize, BaseModelResponeListener listener) {
         String requestType = "0";
         String url = BaseUrlConfig.getRootHost() + UrlConfig.FETCH_REDEEM_INFO_URL;
         HashMap<String,String> params = new HashMap<>();
@@ -39,7 +39,7 @@ public class RewardModel implements RewardContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+//                listener.onFail(e.getMessage());
             }
         });
     }
@@ -61,7 +61,7 @@ public class RewardModel implements RewardContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+//                listener.onFail(e.getMessage());
             }
         });
     }

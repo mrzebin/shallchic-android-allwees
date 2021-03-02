@@ -1,7 +1,5 @@
 package com.project.app.fragment.home;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,6 +12,8 @@ import android.widget.TextView;
 import com.hb.basemodel.config.Constant;
 import com.hb.basemodel.event.RefreshDataEvent;
 import com.hb.basemodel.other.UserUtil;
+import com.hb.basemodel.utils.DataUtil;
+import com.hb.basemodel.utils.JsonUtils;
 import com.hb.basemodel.utils.SPManager;
 import com.qmuiteam.qmui.arch.QMUIFragment;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
@@ -27,8 +27,11 @@ import com.project.app.base.BaseMvpQmuiFragment;
 import com.project.app.bean.AppUpdateBean;
 import com.project.app.bean.CartBuyDataBean;
 import com.project.app.bean.CategoryBean;
+import com.project.app.bean.ContactAppBean;
 import com.project.app.bean.CountryCropBean;
+import com.project.app.bean.MarketGiftInfoBean;
 import com.project.app.bean.ParseFacebookDeeplinkBean;
+import com.project.app.config.AppsFlyConfig;
 import com.project.app.contract.HomeContract;
 import com.project.app.fragment.GoodsDetailFragment;
 import com.project.app.fragment.WebExplorerFragment;
@@ -36,10 +39,16 @@ import com.project.app.fragment.address.AddressManagerFragment;
 import com.project.app.fragment.earn.RewardFragment;
 import com.project.app.fragment.earn.SchallCashFragment;
 import com.project.app.fragment.home.classify.CategoryClassifyFragment;
+import com.project.app.fragment.home.classify.DeliverDoubleFragment;
+import com.project.app.fragment.order.OrderDetailFragment;
 import com.project.app.presenter.HomePresenter;
 import com.project.app.ui.NoScrollViewPager;
+import com.project.app.ui.dialog.RunoobCouponUtil;
+import com.project.app.ui.dialog.UpdateAppUtil;
 import com.project.app.update.DownloadApk;
+import com.project.app.utils.AppsFlyEventUtils;
 import com.project.app.utils.CheckVersionUtil;
+import com.project.app.utils.HomeTitlesUtils;
 import com.project.app.utils.LocaleUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -49,6 +58,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -86,11 +96,13 @@ public class HomeFragment extends BaseMvpQmuiFragment<HomePresenter> implements 
     private HashMap<Pager, QMUIWindowInsetLayout> mPager;
     private HomeController     mHomeController;
     private CategoryController mCategoryController;
-    private GirlController     mGrilController;
-    private CarController      mCarController;
+    private FavoriteController mGrilController;
+    private CartController     mCarController;
     private MeController       mMeController;
     private ArrayList<ImageView> mTabList;
     private int mCurrentIndex = 0;
+    private RunoobCouponUtil mRunoobCouponUtil;
+    private UpdateAppUtil mUpdateAppUtil;
 
     @Override
     public int getLayoutId() {
@@ -101,16 +113,63 @@ public class HomeFragment extends BaseMvpQmuiFragment<HomePresenter> implements 
     public void initView() {
         initTabs();
         initPagers();
-        initDeeplinkStatus();
+        initWidget();
         mPresenter = new HomePresenter();
         mPresenter.attachView(this);
         EventBus.getDefault().register(this);
     }
 
+    private void initWidget() {
+        initDailog();
+        ParseFacebookDeeplinkBean deeplinkBean = ((MainActivity)getActivity()).mDeeplinkBean;
+        if(deeplinkBean == null){
+            return;
+        }
+        String forwardUri = deeplinkBean.getExtras().getSc_deeplink();
+        if(!TextUtils.isEmpty(forwardUri)){
+            initDeeplinkStatus(forwardUri);
+        }
+    }
+
+    private void initDailog() {
+        mRunoobCouponUtil = new RunoobCouponUtil(getContext(),true,false);
+        mUpdateAppUtil    = new UpdateAppUtil(getContext(),true,false);
+
+        mRunoobCouponUtil.setListener(new RunoobCouponUtil.RunoobObserveCancelListener() {
+            @Override
+            public void dialogCancel() {
+                if(!SPManager.sGetBoolean(Constant.SP_DIALOG_DAILY_CHECK_UPDATE)){
+                    mPresenter.checkAppersion();
+                }
+            }
+        });
+
+        mUpdateAppUtil.setListener(new UpdateAppUtil.CallbackOpreateListener() {
+            @Override
+            public void selectUpdateApp(String downUrl,String content) {
+                DownloadApk.downloadApk(getContext(),downUrl,content, Constant.APPLICATION_ID);
+            }
+        });
+    }
+
+    private void checkMiuiPush(boolean isBind) {
+        String pushId = SPManager.sGetString(Constant.SP_BIND_MIUI_PUSH_ID);
+        if(!TextUtils.isEmpty(pushId)){
+            mPresenter.bindMiuiPushId(pushId,isBind);
+        }
+    }
+
     @Override
     protected void lazyFetchData() {
-        mPresenter.checkAppersion();
         mPresenter.fetchCountryList();
+        mPresenter.fetchContactInfo();
+        mPresenter.fetchHomePopularTitles();
+        checkMiuiPush(true);
+        if(!UserUtil.getInstance().isLogin()){    //未登录弹
+            mRunoobCouponUtil.show();
+        }else {
+            mPresenter.fetchFreeGiftStatus();    //如果登录则调取接口获取记录
+        }
     }
 
     @OnClick({R.id.tab_main_home,R.id.tab_main_category,R.id.tab_main_cart,R.id.tab_main_wishlist,R.id.tab_main_me})
@@ -135,23 +194,33 @@ public class HomeFragment extends BaseMvpQmuiFragment<HomePresenter> implements 
         resetTabs(mCurrentIndex);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
     public void onEvent(RefreshDataEvent event) {
         switch (event.getmMsg()) {
             case Constant.EVENT_LOGIN_SUCCESS:     //登录成功后的操作
+                mPresenter.fetchFreeGiftStatus();  //登录成功后获取是否获取礼物接口
+                if(mHomeController != null){
+                    mHomeController.onRefreshView();
+                }
                 if(mGrilController != null){
                     mGrilController.onRefreshView();
                 }
                 if (mCarController != null) {
-                    mCarController.onRefreshView(true);
+                    mCarController.onRefreshView();
                 }
                 if (mMeController != null) {
+                    mMeController.onRefreshView();
+                }
+                checkMiuiPush(true);    //退出app时候调用
+                break;
+            case Constant.EVENT_MODIFY_USERINFO_SUCCESS:  
+                if(mMeController != null){
                     mMeController.onRefreshView();
                 }
                 break;
             case Constant.EVENT_REFRESH_CAR:
                 if (mCarController != null) {
-                    mCarController.onRefreshView(true);
+                    mCarController.onRefreshView();
                 }
                 break;
             case Constant.EVENT_GO_HOME_CART:
@@ -166,6 +235,9 @@ public class HomeFragment extends BaseMvpQmuiFragment<HomePresenter> implements 
                 }
                 break;
             case Constant.EVENT_EXIT_APP_SURE:       //退出app时清理数据
+                if(mHomeController != null){
+                    mHomeController.onRefreshView();
+                }
                 if (mCarController != null) {
                     mCarController.syncExitApp();
                 }
@@ -175,7 +247,9 @@ public class HomeFragment extends BaseMvpQmuiFragment<HomePresenter> implements 
                 if (mMeController != null) {
                     mMeController.syncExitApp();
                 }
+                SPManager.sPutBoolean(Constant.SP_HOME_POPULAR_FLOAT_GIFT,false);
                 refreshTabCartCount();
+                checkMiuiPush(false);
                 break;
             case Constant.REFRESH_WISHLIST_FAVORITE:
                 if (mGrilController != null) {
@@ -225,6 +299,18 @@ public class HomeFragment extends BaseMvpQmuiFragment<HomePresenter> implements 
                     resetTabs(mCurrentIndex);
                 }
                 break;
+            case Constant.EVENT_INNER_APP_DEEPLINK:    //内部app通过deeplink跳转
+                String linkData = event.getData();
+                if(!TextUtils.isEmpty(linkData)){
+                    initDeeplinkStatus(linkData);
+                }
+                break;
+            case Constant.EVENT_PUSH_APP_DEEPLINK:
+                String pushDeepLink = event.getData();
+                if(!TextUtils.isEmpty(pushDeepLink)){
+                    initDeeplinkStatus(pushDeepLink);
+                }
+                break;
         }
     }
 
@@ -239,7 +325,7 @@ public class HomeFragment extends BaseMvpQmuiFragment<HomePresenter> implements 
             tv_tabCartCount.setVisibility(View.VISIBLE);
             if(count<=99){
                 if(mCurrentIndex == 2){
-                    tv_tabCartCount.setTextColor(getResources().getColor(R.color.allwees_theme_color));
+                    tv_tabCartCount.setTextColor(getResources().getColor(R.color.theme_color));
                 }else{
                     tv_tabCartCount.setTextColor(getResources().getColor(R.color.color_999));
                 }
@@ -312,7 +398,7 @@ public class HomeFragment extends BaseMvpQmuiFragment<HomePresenter> implements 
                 try {
                     QMUIFragment desFragment = fragment.newInstance();
                     HomeFragment.this.startFragment(desFragment);
-                } catch (IllegalAccessException | java.lang.InstantiationException e) {
+                } catch (IllegalAccessException | InstantiationException | java.lang.InstantiationException e) {
                     e.printStackTrace();
                 }
             }
@@ -323,7 +409,7 @@ public class HomeFragment extends BaseMvpQmuiFragment<HomePresenter> implements 
                     QMUIFragment desFragment = fragment.newInstance();
                     desFragment.setArguments(argsBundle);
                     HomeFragment.this.startFragment(desFragment);
-                } catch (IllegalAccessException | java.lang.InstantiationException e) {
+                } catch (IllegalAccessException | InstantiationException | java.lang.InstantiationException e) {
                     e.printStackTrace();
                 }
             }
@@ -348,11 +434,11 @@ public class HomeFragment extends BaseMvpQmuiFragment<HomePresenter> implements 
         mCategoryController.setHomeControlListener(mSpriteListener);
         mPager.put(Pager.CATEGORY,mCategoryController);
 
-        mCarController = new CarController(getContext());
+        mCarController = new CartController(getContext());
         mCarController.setHomeControlListener(mSpriteListener);
         mPager.put(Pager.CAR,mCarController);
 
-        mGrilController = new GirlController(getContext());
+        mGrilController = new FavoriteController(getContext());
         mGrilController.setHomeControlListener(mSpriteListener);
         mPager.put(Pager.GIRL,mGrilController);
 
@@ -378,9 +464,10 @@ public class HomeFragment extends BaseMvpQmuiFragment<HomePresenter> implements 
                 } else if (position == 1) {
                     QMUIStatusBarHelper.setStatusBarLightMode(getActivity());
                     mCategoryController.onRefreshView();
+                    AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_CATEGORY_HOME);
                 } else if (position == 2) {
                     QMUIStatusBarHelper.setStatusBarLightMode(getActivity());
-                    mCarController.onRefreshView(true);
+                    mCarController.onRefreshView();
                 } else if (position == 3) {
                     QMUIStatusBarHelper.setStatusBarLightMode(getActivity());
                     mGrilController.onRefreshView();
@@ -398,24 +485,7 @@ public class HomeFragment extends BaseMvpQmuiFragment<HomePresenter> implements 
         refreshTabCartCount();
     }
 
-    /**
-     * {
-     * 	"target_url": "https:\/\/allwees.com",
-     * 	"extras": {
-     * 		"sc_deeplink": "allwees:\/\/mine"
-     *        },
-     * 	"referer_app_link": {
-     * 		"app_name": "AllWees"
-     *    }
-     * }
-     */
-    private void initDeeplinkStatus() {
-        ParseFacebookDeeplinkBean deeplinkBean = ((MainActivity)getActivity()).mDeeplinkBean;
-        if(deeplinkBean == null){
-            return;
-        }
-        String forwardUri = deeplinkBean.getExtras().getSc_deeplink();
-
+    private void initDeeplinkStatus(String forwardUri) {
         if(!TextUtils.isEmpty(forwardUri)){
             if(forwardUri.equalsIgnoreCase(Constant.SCHEME_HOST_DEEPLINK_HOME)){
                 if (mHomeController != null) {
@@ -449,32 +519,26 @@ public class HomeFragment extends BaseMvpQmuiFragment<HomePresenter> implements 
                 if(UserUtil.getInstance().isLogin()){
                     Bundle bundle = new Bundle();
                     bundle.putString("type","1");
-                    Intent goAddress = HolderActivity.of(getContext(), AddressManagerFragment.class,bundle);
-                    getContext().startActivity(goAddress);
+                    HolderActivity.startFragment(getContext(),AddressManagerFragment.class,bundle);
                 }
             }else if(forwardUri.equalsIgnoreCase(Constant.SCHEME_HOST_DEEPLINK_CASH)){
                 if(UserUtil.getInstance().isLogin()){
-                    Intent goCash = HolderActivity.of(getContext(), SchallCashFragment.class);
-                    getContext().startActivity(goCash);
+                    HolderActivity.startFragment(getContext(),SchallCashFragment.class);
                 }
             }else if(forwardUri.equalsIgnoreCase(Constant.SCHEME_HOST_DEEPLINK_REWARDS)){
                 if(UserUtil.getInstance().isLogin()){
-                    Intent goCash = HolderActivity.of(getContext(), RewardFragment.class);
-                    getContext().startActivity(goCash);
+                    HolderActivity.startFragment(getContext(),RewardFragment.class);
                 }
             }else if(forwardUri.startsWith(Constant.SCHEME_HOST_DEEPLINK_ORDERHISTORY)){
                 if(UserUtil.getInstance().isLogin()){
-                    Intent goCash = HolderActivity.of(getContext(), OrderFragment.class);
-                    getContext().startActivity(goCash);
+                    HolderActivity.startFragment(getContext(),OrderFragment.class);
                 }
             }else if(forwardUri.equalsIgnoreCase(Constant.SCHEME_HOST_DEEPLINK_ORDERHISTORYDETAIL)){
                  if(UserUtil.getInstance().isLogin()){
-//                     String orderId = subEqualSymbol(forwardUri);
-//                     Bundle bundle = new Bundle();
-//                     bundle.putString("orderId",orderId);
-//                     bundle.putString("orderType",data.getStateDesc());
-//                     Intent intent = HolderActivity.of(getContext(), OrderDetailFragment.class,bundle);
-//                     getContext().startActivity(intent);
+                     String orderId = subEqualSymbol(forwardUri);
+                     Bundle bundle = new Bundle();
+                     bundle.putString("orderId",orderId);
+                     HolderActivity.startFragment(getContext(),OrderDetailFragment.class,bundle);
                 }
             }else if(forwardUri.startsWith(Constant.SCHEME_HOST_DEEPLINK_GOODSDETAIL)){    //商品详情
                 //解析字符串
@@ -483,16 +547,14 @@ public class HomeFragment extends BaseMvpQmuiFragment<HomePresenter> implements 
                     Bundle bundle = new Bundle();
                     bundle.putString("uuid", uuid);
                     bundle.putString("type","1");
-                    Intent intent = HolderActivity.of(getContext(), GoodsDetailFragment.class,bundle);
-                    getContext().startActivity(intent);
+                    HolderActivity.startFragment(getContext(),GoodsDetailFragment.class,bundle);
                 }
             }else if(forwardUri.startsWith(Constant.SCHEME_HOST_DEEPLINK_WEBVIEW)){
                 String skipUrl = subEqualSymbol(forwardUri);    //提取url
                 Bundle goP = new Bundle();
                 goP.putString("type","4");
                 goP.putString("webUrl",skipUrl);
-                Intent intent = HolderActivity.of(getContext(), WebExplorerFragment.class,goP);
-                getContext().startActivity(intent);
+                HolderActivity.startFragment(getContext(),WebExplorerFragment.class,goP);
             }else if(forwardUri.startsWith(Constant.SCHEME_HOST_DEEPLINK_CATEGORY_ITEM)){    //提取分类
                 String title = "";
                 String categoryNo = "";
@@ -506,10 +568,15 @@ public class HomeFragment extends BaseMvpQmuiFragment<HomePresenter> implements 
                         Bundle bundle = new Bundle();
                         bundle.putString("type", categoryNo);
                         bundle.putString("name",title);
-                        Intent intent = HolderActivity.of(getContext(), CategoryClassifyFragment.class,bundle);
-                        getContext().startActivity(intent);
+                        HolderActivity.startFragment(getContext(),CategoryClassifyFragment.class,bundle);
                     }
                 }
+            }else if(forwardUri.startsWith(Constant.SCHEME_HOST_DEEPLINK_MARKETACTIVITY)){          //跳转到活动专区
+                HashMap<String,String> params = parseDeeplinkParams(forwardUri);
+                Bundle bundle = new Bundle();
+                bundle.putString("marketTitle",params.get("title"));
+                bundle.putString("marketId",params.get("bundleId"));
+                HolderActivity.startFragment(getContext(),DeliverDoubleFragment.class,bundle);
             }
         }
     }
@@ -522,6 +589,25 @@ public class HomeFragment extends BaseMvpQmuiFragment<HomePresenter> implements 
             result = target.substring(endPosition+1,target.length());
         }
         return result;
+    }
+
+    //解析带&符号拼接的字符串
+    private HashMap parseDeeplinkParams(String target){
+        HashMap<String,String> validParams = new HashMap<>();
+        int positionLable = 0;
+        int positionEqualLable = 0;
+
+        if(target.contains("&")){
+            positionLable = target.indexOf("&");
+            validParams.put("title",target.substring(positionLable+1,target.length()));
+        }
+        if(target.contains("=")){
+            positionEqualLable = target.indexOf("=");
+            if(target.contains("&")){
+                validParams.put("bundleId",target.substring(positionEqualLable+1,positionLable));
+            }
+        }
+        return validParams;
     }
 
     private void initTabs() {
@@ -548,29 +634,13 @@ public class HomeFragment extends BaseMvpQmuiFragment<HomePresenter> implements 
      * @param bean
      */
     public void updateDialog(AppUpdateBean bean){
-        String updateTip  = getContext().getResources().getString(R.string.dialog_update_tip);
-        String str_ok     = getContext().getResources().getString(R.string.dialog_ok_tip);
-        String str_cancel = getContext().getResources().getString(R.string.dialog_cancel_tip);
-        String applicationId = getResources().getString(R.string.application_id);
-
         if(bean.getForceUpdate()){
-            DownloadApk.downloadApk(getContext(),bean.getDownUrl(),bean.getContent(),applicationId);
+            if(!TextUtils.isEmpty(bean.getDownUrl())){
+                DownloadApk.downloadApk(getContext(),bean.getDownUrl(),bean.getContent(), Constant.APPLICATION_ID);
+            }
         }else{
-            AlertDialog.Builder updateBuilder = new AlertDialog.Builder(getContext());
-            updateBuilder.setTitle(updateTip);
-            updateBuilder.setMessage(bean.getContent());
-            updateBuilder.setPositiveButton(str_ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    DownloadApk.downloadApk(getContext(),bean.getDownUrl(),bean.getContent(),applicationId);
-                }
-            }).setNegativeButton(str_cancel, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
-                }
-            });
-            updateBuilder.create().show();
+            mUpdateAppUtil.show(bean);
+            SPManager.sPutBoolean(Constant.SP_DIALOG_DAILY_CHECK_UPDATE,true);   //今天已经显示过了
         }
     }
 
@@ -608,11 +678,6 @@ public class HomeFragment extends BaseMvpQmuiFragment<HomePresenter> implements 
     }
 
     @Override
-    public void fetchAccessUploadToken(String result) {
-
-    }
-
-    @Override
     public void fetchFail(String failReason) {
 
     }
@@ -622,7 +687,11 @@ public class HomeFragment extends BaseMvpQmuiFragment<HomePresenter> implements 
         if(!TextUtils.isEmpty(result.getLatestVersion())){
             if(CheckVersionUtil.isNeedUpdate(getContext(),result.getLatestVersion())){
                 if(!TextUtils.isEmpty(result.getDownUrl())){
-                    updateDialog(result);
+                    if(!mRunoobCouponUtil.mDialog.isShowing()){    //新手任务弹窗不显示的时候弹更新弹窗
+                        if(!SPManager.sGetBoolean(Constant.SP_DIALOG_DAILY_CHECK_UPDATE)){ //判断今天有没有弹更新
+                            updateDialog(result);
+                        }
+                    }
                 }
             }
         }
@@ -632,6 +701,69 @@ public class HomeFragment extends BaseMvpQmuiFragment<HomePresenter> implements 
     public void fetchCountrysSuccess(CountryCropBean result) {
         infilterPhoneAreaCode(result);
     }
+
+    @Override
+    public void fetchFreeGiftsStatusSuccess(MarketGiftInfoBean result) {
+        if(!result.getApplied() && !result.getCompleted()){
+            checkRunoobRules();
+        }else{
+            SPManager.sPutBoolean(Constant.SP_HOME_POPULAR_FLOAT_GIFT,true);
+            if(!SPManager.sGetBoolean(Constant.SP_DIALOG_DAILY_CHECK_UPDATE)){
+                mPresenter.checkAppersion();
+            }
+        }
+    }
+
+    @Override
+    public void bindMiuiPushIdSuccess() {   //小米推送绑定成功
+
+    }
+
+    @Override
+    public void fetchHomePopularTitlesSuccess(CategoryBean bean) {
+        if(bean != null){
+            HomeTitlesUtils instance =  HomeTitlesUtils.getInstance();
+            instance.setmCategoryBean(bean);
+        }
+    }
+
+    @Override
+    public void fetchContackInfoSuccess(String result) {
+        if(!TextUtils.isEmpty(result)){
+            List<ContactAppBean> contactList = JsonUtils.deserializeList(result,ContactAppBean[].class);
+            if(DataUtil.idNotNull(contactList)){
+                for(ContactAppBean item:contactList){
+                    if(item.getName().equals(Constant.CONTACT_SPECIFY_EMAIL_FLAG)){
+                        SPManager.sPutString(Constant.SP_CONTACT_EMAIL_NUMBER,item.getAcctNum());
+                    }else if(item.getName().equals(Constant.CONTACT_SPECIFY_WHATSAPP_FLAG)){
+                        SPManager.sPutString(Constant.SP_CONTACT_WHATS_NUMBER,item.getAcctNum());
+                    }else if(item.getName().equals(Constant.CONTACT_SPECIFY_INSTAGRAM_FLAG)){
+                        SPManager.sPutString(Constant.SP_CONTACT_INSTAGRAM_NUMBER,item.getAcctNum());
+                    }else if(item.getName().equals(Constant.CONTACT_SPECIFY_YOUTUBE_FLAG)){
+                        SPManager.sPutString(Constant.SP_CONTACT_YOUTUBE_NUMBER,item.getAcctNum());
+                    }else if(item.getName().equals(Constant.CONTACT_SPECIFY_FACEBOOK_FLAG)){
+                        SPManager.sPutString(Constant.SP_CONTACT_FACEBOOK_NUMBER,item.getAcctNum());
+                    }else if(item.getName().equals(Constant.CONTACT_SPECIFY_TWITTER_FLAG)){
+                        SPManager.sPutString(Constant.SP_CONTACT_TWITTER_NUMBER,item.getAcctNum());
+                    }
+                }
+            }
+        }
+    }
+
+    private void checkRunoobRules(){    //每天只弹一次
+        boolean isToday =  SPManager.sGetBoolean(Constant.SP_DIALOG_TODAY_RUNOOB_GIFT);
+        if(!isToday){
+            mRunoobCouponUtil.show();
+            SPManager.sPutBoolean(Constant.SP_DIALOG_TODAY_RUNOOB_GIFT,true);
+        }else{
+            SPManager.sPutBoolean(Constant.SP_HOME_POPULAR_FLOAT_GIFT,true);
+            if(!SPManager.sGetBoolean(Constant.SP_DIALOG_DAILY_CHECK_UPDATE)){
+                mPresenter.checkAppersion();
+            }
+        }
+    }
+
     //获取国家区号
     private void infilterPhoneAreaCode(CountryCropBean bean){
         CountryCropBean.CountryItem defaultCountryItem = null;

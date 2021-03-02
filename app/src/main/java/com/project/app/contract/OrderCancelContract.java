@@ -10,7 +10,7 @@ public interface OrderCancelContract {
         void submitCancelReasonToService(String orderItemUuid, String orderUuid,String reason,String remarks, int type, BaseModelResponeListener listener);
     }
 
-    interface View extends BaseView{
+    interface View extends BaseView {
         void submitCancalSuccess(OrderDetailBean result);
         void submitCancalFail(String result);
     }

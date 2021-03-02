@@ -1,13 +1,11 @@
 package com.project.app.adapter;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.module.LoadMoreModule;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.hb.basemodel.config.Constant;
 import com.hb.basemodel.image.ImageLoader;
 import com.project.app.R;
 import com.project.app.activity.HolderActivity;
@@ -31,11 +29,7 @@ public class DeliverDoubleAdapter extends BaseQuickAdapter<ActionFreeOneBean.Cla
         String mainPhoto = goodInfo.getMainPhoto();
 
         if(!TextUtils.isEmpty(mainPhoto)){
-            if(mainPhoto.endsWith("png") || mainPhoto.endsWith("jpg")){
-                ImageLoader.getInstance().displayImage(helper.getView(R.id.tv_superClassify),mainPhoto + Constant.mGlobalThumbnailStyle,R.mipmap.allwees_ic_default_goods);
-            }else if(mainPhoto.endsWith("gif")){
-                ImageLoader.getInstance().displayImage(helper.getView(R.id.tv_superClassify),mainPhoto,R.mipmap.allwees_ic_default_goods);
-            }
+            ImageLoader.getInstance().displayImage(helper.getView(R.id.tv_superClassify),mainPhoto,R.mipmap.allwees_ic_default_goods);
         }
 
         if(!TextUtils.isEmpty(goodInfo.getPriceRetail()+"")){
@@ -55,8 +49,7 @@ public class DeliverDoubleAdapter extends BaseQuickAdapter<ActionFreeOneBean.Cla
             Bundle bundle = new Bundle();
             bundle.putString("uuid", goodInfo.getUuid());
             bundle.putString("type","1");
-            Intent intent = HolderActivity.of(getContext(), GoodsDetailFragment.class,bundle);
-            getContext().startActivity(intent);
+            HolderActivity.startFragment(getContext(),GoodsDetailFragment.class,bundle);
         });
     }
 }

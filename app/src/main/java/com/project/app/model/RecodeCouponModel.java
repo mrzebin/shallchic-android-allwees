@@ -32,7 +32,7 @@ public class RecodeCouponModel implements PresenterCouponContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+//                listener.onFail(e.getMessage());
             }
         });
     }

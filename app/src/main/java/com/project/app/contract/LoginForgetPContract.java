@@ -6,10 +6,10 @@ import com.hb.basemodel.base.BaseView;
 public interface LoginForgetPContract {
 
     interface Model{
-        void  sendTargetEmailCode(String email,BaseModelResponeListener listener);
+        void  sendTargetEmailCode(String email, BaseModelResponeListener listener);
     }
 
-    interface View extends BaseView{
+    interface View extends BaseView {
         void sendSuccess(String msg);
         void fetchFail(String failReason);
     }

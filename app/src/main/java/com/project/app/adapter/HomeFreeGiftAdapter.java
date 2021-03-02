@@ -1,6 +1,5 @@
 package com.project.app.adapter;
 
-import android.content.Intent;
 import android.graphics.Paint;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -10,15 +9,14 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.hb.basemodel.config.Constant;
 import com.hb.basemodel.image.ImageLoader;
-import com.qmuiteam.qmui.util.QMUIDisplayHelper;
-import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 import com.project.app.R;
 import com.project.app.activity.HolderActivity;
 import com.project.app.bean.HomeFreeGiftBean;
 import com.project.app.fragment.home.classify.HomeClassifyGiftsFragment;
 import com.project.app.utils.MathUtil;
+import com.qmuiteam.qmui.util.QMUIDisplayHelper;
+import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -59,7 +57,7 @@ public class HomeFreeGiftAdapter extends BaseQuickAdapter<HomeFreeGiftBean.GiftI
             }else{
                 helper.setVisible(R.id.ll_recommendC,true);
                 qiv_cCover.setVisibility(View.GONE);
-                ImageLoader.getInstance().displayImage(qiv_cover,data.getMainPhoto() + Constant.mGlobalThumbnailStyle,R.mipmap.allwees_ic_default_goods);
+                ImageLoader.getInstance().displayImage(qiv_cover,data.getMainPhoto(),R.mipmap.allwees_ic_default_goods);
             }
         }
 
@@ -72,8 +70,7 @@ public class HomeFreeGiftAdapter extends BaseQuickAdapter<HomeFreeGiftBean.GiftI
         tv_newRetailP.setText(MathUtil.Companion.formatPrice(data.getPriceOrigin()));
 
         helper.itemView.setOnClickListener(view -> {
-            Intent goFreeG  = HolderActivity.of(getContext(), HomeClassifyGiftsFragment.class);
-            getContext().startActivity(goFreeG);
+            HolderActivity.startFragment(getContext(),HomeClassifyGiftsFragment.class);
         });
     }
 }

@@ -1,6 +1,5 @@
 package com.project.app.adapter;
 
-import android.content.Intent;
 import android.graphics.Paint;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -9,17 +8,16 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.hb.basemodel.config.Constant;
 import com.hb.basemodel.image.ImageLoader;
 import com.hb.basemodel.uicomponent.roundview.RoundLinearLayout;
-import com.qmuiteam.qmui.util.QMUIDisplayHelper;
-import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 import com.project.app.R;
 import com.project.app.activity.HolderActivity;
 import com.project.app.bean.HomeFLashSaleBean;
 import com.project.app.fragment.home.classify.FlashSaleFragment;
 import com.project.app.utils.LocaleUtil;
 import com.project.app.utils.MathUtil;
+import com.qmuiteam.qmui.util.QMUIDisplayHelper;
+import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -64,7 +62,7 @@ public class HomeFlashSaleAdapter extends BaseQuickAdapter<HomeFLashSaleBean.Fla
         }
 
         if(!TextUtils.isEmpty(data.getMainPhoto())){
-            ImageLoader.getInstance().displayImage(qiv_cover,data.getMainPhoto() + Constant.mGlobalThumbnailStyle,R.mipmap.allwees_ic_default_goods);
+            ImageLoader.getInstance().displayImage(qiv_cover,data.getMainPhoto(),R.mipmap.allwees_ic_default_goods);
         }
 
         if(data.getPriceRetail() == 0){
@@ -79,8 +77,7 @@ public class HomeFlashSaleAdapter extends BaseQuickAdapter<HomeFLashSaleBean.Fla
         helper.setText(R.id.tv_fsRetailP,MathUtil.Companion.formatPrice(data.getPriceRetail()));
 
         helper.itemView.setOnClickListener(view -> {
-            Intent goFreeG  = HolderActivity.of(getContext(), FlashSaleFragment.class);
-            getContext().startActivity(goFreeG);
+            HolderActivity.startFragment(getContext(),FlashSaleFragment.class);
         });
     }
 }

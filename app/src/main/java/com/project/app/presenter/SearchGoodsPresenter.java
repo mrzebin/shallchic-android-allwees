@@ -21,10 +21,19 @@ public class SearchGoodsPresenter extends BasePresenter<SearchGoodsContract.View
         model.trendingSearchs(new BaseModelResponeListener<List<TrendingSearchBean.SearchItem>>() {
             @Override
             public void onSuccess(List<TrendingSearchBean.SearchItem> data) {
+                if(mView == null){
+                    return;
+                }
+                if(data == null){
+                    return;
+                }
                 mView.fetchTrendingSearchSuccess(data);
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchTrendingSearchFail(msg);
             }
         });
@@ -32,17 +41,29 @@ public class SearchGoodsPresenter extends BasePresenter<SearchGoodsContract.View
 
     @Override
     public void searchGoods(boolean showProcess,int page, int pagesize, String query) {
+        if(mView == null){
+            return;
+        }
         if(showProcess){
             mView.startLoading();
         }
         model.searchGoods(page,pagesize,query,new BaseModelResponeListener<ClassifyListBean>() {
             @Override
             public void onSuccess(ClassifyListBean data) {
+                if(data == null){
+                    return;
+                }
+                if(mView == null){
+                    return;
+                }
                 mView.stopLoading();
                 mView.fetchSearchTargetSuccess(data);
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.stopLoading();
                 mView.fetchSearchTargetFail(msg);
             }

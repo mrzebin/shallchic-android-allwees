@@ -39,7 +39,7 @@ public class AddressControlModel implements AddressControlContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+
             }
         });
     }
@@ -64,7 +64,7 @@ public class AddressControlModel implements AddressControlContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+
             }
         },params);
     }

@@ -1,18 +1,13 @@
 package com.project.app.adapter;
 
-import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.module.LoadMoreModule;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.hb.basemodel.config.Constant;
 import com.hb.basemodel.image.ImageLoader;
-import com.hb.basemodel.uicomponent.roundimageview.RoundedImageView;
 import com.hb.basemodel.uicomponent.roundview.RoundLinearLayout;
 import com.qmuiteam.qmui.util.QMUIDisplayHelper;
 import com.project.app.R;
@@ -26,23 +21,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import androidx.annotation.NonNull;
-
-public class HomeClassifyAdapter extends BaseQuickAdapter<ClassifyListBean.ClassifyItem, BaseViewHolder> implements LoadMoreModule {
+public class HomeClassifyAdapter extends BaseQuickAdapter<ClassifyListBean.ClassifyItem, BaseViewHolder> {
     private String pSymbol;
 
     public HomeClassifyAdapter(List<ClassifyListBean.ClassifyItem> data) {
-        super(R.layout.item_home_classify, data);
+        super(R.layout.item_home_popular, data);
         pSymbol = LocaleUtil.getInstance().getSymbole();
-    }
-
-    @Override
-    public void onViewRecycled(@NonNull BaseViewHolder holder) {
-        super.onViewRecycled(holder);
-        RoundedImageView imageView = holder.getView(R.id.tv_superClassify);
-        if(imageView != null){
-            Glide.with(getContext()).clear(imageView);
-        }
     }
 
     @Override
@@ -51,11 +35,8 @@ public class HomeClassifyAdapter extends BaseQuickAdapter<ClassifyListBean.Class
         String mainPhoto = goodInfo.getMainPhoto();
 
         if(!TextUtils.isEmpty(mainPhoto)){
-            if(mainPhoto.endsWith("png") || mainPhoto.endsWith("jpg")){
-                ImageLoader.getInstance().displayImage(helper.getView(R.id.tv_superClassify),mainPhoto + Constant.mGlobalThumbnailStyle,R.mipmap.allwees_ic_default_goods);
-            }else if(mainPhoto.endsWith("gif")){
-                ImageLoader.getInstance().displayImage(helper.getView(R.id.tv_superClassify),mainPhoto,R.mipmap.allwees_ic_default_goods);
-            }
+//            mainPhoto = "https://cdn-ae.shallchic.com/spu/1/20210110/fd04a645f7b1516c68e6b333fd2b67a3.gif";
+            ImageLoader.getInstance().displayImage(helper.getView(R.id.iv_gif_goods),mainPhoto,R.mipmap.allwees_ic_default_goods);
         }
 
         if(!TextUtils.isEmpty(goodInfo.getPriceRetail()+"")){
@@ -68,19 +49,21 @@ public class HomeClassifyAdapter extends BaseQuickAdapter<ClassifyListBean.Class
 
         if(goodInfo.getPriceOrigin() == goodInfo.getPriceRetail()){    //如果价格一样则不显示原价
             helper.setVisible(R.id.tv_orignPrice,false);
+        }else if(goodInfo.getPriceOrigin() == 0){
+            helper.setVisible(R.id.tv_orignPrice,false);
         }else{
             TextView tv_orignPrice = helper.getView(R.id.tv_orignPrice);
             tv_orignPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             helper.setText(R.id.tv_orignPrice,pSymbol + goodInfo.getPriceOrigin());
         }
 
-        if(goodInfo.getDiscountOff().equals("0%")){
+        if(goodInfo.getDiscountOff().equals("0%") || TextUtils.isEmpty(goodInfo.getDiscountOff())){
             helper.setVisible(R.id.rll_discountWrap,false);
         }else{
             if(LocaleUtil.getInstance().getLanguage().equals("ar")){
-                rll_discountWrap.setCornerRadius_TR(QMUIDisplayHelper.dp2px(getContext(),12));
+                rll_discountWrap.setCornerRadius_TR(QMUIDisplayHelper.dp2px(getContext(),5));
             }else{
-                rll_discountWrap.setCornerRadius_TL(QMUIDisplayHelper.dp2px(getContext(),12));
+                rll_discountWrap.setCornerRadius_TL(QMUIDisplayHelper.dp2px(getContext(),5));
             }
             helper.setVisible(R.id.rll_discountWrap,true);
             helper.setText(R.id.tv_discountOff,goodInfo.getDiscountOff());
@@ -95,8 +78,7 @@ public class HomeClassifyAdapter extends BaseQuickAdapter<ClassifyListBean.Class
             Bundle bundle = new Bundle();
             bundle.putString("uuid", goodInfo.getUuid());
             bundle.putString("type", "0");
-            Intent intent = HolderActivity.of(getContext(), GoodsDetailFragment.class,bundle);
-            getContext().startActivity(intent);
+            HolderActivity.startFragment(getContext(),GoodsDetailFragment.class,bundle);
         });
     }
 }

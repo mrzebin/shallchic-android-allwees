@@ -1,4 +1,4 @@
-package com.project.app.bean
+package com.project.app.bean;
 
 class PayOrderBean {
     var uuid:String = ""
@@ -10,20 +10,23 @@ class PayOrderBean {
     var amtCash:Double = 0.0
     var amtProduct:Double =0.0
     var amtProductCoupon:Double = 0.0
+    var amtProductDiscount:Double = 0.0
     var platformAmt:Double = 0.0
     var amtShipping:Double = 0.0
     var state:String = ""
     var currency:String = ""
     var shippingAddressUuid:String = ""
-    lateinit var shippingAddress:ShippingAddress
+    var shippingAddress:ShippingAddress = ShippingAddress()
     var paymentType:String = ""
     var paymentUuid:String = ""
     var paymentExpiredAt:Long = 0
     var paymentAt:Long = 0
     var payed:Boolean =false
+    var promoCode:String = ""
     var createdAt:Long =0
     var updatedAt:Long =0
     var receiveEndDays:Int =0
+
     var items:List<PayItem> = listOf()
     var flows:List<String> = listOf()
     var cancelAble:Boolean = false
@@ -42,6 +45,9 @@ class PayOrderBean {
     var stateDesc:String = ""
     var codDeduct:Double = 0.0
     var deduction:Double = 0.0
+    var cashBackAmt:Double = 0.0
+    var duty:Double = 0.0     //关税
+    var commission:Double = 0.0 //间隙委员会
 
     class ShippingAddress{
         var firstName:String = ""
@@ -59,9 +65,9 @@ class PayOrderBean {
     class PayItem{
         var uuid:String = ""
         var productUuid:String = ""
-        var product:Product ?= null
-        var skuUuid:String ?= null
-        var sku:Sku ?= null
+        var product:Product ?= Product()
+        var skuUuid:String ?= ""
+        var sku:Sku ?= Sku()
         var reviewAble:Boolean  = false
         var refundAble:Boolean  = false
         var receiveAble:Boolean = false

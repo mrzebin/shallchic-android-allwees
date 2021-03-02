@@ -1,6 +1,5 @@
 package com.project.app.fragment.legal;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -88,8 +87,7 @@ public class LegalAndTermsFragment extends BaseMvpQmuiFragment {
             }
             bundle.putString("webUrl", skipUrl);
             bundle.putString("title",skipTitle);
-            Intent intent = HolderActivity.of(getContext(), WebExplorerFragment.class,bundle);
-            getContext().startActivity(intent);
+            HolderActivity.startFragment(getContext(),WebExplorerFragment.class,bundle);
         });
     }
 

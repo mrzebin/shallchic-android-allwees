@@ -24,7 +24,6 @@ public class ChoiceCountryAdapter extends BaseQuickAdapter<CountryCropBean.Count
     private final RecyclerView mRecyclerView;
     private final List<CountryCropBean.CountryItem> mDatas;
 
-
     public ChoiceCountryAdapter(Context context, @Nullable List<CountryCropBean.CountryItem> data, RecyclerView recyclerView) {
         super(R.layout.item_single_country, data);
         this.mDatas = data;
@@ -43,9 +42,9 @@ public class ChoiceCountryAdapter extends BaseQuickAdapter<CountryCropBean.Count
         ImageView iv_nationalFlag = helper.getView(R.id.iv_nationalFlag);
 
         if(countryItem.isSelect()){
-            iv_conutry.setImageResource(R.mipmap.allwees_ic_landain);
+            iv_conutry.setImageResource(R.mipmap.allwees_ic_cart_selected_circle_right_icon);
         }else{
-            iv_conutry.setImageResource(R.mipmap.ic_select_unpayment);
+            iv_conutry.setImageResource(R.mipmap.allwees_ic_cart_normal_circle_right_icon);
         }
 
         iv_nationalFlag.setImageBitmap(ImageCropUtils.cropBitmap(countryBitm,Integer.valueOf(countryItem.getColNum()), Integer.valueOf(countryItem.getRowNum())));

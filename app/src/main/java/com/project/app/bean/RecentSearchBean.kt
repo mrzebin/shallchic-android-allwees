@@ -1,4 +1,4 @@
-package com.project.app.bean
+package com.project.app.bean;
 
 /**
  * 设置一个单例

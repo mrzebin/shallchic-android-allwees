@@ -10,6 +10,9 @@ import com.project.app.bean.GoodsDetailInfoBean;
 import com.project.app.bean.GoodsRelationBean;
 import com.project.app.contract.GoodsDetailContract;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +38,7 @@ public class GoodsDetailModel implements GoodsDetailContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+//                listener.onFail(e.getMessage());
             }
         });
     }
@@ -55,11 +58,10 @@ public class GoodsDetailModel implements GoodsDetailContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+//                listener.onFail(e.getMessage());
             }
         });
     }
-
 
     @Override
     public void operationAddGoods(int count, boolean incr, String skuUuid, BaseModelResponeListener listener) {
@@ -72,18 +74,23 @@ public class GoodsDetailModel implements GoodsDetailContract.Model {
         params.add(new OkHttpUtils.Param("incr",incr+""));
         params.add(new OkHttpUtils.Param("skuUuid",skuUuid));
 
-        OkHttpUtils.post(url,requestType,new OkHttpUtils.ResultCallback<BaseObjectBean<String>>() {
+        OkHttpUtils.post(url,requestType,new OkHttpUtils.ResultCallback<String>() {
             @Override
-            public void onSuccess(BaseObjectBean<String> response) {
-                if(response.getCode() == 1){
-                    listener.onSuccess(response.getMsg());
-                }else{
-                    listener.onFail(response.getMsg());
+            public void onSuccess(String response) {
+                try {
+                    JSONObject objJson = new JSONObject(response);
+                    if(objJson.getInt("code") == 1){
+                        listener.onSuccess(objJson.getString("data"));
+                    }else{
+                        listener.onFail(objJson.getString("msg"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onSuccess(e.getMessage());
+                listener.onFail(e.getMessage());
             }
         },params);
     }
@@ -106,7 +113,7 @@ public class GoodsDetailModel implements GoodsDetailContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onSuccess(e.getMessage());
+//                listener.onSuccess(e.getMessage());
             }
         },params);
     }
@@ -129,7 +136,7 @@ public class GoodsDetailModel implements GoodsDetailContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onSuccess(e.getMessage());
+//                listener.onSuccess(e.getMessage());
             }
         });
     }

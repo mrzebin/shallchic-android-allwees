@@ -2,7 +2,9 @@ package com.project.app.ui.dialog
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Paint
+import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
 import android.widget.ImageView
@@ -12,7 +14,9 @@ import com.hb.basemodel.image.ImageLoader
 import com.hb.basemodel.utils.DataUtil
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
 import com.project.app.R
+import com.project.app.activity.HolderActivity
 import com.project.app.bean.GoodsDetailInfoBean.SkusItem
+import com.project.app.fragment.goods.GoodsSizeChartFragment
 import com.project.app.utils.MathUtil
 import java.util.*
 import kotlin.collections.ArrayList
@@ -34,6 +38,7 @@ class GDChooiceDialogUtil {
     lateinit var tv_inDes:TextView
     lateinit var tv_buyCount:TextView
     lateinit var qmui_addToCart:QMUIRoundButton
+    lateinit var tv_lookSizeChart:TextView
     lateinit var gv_sizes: com.project.app.ui.widget.GoodsViewGroup<TextView>
     lateinit var gv_color: com.project.app.ui.widget.GoodsViewGroup<TextView>
     lateinit var mSkus: com.project.app.bean.GoodsDetailInfoBean.Skus
@@ -46,7 +51,7 @@ class GDChooiceDialogUtil {
     var mChoiceSizeId:Int  = 0
     var mBuyCount = 1
     var isDisplay:Boolean = false   //默认显示
-
+    var mProductNo = ""
 
     constructor(context: Context,isCancelable:Boolean,isCancelOutside :Boolean,listener: DInjectListener){
         this.mContext = context
@@ -79,6 +84,8 @@ class GDChooiceDialogUtil {
         tv_inDes         = mView.findViewById(R.id.tv_inDes)
         tv_inAdd         = mView.findViewById(R.id.tv_inAdd)
         tv_buyCount      = mView.findViewById(R.id.tv_buyCount)
+        tv_lookSizeChart = mView.findViewById(R.id.tv_lookforSizeChart);
+
         tv_gdOrignPrice.paint.flags = Paint.STRIKE_THRU_TEXT_FLAG
         qmui_addToCart.setChangeAlphaWhenPress(true)
         tv_inAdd.setOnClickListener({
@@ -103,6 +110,12 @@ class GDChooiceDialogUtil {
                 dismiss()
             }
         })
+
+        tv_lookSizeChart.setOnClickListener(){
+            mListener?.lookForSizeChart()
+            dismiss()
+        }
+
         gv_sizes = mView.findViewById(R.id.gv_sizes)
         gv_color = mView.findViewById(R.id.gv_colors)
     }
@@ -193,14 +206,17 @@ class GDChooiceDialogUtil {
         if(skus.priceOrigin == skus.priceRetail){
             tv_gdOrignPrice.visibility = View.GONE
         }
+        if(skus.priceOrigin == 0.0){
+            tv_gdOrignPrice.visibility = View.GONE
+        }
         tv_gdOrignPrice.text = MathUtil.formatPrice(skus.priceOrigin * mBuyCount)
         tv_gdRetailprice.text = MathUtil.formatPrice(skus.priceRetail * mBuyCount)
         tv_cGdColor.text = skus.color + " " + skus.size
 
         if(skus.photos.isNotEmpty()){
-            ImageLoader.getInstance().displayImage(iv_goodThumb,skus.photos[0] + Constant.mGlobalThumbnailStyle,R.mipmap.allwees_ic_default_goods)
+            ImageLoader.getInstance().displayImage(iv_goodThumb,skus.photos[0],R.mipmap.allwees_ic_default_goods)
         }else{
-            ImageLoader.getInstance().displayImage(iv_goodThumb,mCoverPhoto + Constant.mGlobalThumbnailStyle,R.mipmap.allwees_ic_default_goods)
+            ImageLoader.getInstance().displayImage(iv_goodThumb,mCoverPhoto,R.mipmap.allwees_ic_default_goods)
         }
         limitOtherSelect(skus)
     }
@@ -231,6 +247,13 @@ class GDChooiceDialogUtil {
             }
         }
         return validColors
+    }
+
+    /**
+     * 同步uuid
+     */
+    fun choiceTargetGoods(Uuid: String) {
+        this.mProductNo = Uuid
     }
 
     fun show(){

@@ -34,6 +34,7 @@ public class AwsClient {
         ClientConfiguration config = new ClientConfiguration();
         config.setConnectionTimeout(10000);
         config.setSocketTimeout(300000);
+
         s3 = new AmazonS3Client(new BasicSessionCredentials(accessKey, secretId,sessionId),config);
         Region usWest2 = Region.getRegion(REGION);
         s3.setRegion(usWest2);
@@ -49,12 +50,14 @@ public class AwsClient {
      * @return String
      * @throws
      */
-    public String uploadToS3(InputStream stream, String remoteFileName){
+    public String uploadToS3(long length,InputStream stream, String remoteFileName){
         try {
             //
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType("image/jpg");
             metadata.setCacheControl("public,max-age=31536000");
+            metadata.setContentLength(length);
+
             s3.putObject(new PutObjectRequest(BUCKET_NAME, remoteFileName, stream,metadata).withCannedAcl(CannedAccessControlList.PublicRead));
             //request
             GeneratePresignedUrlRequest urlRequest = new GeneratePresignedUrlRequest(

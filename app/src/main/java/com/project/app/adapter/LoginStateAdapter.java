@@ -13,7 +13,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 public class LoginStateAdapter extends FragmentStateAdapter {
     private List<QMUIFragment> sparseFragments = new ArrayList<>();
 
-    public LoginStateAdapter(List<QMUIFragment> fragments,@NonNull FragmentActivity fragmentActivity) {
+    public LoginStateAdapter(List<QMUIFragment> fragments, @NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
         this.sparseFragments = fragments;
     }

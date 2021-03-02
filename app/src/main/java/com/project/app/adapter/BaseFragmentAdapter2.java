@@ -12,7 +12,12 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 public class BaseFragmentAdapter2 extends FragmentStateAdapter {
     List<QMUIFragment> mFragments;
 
-    public BaseFragmentAdapter2(@NonNull FragmentActivity fragmentActivity,List<QMUIFragment> fragments) {
+    public BaseFragmentAdapter2(@NonNull Fragment fragment, List<QMUIFragment> fragments) {
+        super(fragment);
+        this.mFragments = fragments;
+    }
+
+    public BaseFragmentAdapter2(@NonNull FragmentActivity fragmentActivity, List<QMUIFragment> fragments) {
         super(fragmentActivity);
         this.mFragments = fragments;
     }

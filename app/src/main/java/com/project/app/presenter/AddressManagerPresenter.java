@@ -17,10 +17,16 @@ public class AddressManagerPresenter extends BasePresenter<AddressManagerContrac
         model.fetchAddressList(new BaseModelResponeListener<AddressBean>() {
             @Override
             public void onSuccess(AddressBean data) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchAddressSuccess(data);
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchFail(msg);
             }
         });
@@ -28,15 +34,24 @@ public class AddressManagerPresenter extends BasePresenter<AddressManagerContrac
 
     @Override
     public void deleteSpecifyAddress(String addressId) {
+        if(mView == null){
+            return;
+        }
         mView.startLoading();
         model.deleteSpecifyAddress(addressId, new BaseModelResponeListener<String>() {
             @Override
             public void onSuccess(String data) {
+                if(mView == null){
+                    return;
+                }
                 mView.stopLoading();
                 mView.deleteAddressSuccess();
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.stopLoading();
                 mView.fetchFail(msg);
             }
@@ -45,15 +60,24 @@ public class AddressManagerPresenter extends BasePresenter<AddressManagerContrac
 
     @Override
     public void selectAddress(String addressId) {
+        if(mView == null){
+            return;
+        }
         mView.startLoading();
         model.selectAddress(addressId, new BaseModelResponeListener<String>() {
             @Override
             public void onSuccess(String data) {
+                if(mView == null){
+                    return;
+                }
                 mView.stopLoading();
                 mView.selectAddressSuccess();
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.stopLoading();
                 mView.fetchFail(msg);
             }

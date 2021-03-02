@@ -19,11 +19,17 @@ public class MePresenter extends BasePresenter<MeContract.View> implements MeCon
         model.fetchBindCashInfo(new BaseModelResponeListener<MeBindCPBean>() {
             @Override
             public void onSuccess(MeBindCPBean data) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchCashSuccess(data);
             }
 
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchFail(msg);
             }
         });
@@ -34,11 +40,17 @@ public class MePresenter extends BasePresenter<MeContract.View> implements MeCon
         model.fetchBindPointInfo(new BaseModelResponeListener<MeBindCPBean>() {
             @Override
             public void onSuccess(MeBindCPBean data) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchPointSuccess(data);
             }
 
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchFail(msg);
             }
         });
@@ -50,6 +62,9 @@ public class MePresenter extends BasePresenter<MeContract.View> implements MeCon
         model.fetchUserInfo(accessToken, new BaseModelResponeListener<BaseUserInfo>() {
             @Override
             public void onSuccess(BaseUserInfo data) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchUserInfo(data);
             }
             @Override

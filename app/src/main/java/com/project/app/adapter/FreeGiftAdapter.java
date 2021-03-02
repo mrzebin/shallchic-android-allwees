@@ -1,6 +1,5 @@
 package com.project.app.adapter;
 
-import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -13,7 +12,9 @@ import com.hb.basemodel.image.ImageLoader;
 import com.project.app.R;
 import com.project.app.activity.HolderActivity;
 import com.project.app.bean.FreeGiftBean;
+import com.project.app.config.AppsFlyConfig;
 import com.project.app.fragment.GoodsDetailFragment;
+import com.project.app.utils.AppsFlyEventUtils;
 import com.project.app.utils.LocaleUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +25,7 @@ public class FreeGiftAdapter extends BaseQuickAdapter<FreeGiftBean.ClassifyItem,
     private String pSymbol;
 
     public FreeGiftAdapter(List<FreeGiftBean.ClassifyItem> data) {
-        super(R.layout.item_home_classify, data);
+        super(R.layout.item_new_gift, data);
         pSymbol = LocaleUtil.getInstance().getSymbole();
     }
 
@@ -33,7 +34,7 @@ public class FreeGiftAdapter extends BaseQuickAdapter<FreeGiftBean.ClassifyItem,
         String free = getContext().getResources().getString(R.string.str_free);
 
         if(!TextUtils.isEmpty(goodInfo.getMainPhoto())){
-            ImageLoader.getInstance().displayImage(helper.getView(R.id.tv_superClassify),goodInfo.getMainPhoto(),R.mipmap.allwees_ic_default_goods);
+            ImageLoader.getInstance().displayImage(helper.getView(R.id.iv_gif_goods),goodInfo.getMainPhoto(),R.mipmap.allwees_ic_default_goods);
         }
 
         if(!TextUtils.isEmpty(goodInfo.getPriceRetail()+"")){
@@ -60,11 +61,11 @@ public class FreeGiftAdapter extends BaseQuickAdapter<FreeGiftBean.ClassifyItem,
         }
 
         helper.itemView.setOnClickListener(view -> {
+            AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_NEW_USER_GIFT_GOODS);
             Bundle bundle = new Bundle();
             bundle.putString("uuid", goodInfo.getUuid());
             bundle.putString("type", "1");
-            Intent intent = HolderActivity.of(getContext(), GoodsDetailFragment.class,bundle);
-            getContext().startActivity(intent);
+            HolderActivity.startFragment(getContext(),GoodsDetailFragment.class,bundle);
         });
     }
 }

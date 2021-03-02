@@ -18,7 +18,7 @@ import java.io.File;
 
 public class DownloadApk {
     private Uri mSaveFileUri;
-    private static ApkInstallReceiver apkInstallReceiver;
+    private static com.project.app.update.ApkInstallReceiver apkInstallReceiver;
 
     /**
      * 下载APK文件
@@ -37,7 +37,7 @@ public class DownloadApk {
 
         if(downloadId != -1) {
             //存在downloadId
-            DownLoadUtils downLoadUtils = DownLoadUtils.getInstance(context);
+            com.project.app.update.DownLoadUtils downLoadUtils = com.project.app.update.DownLoadUtils.getInstance(context);
             //获取当前状态
             int status = downLoadUtils.getDownloadStatus(downloadId);
 
@@ -90,7 +90,7 @@ public class DownloadApk {
      */
     private static void start(Context context, String url, String title,String appName) {
         if(hasSDKCard()) {
-            long id = DownLoadUtils.getInstance(context).download(url,title, "下载完成后点击打开", appName);
+            long id = com.project.app.update.DownLoadUtils.getInstance(context).download(url,title, "下载完成后点击打开", appName);
             SPManager.sPutLong(DownloadManager.EXTRA_DOWNLOAD_ID,id);
         } else {
             Toast.makeText(context,"手机未安装SD卡，下载失败",Toast.LENGTH_LONG).show();
@@ -98,7 +98,7 @@ public class DownloadApk {
     }
 
     public static void registerBroadcast(Context context) {
-        apkInstallReceiver = new ApkInstallReceiver();
+        apkInstallReceiver = new com.project.app.update.ApkInstallReceiver();
         context.registerReceiver(apkInstallReceiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
     }
 

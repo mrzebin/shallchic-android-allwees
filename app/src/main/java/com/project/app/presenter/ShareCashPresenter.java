@@ -15,14 +15,20 @@ public class ShareCashPresenter extends BasePresenter<ScContract.View> implement
     }
 
     @Override
-    public void fetchScHistory() {
-        model.fetchScHistory(new BaseModelResponeListener<ScCashBean>() {
+    public void fetchScHistory(int current, int size) {
+        model.fetchScHistory(current,size,new BaseModelResponeListener<ScCashBean>() {
             @Override
             public void onSuccess(ScCashBean data) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchSuccess(data);
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchFail(msg);
             }
         });
@@ -33,11 +39,17 @@ public class ShareCashPresenter extends BasePresenter<ScContract.View> implement
         model.fetchBindCashInfo(new BaseModelResponeListener<MeBindCPBean>() {
             @Override
             public void onSuccess(MeBindCPBean data) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchCashSuccess(data);
             }
 
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchFail(msg);
             }
         });

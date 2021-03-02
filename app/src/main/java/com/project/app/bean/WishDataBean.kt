@@ -1,4 +1,4 @@
-package com.project.app.bean
+package com.project.app.bean;
 
 class WishDataBean {
     var current:Int = 0
@@ -10,7 +10,7 @@ class WishDataBean {
     var results:List<ProductDtoWrapp> = listOf()
 
     class ProductDtoWrapp{
-        var productDto:ProductDto ?= null
+        var productDto:ProductDto ?= ProductDto()
         var createdAt:String = ""
     }
 

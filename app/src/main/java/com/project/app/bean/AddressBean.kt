@@ -1,4 +1,4 @@
-package com.project.app.bean
+package com.project.app.bean;
 
 class AddressBean {
     var current:Int = 0
@@ -7,7 +7,7 @@ class AddressBean {
     var total:Int = 0
     var count:Int = 0
     var hasMorePages:Boolean = false
-    var results:List<com.project.app.bean.AddressBean.AddressItem> = listOf()
+    var results:List<AddressBean.AddressItem> = listOf()
 
     class AddressItem{
         var uuid:String = ""
@@ -18,6 +18,8 @@ class AddressBean {
         var lastName:String = ""
         var itu:String = ""
         var phone:String = ""
+        var mobile:String = ""  //备用手机号码
+        var addressTag:String = ""   //地址类型
         var country:String = ""
         var province:String = ""
         var provinceRegion:String = ""
@@ -30,5 +32,6 @@ class AddressBean {
         var street:String = ""
         var createdAt:Long = 0
         var updatedAt:Long = 0
+
     }
 }

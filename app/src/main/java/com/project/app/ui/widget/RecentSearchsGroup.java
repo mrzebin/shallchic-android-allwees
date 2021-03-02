@@ -5,21 +5,20 @@ import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.Button;
 import android.widget.TextView;
 
-import com.hb.basemodel.utils.LoggerUtil;
 import com.qmuiteam.qmui.util.QMUIDisplayHelper;
 import com.project.app.R;
 import com.project.app.bean.RecentSearchBean;
 
 import java.util.List;
 
-public class RecentSearchsGroup<X extends LinearLayout> extends ViewGroup {
+public class RecentSearchsGroup<X extends TextView> extends ViewGroup {
     private static final int HorInterval   = 15;
     private static final int VerInterval   = 15;
-    public static final String LINEARLAYOUT_MODE = "LL_MODE";
+    public  final static String BTN_MODE   = "BTN_MODE";
+    public  final static  String TV_MODE   = "TV_MODE";
 
     //正常样式
     private float itemTextSize = 10;
@@ -30,14 +29,13 @@ public class RecentSearchsGroup<X extends LinearLayout> extends ViewGroup {
     private int viewWidth  = 0;     //控件的宽度
     private final int textModePadding = 10;
 
-    private int itemTextColorNor = Color.parseColor("#000000");
+    private int itemTextColorNor = Color.parseColor("#999999");
 
     private Context mContext;
 
     public RecentSearchsGroup(Context context) {
         this(context,null);
     }
-
 
     public RecentSearchsGroup(Context context, AttributeSet attrs) {
         super(context,attrs);
@@ -52,34 +50,28 @@ public class RecentSearchsGroup<X extends LinearLayout> extends ViewGroup {
     }
 
     private void addItemView(int position,String text,String mode) {
-        LinearLayout childView = new LinearLayout(mContext);
-        childView.setOrientation(LinearLayout.HORIZONTAL);
-        childView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT));
+        X childView = null;
+        switch (mode) {
+            case BTN_MODE:
+                childView = (X) new Button(mContext);
+                break;
+            case TV_MODE:
+                childView = (X) new TextView(mContext);
+                break;
+        }
+
+        childView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
+        childView.setTextSize(itemTextSize);
+        setItemPadding(childView);
+        childView.setText(text);
         childView.setBackgroundResource(itemBGResNor);
-
-        LinearLayout.LayoutParams ivParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
-        ivParams.setMargins(10,0,10,0);
-        ImageView iv_close = new ImageView(mContext);
-        iv_close.setImageResource(R.mipmap.ic_black_close);
-        iv_close.setLayoutParams(ivParams);
-
-        TextView tvChildView = new TextView(mContext);
-        tvChildView.setTextSize(itemTextSize);
-        tvChildView.setText(text);
-        tvChildView.setTextColor(itemTextColorNor);
-        setItemPadding(tvChildView);
-
-        childView.addView(tvChildView);
-        childView.addView(iv_close);
-
+        childView.setTextColor(itemTextColorNor);
 
         this.addView(childView);
     }
 
     private void setItemPadding(View view) {
-        if (view instanceof TextView) {
-            LoggerUtil.i("textview 设置padding");
+        if (view instanceof Button) {
             view.setPadding(textModePadding, 0, textModePadding, 0);
         } else {
             int fixedPadding_h = QMUIDisplayHelper.dp2px(getContext(),15);
@@ -200,17 +192,15 @@ public class RecentSearchsGroup<X extends LinearLayout> extends ViewGroup {
         return result;
     }
 
-    public void setGroupClickListener(RecentSearchsGroup.OnGroupItemClickListener listener) {
+    public void setGroupClickListener(com.project.app.ui.widget.RecentSearchsGroup.OnGroupItemClickListener listener) {
         this.onGroupItemClickListener = listener;
         for (int i = 0; i < getChildCount(); i++) {
             final X childView = (X) getChildAt(i);
 
-
-
             childView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    onGroupItemClickListener.onGroupItemClick(childView.getText().toString());
+                    onGroupItemClickListener.onGroupItemClick(childView.getText().toString());
                 }
             });
         }

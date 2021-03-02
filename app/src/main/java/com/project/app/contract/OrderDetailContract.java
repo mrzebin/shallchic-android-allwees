@@ -8,12 +8,12 @@ import com.project.app.bean.OrderDetailBean;
 public interface OrderDetailContract {
 
     interface Model{
-        void fetchDetailData(String orderNo,String orderType ,BaseModelResponeListener listener);
-        void checkLogisticTrack(String trackUuid,BaseModelResponeListener listener);
-        void receiveGoodsRequest(String orderId,BaseModelResponeListener listener);
+        void fetchDetailData(String orderNo, BaseModelResponeListener listener);
+        void checkLogisticTrack(String trackUuid, BaseModelResponeListener listener);
+        void receiveGoodsRequest(String orderId, BaseModelResponeListener listener);
     }
 
-    interface View extends BaseView{
+    interface View extends BaseView {
         void fetchDetailSuccess(OrderDetailBean result);
         void fetchDetailFail(String msg);
         void fetchLogisticTSuccess(LogisticTrackBean tracks);
@@ -23,7 +23,7 @@ public interface OrderDetailContract {
     }
 
     interface Presenter{
-      void fetchDetailData(String orderNo,String orderType);
+      void fetchDetailData(String orderNo);
       void checkLogisticTrack(String trackUuid);
       void receiveGoodsRequest(String orderId);
     }

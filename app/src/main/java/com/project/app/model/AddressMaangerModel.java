@@ -30,7 +30,7 @@ public class AddressMaangerModel implements AddressManagerContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+
             }
         });
     }
@@ -53,7 +53,7 @@ public class AddressMaangerModel implements AddressManagerContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+//                listener.onFail(e.getMessage());
             }
         });
     }
@@ -76,7 +76,7 @@ public class AddressMaangerModel implements AddressManagerContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+//                listener.onFail(e.getMessage());
             }
         });
     }

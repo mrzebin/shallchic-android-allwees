@@ -11,10 +11,10 @@ public interface SearchGoodsContract {
 
     interface Model{
         void trendingSearchs(BaseModelResponeListener listener);
-        void searchGoods(int page,int pagesize,String query,BaseModelResponeListener listener);
+        void searchGoods(int page, int pagesize, String query, BaseModelResponeListener listener);
     }
 
-    interface View extends BaseView{
+    interface View extends BaseView {
         void fetchTrendingSearchSuccess(List<TrendingSearchBean.SearchItem> result);
         void fetchTrendingSearchFail(String result);
         void fetchSearchTargetSuccess(ClassifyListBean result);

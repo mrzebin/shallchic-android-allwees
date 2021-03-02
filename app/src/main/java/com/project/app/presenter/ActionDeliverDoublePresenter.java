@@ -14,18 +14,34 @@ public class ActionDeliverDoublePresenter extends BasePresenter<ActionDeliverDou
     }
 
     @Override
-    public void fetchActionFreeOne(int page,int size) {
-        model.fetchActionFreeOne(page,size,new BaseModelResponeListener<ActionFreeOneBean>() {
+    public void fetchActionFreeOne(String marketType,int page,int size) {
+        model.fetchActionFreeOne(marketType,page,size,new BaseModelResponeListener<ActionFreeOneBean>() {
             @Override
             public void onSuccess(ActionFreeOneBean data) {
+                if(mView == null){
+                    return;
+                }
+                if(data == null){
+                    return;
+                }
+                mView.loadMatchViewStatus(0);
                 mView.fetchActionFreeOneSuccess(data);
             }
 
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
+                mView.loadMatchViewStatus(1);
                 mView.fetchActionFreeOneFail(msg);
             }
         });
     }
 
+    @Override
+    public void onDestoryView() {
+        mView = null;
+        System.gc();
+    }
 }

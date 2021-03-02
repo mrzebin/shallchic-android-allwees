@@ -2,7 +2,6 @@ package com.project.app.utils;
 
 import com.hb.basemodel.config.Constant;
 import com.hb.basemodel.utils.JsonUtils;
-import com.hb.basemodel.utils.LoggerUtil;
 import com.hb.basemodel.utils.SPManager;
 import com.project.app.bean.AppLocaleBean;
 import com.project.app.bean.CountryCropBean;
@@ -33,6 +32,7 @@ public class LocaleUtil {
         country.setLanguage(SPManager.sGetString(Constant.SP_LOCALE_LANGUAGE));
         country.setNameEn(SPManager.sGetString(Constant.SP_LOCALE_COUNTRY));
         country.setRegion(SPManager.sGetString(Constant.SP_LOCALE_REGION));
+        country.setCode(SPManager.sGetString(Constant.SP_LOCALE_CODE));
         currency.setAbbr(SPManager.sGetString(Constant.SP_LOCALE_ABBR));
         currency.setSymbol(SPManager.sGetString(Constant.SP_LOCALE_SYMBOL));
 
@@ -49,19 +49,18 @@ public class LocaleUtil {
         SPManager.sPutInt(Constant.SP_LOCALE_COUNTRY_FLAG_ROW,Integer.valueOf(item.getRowNum()));
     }
 
-
     public void setLocaleBean(AppLocaleBean localeBean) {
         SPManager.sPutString(Constant.SP_LOCALE_LANGUAGE,localeBean.getCountry().getLanguage());
-        SPManager.sPutString(Constant.SP_LOCALE_COUNTRY,localeBean.getCountry().getNameEn());
+        SPManager.sPutString(Constant.SP_LOCALE_COUNTRY,localeBean.getCountry().toString());
         SPManager.sPutString(Constant.SP_LOCALE_NAME_EN,localeBean.getCountry().getNameEn());
         SPManager.sPutString(Constant.SP_LOCALE_REGION,localeBean.getCountry().getRegion());
+        SPManager.sPutString(Constant.SP_LOCALE_CODE,localeBean.getCountry().getCode());
         SPManager.sPutString(Constant.SP_LOCALE_IP,localeBean.getIp());
         SPManager.sPutString(Constant.SP_LOCALE_HOST,localeBean.getHost());
         SPManager.sPutString(Constant.SP_LOCALE_CDN,localeBean.getCdn());
         SPManager.sPutString(Constant.SP_LOCALE_ABBR,localeBean.getCurrency().getAbbr());
         SPManager.sPutString(Constant.SP_LOCALE_SYMBOL,localeBean.getCurrency().getSymbol());
         SPManager.sPutString(Constant.SP_LOCALE_INFO, JsonUtils.serialize(localeBean));  //初始化语言环境
-
 
         if(localeBean.getCountry().getRegion().equals("53950000")){        //美国
             SPManager.sPutInt(Constant.SP_LOCALE_COUNTRY_FLAG_COLUMN,7);
@@ -102,13 +101,6 @@ public class LocaleUtil {
         return SPManager.sGetString(Constant.SP_LOCALE_REGION);
     }
 
-    public void setLocalCustomNameEn(String nameEn) {
-        SPManager.sPutString(Constant.SP_LOCALE_CUSTOM_REGIONNAME,nameEn);
-    }
-
-    public String getLocalCustomNameEn(){
-        return SPManager.sGetString(Constant.SP_LOCALE_CUSTOM_REGIONNAME);
-    }
 
     public void setLocaleCountryFlagColumn(String colNum) {
         SPManager.sPutInt(Constant.SP_LOCALE_COUNTRY_FLAG_COLUMN,Integer.valueOf(colNum));
@@ -129,65 +121,12 @@ public class LocaleUtil {
     //国家区号
     public void setPhoneAreaCode(String areaCode){
         SPManager.sPutString(Constant.SP_LOCALE_AREA_CODE,areaCode);
-        LoggerUtil.i("国家区号:" + areaCode);
     }
 
     public String getPhoneAreaCode(){
         return SPManager.sGetString(Constant.SP_LOCALE_AREA_CODE);
     }
 
-    //自定义选择国家货币
-    public void setLocalCustomSymbol(String region) {
-        if(region.equals("48650000") || region.equals("2610000")){
-            SPManager.sPutString(Constant.SPLOCALE_CUSTOM_SYMBOL,"SAR");
-        }else{
-            SPManager.sPutString(Constant.SPLOCALE_CUSTOM_SYMBOL,"$");
-        }
-    }
-    //获取选择国家货币
-    public String getLocalCustomSymbole(){
-        return SPManager.sGetString(Constant.SPLOCALE_CUSTOM_SYMBOL);
-    }
-
-    public void setLocaleCustomCountryFlagCloumn(String colNum) {
-        SPManager.sPutInt(Constant.SP_LOCALE_CUSTOM_FLAG_COLMU,Integer.valueOf(colNum));
-    }
-
-    public int getLocaleCustomCountryFlagCloumn() {
-        return SPManager.sGetInt(Constant.SP_LOCALE_CUSTOM_FLAG_COLMU);
-    }
-
-    public void setLocaleCustomCountryFlagRow(String rowNum) {
-        SPManager.sPutInt(Constant.SP_LOCALE_CUSTOM_FLAG_ROW,Integer.valueOf(rowNum));
-    }
-
-    public int getLocaleCustomCountryFlagRow() {
-        return SPManager.sGetInt(Constant.SP_LOCALE_CUSTOM_FLAG_ROW);
-    }
-
-    public void setLocaleCustom(boolean isCustom){
-        SPManager.sPutBoolean(Constant.SP_LOCALE_ISCOUSTOM,isCustom);
-    }
-
-    public boolean getLocaleCustom(){
-        return SPManager.sGetBoolean(Constant.SP_LOCALE_ISCOUSTOM);
-    }
-
-    public void setLocalCustomRegion(String region) {
-        SPManager.sPutString(Constant.SP_LOCALE_CUSTOM_REGION,region);
-    }
-
-    public String getLocalCustomRegion(){
-        return SPManager.sGetString(Constant.SP_LOCALE_CUSTOM_REGION);
-    }
-
-    public void setCustomPhoneAreaCode(String phoneAreaCode) {
-        SPManager.sPutString(Constant.SP_LOCALE_CUSTOM_AREA_CODE,phoneAreaCode);
-    }
-
-    public String getCustomPhoneAreaCode() {
-        return SPManager.sGetString(Constant.SP_LOCALE_CUSTOM_AREA_CODE);
-    }
 
     public void clearLocaleInfo() {
 //        SPManager.sPutString(Constant.SP_LANGUAGE,"");   注意这里不要清掉,不然到登录界面会出现英文
@@ -199,8 +138,6 @@ public class LocaleUtil {
 //        SPManager.sPutString(Constant.SP_CDN,"");
 //        SPManager.sPutString(Constant.SP_ABBR,"");
 //        SPManager.sPutString(Constant.SP_SYMBOL,"");
-        SPManager.sPutBoolean(Constant.SP_INIT_LOCALE,false);
-        SPManager.sPutBoolean(Constant.SP_LOCALE_ISCOUSTOM,false);
-        SPManager.sPutString(Constant.SPLOCALE_CUSTOM_SYMBOL,"");
+//        SPManager.sPutBoolean(Constant.SP_INIT_LOCALE,false);
     }
 }

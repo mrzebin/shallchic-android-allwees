@@ -21,19 +21,18 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.hb.basemodel.base.LoadingDialog;
 import com.hb.basemodel.event.RefreshDataEvent;
 import com.hb.basemodel.utils.AppManager;
-import com.qmuiteam.qmui.arch.QMUIFragmentActivity;
 import com.project.app.MyApp;
 import com.project.app.manager.LocaleSwitcherManager;
+import com.project.app.ui.dialog.LoadingDialog;
+import com.qmuiteam.qmui.arch.QMUIFragmentActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import androidx.annotation.Nullable;
-
 
 @SuppressLint("Registered")
 public class BaseActivity extends QMUIFragmentActivity {
@@ -80,7 +79,6 @@ public class BaseActivity extends QMUIFragmentActivity {
         if (dialog == null || (!dialog.isShowing())) {
             dialogCreateTime = System.currentTimeMillis();
             dialog = new LoadingDialog(MyApp.mContext);
-            dialog.setLoadingInformation("");
             dialog.show();
         }
     }
@@ -138,3 +136,4 @@ public class BaseActivity extends QMUIFragmentActivity {
     }
 
 }
+

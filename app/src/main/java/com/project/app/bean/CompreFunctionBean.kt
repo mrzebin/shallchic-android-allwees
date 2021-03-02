@@ -1,5 +1,5 @@
-package com.project.app.bean
+package com.project.app.bean;
 
 class CompreFunctionBean{
-    var funName: String? = null
+    var funName: String = ""
 }

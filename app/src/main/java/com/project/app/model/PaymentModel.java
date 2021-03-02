@@ -1,11 +1,15 @@
 package com.project.app.model;
 
+import android.text.TextUtils;
+
 import com.hb.basemodel.base.BaseModelResponeListener;
 import com.hb.basemodel.config.BaseUrlConfig;
 import com.hb.basemodel.config.Constant;
 import com.hb.basemodel.config.api.UrlConfig;
 import com.hb.basemodel.http.OkHttpUtils;
+import com.hb.basemodel.utils.JsonUtils;
 import com.project.app.base.BaseObjectBean;
+import com.project.app.bean.CartItemReqBean;
 import com.project.app.bean.ChionWrapperBean;
 import com.project.app.bean.PayOrderBean;
 import com.project.app.bean.PaymentCheckBean;
@@ -42,7 +46,7 @@ public class PaymentModel implements PaymentContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+//                listener.onFail(e.getMessage());
             }
         },params);
     }
@@ -64,14 +68,18 @@ public class PaymentModel implements PaymentContract.Model {
                     JSONObject resultObj = new JSONObject(response);
                     code = resultObj.getInt("code");
                     msg  = resultObj.getString("msg");
-                    listener.onSuccess(msg);
+                    if(code == 1){
+                        listener.onSuccess(msg);
+                    }else{
+                        listener.onFail(msg);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+
             }
         },params);
     }
@@ -83,7 +91,9 @@ public class PaymentModel implements PaymentContract.Model {
         List<OkHttpUtils.Param> params = new ArrayList<>();
         params.add(new OkHttpUtils.Param("orderUuid",orderUuid));
         params.add(new OkHttpUtils.Param("phone",phone));
-        params.add(new OkHttpUtils.Param("code",code));
+        if(!TextUtils.isEmpty(code)){
+            params.add(new OkHttpUtils.Param("code",code));
+        }
 
         OkHttpUtils.post(url, requestType,new OkHttpUtils.ResultCallback<BaseObjectBean<PayOrderBean>>() {
             @Override
@@ -96,7 +106,7 @@ public class PaymentModel implements PaymentContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+//                listener.onFail(e.getMessage());
             }
         },params);
     }
@@ -119,7 +129,7 @@ public class PaymentModel implements PaymentContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+//                listener.onFail(e.getMessage());
             }
         });
     }
@@ -143,7 +153,53 @@ public class PaymentModel implements PaymentContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+//                listener.onFail(e.getMessage());
+            }
+        },params);
+    }
+
+    @Override
+    public void refreshPayOrder(CartItemReqBean reqBean, BaseModelResponeListener listener) {
+        String requestType = "4";
+        String url = BaseUrlConfig.getRootHost() + UrlConfig.REQUEST_ORDER_PAY_URL;
+        List<OkHttpUtils.Param> params = new ArrayList<>();
+        params.add(new OkHttpUtils.Param("params", JsonUtils.serialize(reqBean)));
+
+        OkHttpUtils.post(url,requestType,new OkHttpUtils.ResultCallback<BaseObjectBean<PayOrderBean>>() {
+            @Override
+            public void onSuccess(BaseObjectBean<PayOrderBean> response) {
+                if(response.getCode() == 1){
+                    listener.onSuccess(response.getData());
+                }else{
+                    listener.onFail(response.getMsg());
+                }
+            }
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        },params);
+    }
+
+    @Override
+    public void createPayOrder(CartItemReqBean reqBean, BaseModelResponeListener listener) {
+        String requestType = "4";
+        String url = BaseUrlConfig.getRootHost() + UrlConfig.PAYMENT_PAY_CREATE_ORDER;
+        List<OkHttpUtils.Param> params = new ArrayList<>();
+        params.add(new OkHttpUtils.Param("params", JsonUtils.serialize(reqBean)));
+        
+        OkHttpUtils.post(url,requestType,new OkHttpUtils.ResultCallback<BaseObjectBean<PayOrderBean>>() {
+            @Override
+            public void onSuccess(BaseObjectBean<PayOrderBean> response) {
+                if(response.getCode() == 1){
+                    listener.onSuccess(response.getData());
+                }else{
+                    listener.onFail(response.getMsg());
+                }
+            }
+            @Override
+            public void onFailure(Exception e) {
+
             }
         },params);
     }

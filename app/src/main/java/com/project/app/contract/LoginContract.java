@@ -11,12 +11,12 @@ public interface LoginContract {
 
     interface Model{
         void regist(Map<String,String> params, BaseModelResponeListener listener);
-        void login(Map<String,String> params,BaseModelResponeListener listener);
-        void fbLogin(Map<String,String> params,BaseModelResponeListener listener);
-        void fetchUserInfo(String accessToken,BaseModelResponeListener listener);
+        void login(Map<String,String> params, BaseModelResponeListener listener);
+        void fbLogin(Map<String,String> params, BaseModelResponeListener listener);
+        void fetchUserInfo(String accessToken, BaseModelResponeListener listener);
     }
 
-    interface View extends BaseView{
+    interface View extends BaseView {
         void fetchRegistSuccess(String msg);
         void fetchLoginSuccess(LocalUserInfo result);
         void fetchFbLoginSuccess(LocalUserInfo result);

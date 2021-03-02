@@ -45,6 +45,8 @@ import androidx.fragment.app.FragmentContainerView;
 @DefaultFirstFragment(GoodsDetailFragment.class)
 @LatestVisitRecord
 public class HolderActivity extends BaseActivity {
+    private static long mPreviousTime = 0;
+    private static long mIntervalTime = 500;   //500毫秒不能重复点击
 
     public static Intent of(@NonNull Context context,
                             @NonNull Class<? extends QMUIFragment> firstFragment) {
@@ -55,6 +57,27 @@ public class HolderActivity extends BaseActivity {
                             @NonNull Class<? extends QMUIFragment> firstFragment,
                             @Nullable Bundle fragmentArgs) {
         return QMUIFragmentActivity.intentOf(context, HolderActivity.class, firstFragment, fragmentArgs);
+    }
+
+    public static void startFragment(@NonNull Context context,
+                                     @NonNull Class<? extends QMUIFragment> firstFragment) {
+        long currentTime = System.currentTimeMillis();
+        if(currentTime - mPreviousTime > mIntervalTime){
+            mPreviousTime = currentTime;
+            Intent intent =  QMUIFragmentActivity.intentOf(context, HolderActivity.class, firstFragment);
+            context.startActivity(intent);
+        }
+    }
+
+    public static void startFragment(@NonNull Context context,
+                                     @NonNull Class<? extends QMUIFragment> firstFragment,
+                                     @Nullable Bundle fragmentArgs) {
+        long currentTime = System.currentTimeMillis();
+        if(currentTime - mPreviousTime > mIntervalTime){
+            mPreviousTime = currentTime;
+            Intent intent =  QMUIFragmentActivity.intentOf(context, HolderActivity.class, firstFragment, fragmentArgs);
+            context.startActivity(intent);
+        }
     }
 
     @Override

@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.hb.basemodel.config.Constant;
 import com.hb.basemodel.image.ImageLoader;
 import com.project.app.R;
 
@@ -19,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 /**
  * 商品详情的封面
  */
-public class DetailCoverAdapter extends RecyclerView.Adapter<DetailCoverAdapter.GoodDetailViewHolder> {
+public class DetailCoverAdapter extends RecyclerView.Adapter<com.project.app.adapter.DetailCoverAdapter.GoodDetailViewHolder> {
     private Context mContext;
     private ArrayList<String> mCoverList;
 
@@ -27,15 +26,6 @@ public class DetailCoverAdapter extends RecyclerView.Adapter<DetailCoverAdapter.
         this.mContext = context;
         this.mCoverList = mCoverList;
     }
-
-//    @Override
-//    public void onViewRecycled(@NonNull GoodDetailViewHolder holder) {
-//        super.onViewRecycled(holder);
-//        PhotoView view = holder.pvView;
-//        if(view != null){
-//            Glide.with(mContext).clear(view);
-//        }
-//    }
 
     @NonNull
     @Override
@@ -50,7 +40,7 @@ public class DetailCoverAdapter extends RecyclerView.Adapter<DetailCoverAdapter.
         ImageView pvView = holder.pvView;
 
         if(!TextUtils.isEmpty(loadUrl)){
-            ImageLoader.getInstance().displayImage(pvView,loadUrl + Constant.mGlobalThumbnailStyle, R.mipmap.allwees_ic_default_goods);
+            ImageLoader.getInstance().displayImage(pvView,loadUrl, R.mipmap.allwees_ic_default_goods);
         }else{
             holder.pvView.setImageDrawable(mContext.getDrawable(R.mipmap.allwees_ic_default_goods));
         }

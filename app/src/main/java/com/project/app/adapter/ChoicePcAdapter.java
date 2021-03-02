@@ -32,9 +32,9 @@ public class ChoicePcAdapter extends BaseQuickAdapter<ProvinceBean, BaseViewHold
         }
 
         if(item.isSelect()){
-            iv_conutry.setImageResource(R.mipmap.allwees_ic_landain);
+            iv_conutry.setImageResource(R.mipmap.allwees_ic_cart_selected_small_circle_right_icon);
         }else{
-            iv_conutry.setImageResource(R.mipmap.ic_select_unpayment);
+            iv_conutry.setImageResource(R.mipmap.allwees_ic_cart_normal_circle_small_right_icon);
         }
 
         //注意 这里不要监听checkbox的状态

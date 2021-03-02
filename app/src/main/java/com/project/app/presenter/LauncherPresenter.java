@@ -1,13 +1,12 @@
 package com.project.app.presenter;
 
 import com.hb.basemodel.base.BaseModelResponeListener;
-import com.hb.basemodel.config.Constant;
-import com.hb.basemodel.utils.SPManager;
 import com.project.app.base.BasePresenter;
 import com.project.app.bean.AppLocaleBean;
 import com.project.app.bean.CategoryBean;
 import com.project.app.contract.LauncherContract;
 import com.project.app.model.LauncherModel;
+import com.project.app.net.NetStateUtils;
 
 public class LauncherPresenter extends BasePresenter<LauncherContract.View> implements LauncherContract.Presenter {
     private final LauncherContract.Model model;
@@ -18,20 +17,19 @@ public class LauncherPresenter extends BasePresenter<LauncherContract.View> impl
 
     @Override
     public void fetchNormTitles() {
-        if(mView == null){
-            return;
-        }
-        String platform = Constant.APP_PLATFROM;
-        String device = SPManager.sGetString(Constant.SP_DEVICE_ID_FLAG);
-        String version = SPManager.sGetString(Constant.SP_APP_VERSION);
-
-        model.fetchNormTitles(platform, device, version, new BaseModelResponeListener<CategoryBean>() {
+        model.fetchNormTitles(new BaseModelResponeListener<CategoryBean>() {
             @Override
             public void onSuccess(CategoryBean data) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchHomeTitleSuccess(data);
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchLocaleInfoFail(msg);
             }
         });
@@ -39,13 +37,26 @@ public class LauncherPresenter extends BasePresenter<LauncherContract.View> impl
 
     @Override
     public void fetchLocaleInfo() {
+        if(mView == null){
+            return;
+        }
+        if(!NetStateUtils.isHasNet()){
+            mView.exceptNetError();
+            return;
+        }
         model.fetchLocaleInfo(new BaseModelResponeListener<AppLocaleBean>() {
             @Override
             public void onSuccess(AppLocaleBean data) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchLocaleInofSuccess(data);
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchLocaleInfoFail(msg);
             }
         });
@@ -65,4 +76,9 @@ public class LauncherPresenter extends BasePresenter<LauncherContract.View> impl
         });
     }
 
+    @Override
+    public void onDestoryView() {
+        mView = null;
+        System.gc();
+    }
 }

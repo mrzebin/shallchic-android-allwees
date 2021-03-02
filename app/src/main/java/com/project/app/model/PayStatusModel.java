@@ -6,6 +6,7 @@ import com.hb.basemodel.config.api.UrlConfig;
 import com.hb.basemodel.http.OkHttpUtils;
 import com.project.app.base.BaseObjectBean;
 import com.project.app.bean.ClassifyListBean;
+import com.project.app.bean.OrderDetailBean;
 import com.project.app.contract.PayStatusContract;
 
 import java.util.HashMap;
@@ -32,7 +33,29 @@ public class PayStatusModel implements PayStatusContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+//                listener.onFail(e.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void fetchOrderCashBackAmt(String orderNo, BaseModelResponeListener listener) {
+        String url = BaseUrlConfig.getRootHost() + UrlConfig.ORDER_DETAIL_URL + orderNo;
+        String requestType = "0";
+        HashMap<String,String> params = new HashMap<>();
+
+        OkHttpUtils.get(url, requestType,params,new OkHttpUtils.ResultCallback<BaseObjectBean<OrderDetailBean>>() {
+            @Override
+            public void onSuccess(BaseObjectBean<OrderDetailBean> response) {
+                if(response.getCode() == 1){
+                    listener.onSuccess(response.getData());
+                }else{
+                    listener.onFail(response.getMsg());
+                }
+            }
+            @Override
+            public void onFailure(Exception e) {
+//                listener.onFail(e.getMessage());
             }
         });
     }

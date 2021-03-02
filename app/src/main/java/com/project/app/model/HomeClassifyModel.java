@@ -35,7 +35,7 @@ public class HomeClassifyModel implements HomeClassifyContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+//                listener.onFail(e.getMessage());
             }
         });
     }

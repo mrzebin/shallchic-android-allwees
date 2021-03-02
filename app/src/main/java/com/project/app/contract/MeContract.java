@@ -8,12 +8,12 @@ import com.project.app.bean.MeBindCPBean;
 public interface MeContract {
 
     interface Model{
-        void fetchUserInfo(String accessToken,BaseModelResponeListener listener);
+        void fetchUserInfo(String accessToken, BaseModelResponeListener listener);
         void fetchBindCashInfo(BaseModelResponeListener listener);
         void fetchBindPointInfo(BaseModelResponeListener listener);
     }
 
-    interface View extends BaseView{
+    interface View extends BaseView {
         void fetchUserInfo(BaseUserInfo result);
         void fetchCashSuccess(MeBindCPBean result);
         void fetchPointSuccess(MeBindCPBean result);

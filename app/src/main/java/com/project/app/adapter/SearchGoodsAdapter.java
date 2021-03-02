@@ -1,6 +1,5 @@
 package com.project.app.adapter;
 
-import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -9,16 +8,15 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.module.LoadMoreModule;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.hb.basemodel.config.Constant;
 import com.hb.basemodel.image.ImageLoader;
 import com.hb.basemodel.uicomponent.roundview.RoundLinearLayout;
-import com.qmuiteam.qmui.util.QMUIDisplayHelper;
 import com.project.app.R;
 import com.project.app.activity.HolderActivity;
 import com.project.app.bean.ClassifyListBean;
 import com.project.app.fragment.GoodsDetailFragment;
 import com.project.app.utils.LocaleUtil;
 import com.project.app.utils.MathUtil;
+import com.qmuiteam.qmui.util.QMUIDisplayHelper;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -39,11 +37,7 @@ public class SearchGoodsAdapter extends BaseQuickAdapter<ClassifyListBean.Classi
         String mainPhoto = goodInfo.getMainPhoto();
 
         if(!TextUtils.isEmpty(mainPhoto)){
-            if(mainPhoto.endsWith("png") || mainPhoto.endsWith("jpg")){
-                ImageLoader.getInstance().displayImage(helper.getView(R.id.iv_goodsCover),mainPhoto + Constant.mGlobalThumbnailStyle,R.mipmap.allwees_ic_default_goods);
-            }else if(mainPhoto.endsWith("gif")){
-                ImageLoader.getInstance().displayImage(helper.getView(R.id.iv_goodsCover),mainPhoto,R.mipmap.allwees_ic_default_goods);
-            }
+            ImageLoader.getInstance().displayImage(helper.getView(R.id.iv_goodsCover),mainPhoto,R.mipmap.allwees_ic_default_goods);
         }
 
         if(!TextUtils.isEmpty(goodInfo.getPriceRetail()+"")){
@@ -62,7 +56,7 @@ public class SearchGoodsAdapter extends BaseQuickAdapter<ClassifyListBean.Classi
             helper.setText(R.id.tv_orignPrice,pSymbol + goodInfo.getPriceOrigin());
         }
 
-        if(goodInfo.getDiscountOff().equals("0%")){
+        if(goodInfo.getDiscountOff().equals("0%") || goodInfo.getDiscountOff().equals("")){
             helper.setVisible(R.id.rll_discountWrap,false);
         }else{
             if(LocaleUtil.getInstance().getLanguage().equals("ar")){
@@ -83,8 +77,7 @@ public class SearchGoodsAdapter extends BaseQuickAdapter<ClassifyListBean.Classi
             Bundle bundle = new Bundle();
             bundle.putString("uuid", goodInfo.getUuid());
             bundle.putString("type", "0");
-            Intent intent = HolderActivity.of(getContext(), GoodsDetailFragment.class,bundle);
-            getContext().startActivity(intent);
+            HolderActivity.startFragment(getContext(),GoodsDetailFragment.class,bundle);
         });
     }
 }

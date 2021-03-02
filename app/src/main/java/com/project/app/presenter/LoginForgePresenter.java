@@ -16,10 +16,16 @@ public class LoginForgePresenter extends BasePresenter<LoginForgetPContract.View
         model.sendTargetEmailCode(email,new BaseModelResponeListener<String>() {
             @Override
             public void onSuccess(String data) {
+                if(mView == null){
+                    return;
+                }
                 mView.sendSuccess(data);
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchFail(msg);
             }
         });

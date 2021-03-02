@@ -5,30 +5,28 @@ import com.hb.basemodel.config.BaseUrlConfig;
 import com.hb.basemodel.config.api.UrlConfig;
 import com.hb.basemodel.http.OkHttpUtils;
 import com.project.app.base.BaseObjectBean;
-import com.project.app.bean.CategoryBean;
+import com.project.app.bean.CategoryAllBean;
 import com.project.app.contract.CategoryContract;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class CategoryModel implements CategoryContract.Model {
-
     public CategoryModel() {
 
     }
 
     @Override
-    public void fetchGoodsInfo(String platform, String device, String version, BaseModelResponeListener listener) {
+    public void fetchCateofyAll(String platform, String device, String version, BaseModelResponeListener listener) {
         String requestType = "0";
-        String url = BaseUrlConfig.getRootHost() + UrlConfig.CATEGORY_GOODS_URL;
-        List<OkHttpUtils.Param> params = new ArrayList<>();
-        params.add(new OkHttpUtils.Param("platform",platform));
-        params.add(new OkHttpUtils.Param("device",device));
-        params.add(new OkHttpUtils.Param("version",version));
+        String url = BaseUrlConfig.getRootHost() + UrlConfig.CATEGORY_ALL_URL;
+        HashMap hMap = new HashMap();
+        hMap.put("platform",platform);
+        hMap.put("device",device);
+        hMap.put("version",version);
 
-        OkHttpUtils.post(url, requestType,new OkHttpUtils.ResultCallback<BaseObjectBean<CategoryBean>>() {
+        OkHttpUtils.get(url, requestType,hMap,new OkHttpUtils.ResultCallback<BaseObjectBean<CategoryAllBean>>() {
             @Override
-            public void onSuccess(BaseObjectBean<CategoryBean> response) {
+            public void onSuccess(BaseObjectBean<CategoryAllBean> response) {
                 if(response.getCode() == 1){
                     listener.onSuccess(response.getData());
                 }else{
@@ -37,8 +35,10 @@ public class CategoryModel implements CategoryContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+
             }
-        },params);
+        });
     }
+
+
 }

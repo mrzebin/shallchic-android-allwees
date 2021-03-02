@@ -16,7 +16,6 @@ import com.hb.basemodel.config.Constant;
 import com.hb.basemodel.event.RefreshDataEvent;
 import com.hb.basemodel.utils.DataUtil;
 import com.hb.basemodel.utils.JsonUtils;
-import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.project.app.R;
 import com.project.app.adapter.ChoicePcAdapter;
 import com.project.app.base.BaseMvpQmuiFragment;
@@ -24,6 +23,7 @@ import com.project.app.bean.ProvinceBean;
 import com.project.app.contract.ProvinceCityContract;
 import com.project.app.presenter.ProvinceCityPresenter;
 import com.project.app.ui.widget.SimpleDividerItemDecoration;
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -95,7 +95,7 @@ public class SelectProvinceCityFragment extends BaseMvpQmuiFragment<ProvinceCity
                 String inputStr = editable.toString();
                 if(inputStr.length() >0){
                     tv_sureChoiceC.setClickable(true);
-                    tv_sureChoiceC.setTextColor(getResources().getColor(R.color.allwees_theme_color));
+                    tv_sureChoiceC.setTextColor(getResources().getColor(R.color.theme_color));
                 }else{
                     tv_sureChoiceC.setClickable(false);
                     tv_sureChoiceC.setTextColor(getResources().getColor(R.color.color_999));
@@ -135,7 +135,7 @@ public class SelectProvinceCityFragment extends BaseMvpQmuiFragment<ProvinceCity
         mPresenter.attachView(this);
         mSwipeRefresh.setOnRefreshListener(this);
         QMUIStatusBarHelper.setStatusBarLightMode(getActivity());
-        mSwipeRefresh.setColorSchemeResources(R.color.allwees_theme_color,android.R.color.holo_blue_dark,android.R.color.holo_orange_dark);
+        mSwipeRefresh.setColorSchemeResources(R.color.theme_color,android.R.color.holo_blue_dark,android.R.color.holo_orange_dark);
         rlv_pc.setLayoutManager(new LinearLayoutManager(getContext()));
         Drawable drawable = ContextCompat.getDrawable(getActivity(), R.drawable.line_divider);
         rlv_pc.addItemDecoration(new SimpleDividerItemDecoration(getContext(),drawable,1));
@@ -200,7 +200,7 @@ public class SelectProvinceCityFragment extends BaseMvpQmuiFragment<ProvinceCity
                 mSelectProvince = item;
                 mChoiceIndex = position;
                 tv_sureChoiceC.setClickable(true);
-                tv_sureChoiceC.setTextColor(getResources().getColor(R.color.allwees_theme_color));
+                tv_sureChoiceC.setTextColor(getResources().getColor(R.color.theme_color));
                 for(int i=0;i<mData.size();i++){
                     mData.get(i).setSelect(false);
                 }
@@ -225,7 +225,7 @@ public class SelectProvinceCityFragment extends BaseMvpQmuiFragment<ProvinceCity
                 mSelectProvince = item;
                 mChoiceIndex = position;
                 tv_sureChoiceC.setClickable(true);
-                tv_sureChoiceC.setTextColor(getResources().getColor(R.color.allwees_theme_color));
+                tv_sureChoiceC.setTextColor(getResources().getColor(R.color.theme_color));
                 for(int i=0;i<mData.size();i++){
                     mData.get(i).setSelect(false);
                 }

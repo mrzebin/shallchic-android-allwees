@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.hb.basemodel.config.Constant;
 import com.hb.basemodel.utils.JsonUtils;
+import com.hb.basemodel.utils.LoggerUtil;
 import com.hb.basemodel.utils.SPManager;
 import com.project.app.bean.CategoryBean;
 
@@ -18,11 +19,17 @@ public class HomeTitlesUtils {
             title = SPManager.sGetString(Constant.HOME_DYNAMIC_CATEGORY_TITLES_AR);
             if(TextUtils.isEmpty(title)){
                 title =  FileManager.readAssetFile(Constant.ASSERT_CATEGORY_TITLES_AR);
+                LoggerUtil.i("本地获取数据ar");
+            }else{
+                LoggerUtil.i("接口获取数据ar");
             }
         }else if(languageId.equals("en")){
             title = SPManager.sGetString(Constant.HOME_DYNAMIC_CATEGORY_TITLES_EN);
             if(TextUtils.isEmpty(title)){
                 title =  FileManager.readAssetFile(Constant.ASSERT_CATEGORY_TITLES_EN);
+                LoggerUtil.i("本地获取数据en");
+            }else{
+                LoggerUtil.i("接口获取数据en");
             }
         }
         bean = JsonUtils.deserialize(title,CategoryBean.class);

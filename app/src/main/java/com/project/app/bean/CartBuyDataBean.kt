@@ -1,4 +1,4 @@
-package com.project.app.bean
+package com.project.app.bean;
 
 class CartBuyDataBean {
     var uuid:String = ""
@@ -47,6 +47,7 @@ class CartBuyDataBean {
         var no:String = ""
         var categoryNo:String = ""
         var name:String = ""
+        var nameAr:String = ""
         var mainPhoto:String = ""
         var originalPrice:Double = 0.0
         var retailPrice:Double = 0.0

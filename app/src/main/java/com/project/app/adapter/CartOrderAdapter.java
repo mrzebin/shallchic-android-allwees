@@ -1,7 +1,6 @@
 package com.project.app.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -21,7 +20,6 @@ import com.project.app.R;
 import com.project.app.activity.HolderActivity;
 import com.project.app.bean.CartBuyDataBean;
 import com.project.app.fragment.GoodsDetailFragment;
-import com.project.app.utils.LocaleUtil;
 import com.project.app.utils.MathUtil;
 
 import java.util.List;
@@ -60,55 +58,34 @@ public class CartOrderAdapter extends RecyclerView.Adapter<QMUISwipeViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull QMUISwipeViewHolder helper, int position) {
-        boolean isPfree  = false;
+        boolean isfree  = false;
         String  strFree  = mContext.getString(R.string.str_free);
-        String  languate = LocaleUtil.getInstance().getLanguage();
         CartBuyDataBean.ProductItem productItem = mData.get(position);
-        CartBuyDataBean.Product product = productItem.getProduct();
-        CartBuyDataBean.Sku productSku  = productItem.getSku();
-        View viewHolder         = helper.itemView;
-        String goodsUrl         = product.getMainPhoto();
-        ImageView iv_goods      = viewHolder.findViewById(R.id.iv_carGoods);
-        TextView tv_free        = viewHolder.findViewById(R.id.tv_free);
-        TextView tv_origin      = viewHolder.findViewById(R.id.tv_cartOriginP);
-        TextView tv_cGoodsRult  = viewHolder.findViewById(R.id.tv_cartGoodsRult);
-        TextView tv_cGoodsDes   = viewHolder.findViewById(R.id.tv_cartGoodsDes);
-        TextView tv_cartBuyP    = viewHolder.findViewById(R.id.tv_cartBuyP);
-        TextView tv_cShippingP  = viewHolder.findViewById(R.id.tv_cartShippingP);
-        TextView tv_cShipping   = viewHolder.findViewById(R.id.tv_cShipping);
-        TextView tv_carBuyCount = viewHolder.findViewById(R.id.tv_carBuyCount);
-        LinearLayout ll_cModifyCount = viewHolder.findViewById(R.id.ll_cModifyCount);
+        CartBuyDataBean.Product product   = productItem.getProduct();
+        CartBuyDataBean.Sku productSku    = productItem.getSku();
+        View viewHolder                   = helper.itemView;
+        String goodsUrl                   = product.getMainPhoto();
+        ImageView iv_goods                = viewHolder.findViewById(R.id.iv_carGoods);
+        TextView tv_free                  = viewHolder.findViewById(R.id.tv_free);
+        TextView tv_origin                = viewHolder.findViewById(R.id.tv_cartOriginP);
+        TextView tv_cGoodsRult            = viewHolder.findViewById(R.id.tv_cartGoodsRult);
+        TextView tv_cGoodsDes             = viewHolder.findViewById(R.id.tv_cartGoodsDes);
+        TextView tv_cartPriceRetail       = viewHolder.findViewById(R.id.tv_cartPriceRetail);   //售价
+        TextView tv_cartSkuShippingPrice  = viewHolder.findViewById(R.id.tv_cartSkuShippingPrice);
+        TextView tv_carBuyCount           = viewHolder.findViewById(R.id.tv_carBuyCount);
+        LinearLayout ll_cModifyCount      = viewHolder.findViewById(R.id.ll_cModifyCount);
 
-        String retailPrice = MathUtil.Companion.formatPrice(productSku.getRetailPrice());
-        String orginPrice  = MathUtil.Companion.formatPrice(productSku.getOriginalPrice());
-        String sPrice;
+        String retailPrice = MathUtil.Companion.formatPrice(productSku.getPriceRetail());
+        String orginPrice  = MathUtil.Companion.formatPrice(productSku.getPriceOrigin());
         String gSize       = productItem.sku.getSize();
         String gColor      = productItem.sku.getColor();
 
-        if(productItem.getAmtShipping() == 0 ){
-            sPrice = strFree;
-            tv_cShippingP.setTextColor(mContext.getResources().getColor(R.color.allwees_theme_color));
+        //售价为0则free,邮费按amtShipping价格来计算
+        if(productItem.getSku().getPriceRetail() == 0 ){
+            tv_cartSkuShippingPrice.setTextColor(mContext.getResources().getColor(R.color.theme_color));
+            tv_cartSkuShippingPrice.setText(strFree);
         }else{
-            sPrice =  MathUtil.Companion.formatPrice(productSku.getShippingPrice());
-        }
-
-        if(languate.equals("ar")){
-            tv_cShippingP.setVisibility(View.GONE);
-            tv_cShipping.setVisibility(View.GONE);
-        }
-
-        if(productItem.getProduct().getRetailPrice() == 0){
-            isPfree = true;
-            tv_free.setVisibility(View.VISIBLE);
-        }else{
-            tv_free.setVisibility(View.GONE);
-        }
-
-        if(productItem.getFree()){
-            isPfree = true;
-            tv_free.setVisibility(View.VISIBLE);
-        }else{
-            tv_free.setVisibility(View.GONE);
+            tv_cartSkuShippingPrice.setText(MathUtil.Companion.formatPrice(productItem.getAmtShipping()));
         }
 
         if(!TextUtils.isEmpty(goodsUrl)){
@@ -121,25 +98,27 @@ public class CartOrderAdapter extends RecyclerView.Adapter<QMUISwipeViewHolder>{
             tv_cGoodsDes.setText(product.getName());
         }
 
-        if(!TextUtils.isEmpty(retailPrice)){
-            tv_cartBuyP.setText(retailPrice);
+        if(productItem.getSku().getPriceRetail() == 0){    //售价是0则free
+            isfree = true;
+            tv_free.setVisibility(View.VISIBLE);
+        }else{
+            tv_free.setVisibility(View.GONE);
+            tv_cartPriceRetail.setText(retailPrice);
         }
 
         if(!TextUtils.isEmpty(orginPrice)){
-            if(productSku.getOriginalPrice() == productSku.getRetailPrice()){
-                tv_origin.setText(strFree);
+            if(productSku.getPriceOrigin() == productSku.getPriceRetail()){      //售价跟原价一样不显示原价
+                tv_origin.setVisibility(View.GONE);
             }else if(productSku.getOriginalPrice() > productSku.getRetailPrice()){
                 tv_origin.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
                 tv_origin.setText(orginPrice);
             }
         }
-        if(!TextUtils.isEmpty(sPrice)){
-            tv_cShippingP.setText(sPrice);
-        }
+
         tv_cGoodsRult.setText(gColor+","+ gSize);
         tv_carBuyCount.setText(productItem.getQuantity()+"");
 
-        boolean finalIsPfree = isPfree;
+        boolean finalIsPfree = isfree;
         ll_cModifyCount.setOnClickListener(view -> {
             if(listener != null){
                 listener.modifyBuyCount(productItem.getQuantity(),productSku.getUuid(),product.getUuid(), finalIsPfree);
@@ -150,8 +129,7 @@ public class CartOrderAdapter extends RecyclerView.Adapter<QMUISwipeViewHolder>{
             Bundle bundle = new Bundle();
             bundle.putString("uuid", productItem.product.getUuid());
             bundle.putString("type", "1");
-            Intent intent = HolderActivity.of(mContext, GoodsDetailFragment.class,bundle);
-            mContext.startActivity(intent);
+            HolderActivity.startFragment(mContext,GoodsDetailFragment.class,bundle);
         });
     }
 

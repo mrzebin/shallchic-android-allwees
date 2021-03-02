@@ -15,21 +15,20 @@ public interface CartContract {
 
     interface Model{
         void fetchCouponList(BaseModelResponeListener listener);
-        void fetchCLikeList(int currentPage,int pagetSize,BaseModelResponeListener listener);
+        void fetchCLikeList(int currentPage, int pagetSize, BaseModelResponeListener listener);
         void fetchCartData(BaseModelResponeListener listener);
-        void applyCouponCode(String promoCode,BaseModelResponeListener listener);
-        void deleteItemBuyGoods(String itemUuid,String skuUuid,String type,BaseModelResponeListener listener);
-//        void requestOrderPay(String addressUuid, String userCouponUuid, List<HashMap<Object,Object>> paramkeys,BaseModelResponeListener listener);
+        void applyCouponCode(String promoCode, BaseModelResponeListener listener);
+        void deleteItemBuyGoods(String itemUuid, String skuUuid, String type, BaseModelResponeListener listener);
         void requestOrderPay(CartItemReqBean reqBean, BaseModelResponeListener listener);
         void fetchAddressList(BaseModelResponeListener listener);
-        void balanceAmtByCash(Double cash,BaseModelResponeListener listener);
-        void goPayPal(String orderUuid,BaseModelResponeListener listener);
-        void modifyBuyCount(int count,boolean incr,String itemUuid,String skuUuid,BaseModelResponeListener listener);
+        void balanceAmtByCash(Double cash, BaseModelResponeListener listener);
+        void goPayPal(String orderUuid, BaseModelResponeListener listener);
+        void modifyBuyCount(int count, boolean incr, String itemUuid, String skuUuid, BaseModelResponeListener listener);
     }
 
-    interface View extends BaseView{
+    interface View extends BaseView {
         void fetchBuyDataFail(String msg);
-        void fetchBuyData(CartBuyDataBean result);
+        void fetchBuyDataSuccess(CartBuyDataBean result);
         void fetchMightLikeData(ClassifyListBean result);
         void fetchSuccess(CategoryBean result);
         void fetchFail(String failReason);
@@ -53,7 +52,6 @@ public interface CartContract {
         void requestOrderPay(CartItemReqBean reqBean);
         void fetchAddressList();
         void balanceAmtByCash(Double cash);
-        void goPayPal(String orderUuid);
         void modifyBuyCount(int count,boolean incr,String itemUuid,String skuUuid);
         void fetchCouponList();
     }

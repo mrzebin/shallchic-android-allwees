@@ -1,15 +1,16 @@
 package com.project.app.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AddMoreListBean {
-    private int current;
-    private int lastPage;
-    private int size;
-    private int total;
-    private int count;
-    private boolean hasMorePages;
-    private List<ClassifyItem> results;
+    private int current = 0;
+    private int lastPage = 0;
+    private int size = 0;
+    private int total = 0;
+    private int count = 0;
+    private boolean hasMorePages = false;
+    private List<ClassifyItem> results = new ArrayList<>();
 
     public int getCurrent() {
         return current;
@@ -68,19 +69,19 @@ public class AddMoreListBean {
     }
 
     public static class ClassifyItem{
-        String uuid;
-        private int status;
-        private String name;
-        private String mainPhoto;
-        private int salesTotal;
-        private double priceOrigin;
-        private double priceRetail;
-        private double priceShip;
-        private int marketingType;
-        private String discountOff;
-        private boolean userIsCollection;
-        private int displayAs;
-        private String statusDesc;
+        String uuid = "";
+        private int status = 0;
+        private String name = "";
+        private String mainPhoto = "";
+        private int salesTotal = 0;
+        private double priceOrigin = 0.0;
+        private double priceRetail = 0.0;
+        private double priceShip = 0.0;
+        private int marketingType = 0;
+        private String discountOff = "";
+        private boolean userIsCollection = false;
+        private int displayAs = 0;
+        private String statusDesc = "";
 
         public String getDiscountOff() {
             return discountOff;

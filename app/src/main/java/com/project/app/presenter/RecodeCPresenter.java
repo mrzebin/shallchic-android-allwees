@@ -18,11 +18,17 @@ public class RecodeCPresenter extends BasePresenter<PresenterCouponContract.View
        model.fetchUseCouponHistory(page, pageSize, url, new BaseModelResponeListener<RewardDashbBean>() {
            @Override
            public void onSuccess(RewardDashbBean data) {
+               if(mView == null){
+                   return;
+               }
                mView.fetchSuccess(data);
            }
 
            @Override
            public void onFail(String msg) {
+               if(mView == null){
+                   return;
+               }
                 mView.fetchFail(msg);
            }
        });

@@ -12,10 +12,10 @@ public interface NewFreeGiftContract {
         void fetchFreeGiftStatus(BaseModelResponeListener listener);
         void fetchFreeGiftsCouponStatus(BaseModelResponeListener listener);
         void fetchFreeGiftsList(BaseModelResponeListener listener);
-        void operationAddGoods(int count,boolean incr,String skuUuid,BaseModelResponeListener listener);
+        void operationAddGoods(int count, boolean incr, String skuUuid, BaseModelResponeListener listener);
     }
 
-    interface View extends BaseView{
+    interface View extends BaseView {
         void fetchFreeGiftsCouponSuccess(FreeGiftCouponBean result);
         void fetchFreeGiftsStatusSuccess(MarketGiftInfoBean result);
         void fetchGiftsList(HomeFreeGiftBean result);

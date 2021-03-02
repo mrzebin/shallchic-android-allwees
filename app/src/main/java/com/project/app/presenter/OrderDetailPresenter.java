@@ -18,16 +18,25 @@ public class OrderDetailPresenter extends BasePresenter<OrderDetailContract.View
     }
 
     @Override
-    public void fetchDetailData(String orderNo, String orderType) {
+    public void fetchDetailData(String orderNo) {
+        if(mView == null){
+            return;
+        }
         mView.startLoading();
-        model.fetchDetailData(orderNo,orderType,new BaseModelResponeListener<OrderDetailBean>() {
+        model.fetchDetailData(orderNo,new BaseModelResponeListener<OrderDetailBean>() {
             @Override
             public void onSuccess(OrderDetailBean data) {
+                if(mView == null){
+                    return;
+                }
                 mView.stopLoading();
                 mView.fetchDetailSuccess(data);
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.stopLoading();
                 mView.fetchDetailFail(msg);
             }
@@ -39,10 +48,16 @@ public class OrderDetailPresenter extends BasePresenter<OrderDetailContract.View
         model.checkLogisticTrack(trackUuid, new BaseModelResponeListener<LogisticTrackBean>() {
             @Override
             public void onSuccess(LogisticTrackBean data) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchLogisticTSuccess(data);
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchLogisticTFail(msg);
             }
         });
@@ -53,6 +68,9 @@ public class OrderDetailPresenter extends BasePresenter<OrderDetailContract.View
         model.receiveGoodsRequest(orderId, new BaseModelResponeListener<String>() {
             @Override
             public void onSuccess(String data) {
+                if(mView == null){
+                    return;
+                }
                 try {
                     JSONObject object = new JSONObject(data);
                     String msg = object.getString("msg");
@@ -68,6 +86,9 @@ public class OrderDetailPresenter extends BasePresenter<OrderDetailContract.View
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.refundFail(msg);
             }
         });

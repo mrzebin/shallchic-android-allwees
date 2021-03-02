@@ -34,10 +34,16 @@ public class RedeemPresenter extends BasePresenter<RedeemContract.View> implemen
         model.fetchRedeemInfo(page,pageSize,new BaseModelResponeListener<RedeemBean>() {
             @Override
             public void onSuccess(RedeemBean data) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchRedeemInfoSuccess(data);
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchFail(msg);
             }
         });
@@ -48,11 +54,17 @@ public class RedeemPresenter extends BasePresenter<RedeemContract.View> implemen
         model.fetchBindPointInfo(new BaseModelResponeListener<MeBindCPBean>() {
             @Override
             public void onSuccess(MeBindCPBean data) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchPointSuccess(data);
             }
 
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchFail(msg);
             }
         });

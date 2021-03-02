@@ -8,6 +8,7 @@ import com.hb.basemodel.base.BaseUserInfo;
 import com.hb.basemodel.base.LocalUserInfo;
 import com.hb.basemodel.other.UserUtil;
 import com.project.app.base.BasePresenter;
+import com.project.app.bean.LoginTokenMeBean;
 import com.project.app.contract.LoginContract;
 import com.project.app.model.LoginModel;
 
@@ -27,11 +28,17 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
         model.regist(params, new BaseModelResponeListener<String>() {
             @Override
             public void onSuccess(String data) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchRegistSuccess(data);
             }
 
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchFail(msg);
             }
         });
@@ -39,32 +46,23 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
 
     @Override
     public void login(Map<String, String> params) {
-        model.login(params, new BaseModelResponeListener<String>() {
+        model.login(params, new BaseModelResponeListener<LoginTokenMeBean>() {
             @Override
-            public void onSuccess(String data) {
-                if(!TextUtils.isEmpty(data)){
-                    try {
-                        int code;
-                        String msg;
-                        JSONObject object = new JSONObject(data);
-                        code = object.getInt("code");
-                        msg   = object.getString("msg");
-                        if(code == 1){
-                            LocalUserInfo localUserInfo = new LocalUserInfo();
-                            localUserInfo.setLogin(true);
-                            localUserInfo.setAccess_token(object.getString("access_token"));
-                            localUserInfo.setToken_type(object.getString("token_type"));
-                            mView.fetchLoginSuccess(localUserInfo);
-                        }else{
-                            mView.fetchFail(msg);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+            public void onSuccess(LoginTokenMeBean data) {
+                LocalUserInfo localUserInfo = new LocalUserInfo();
+                localUserInfo.setLogin(true);
+                localUserInfo.setAccess_token(data.getAccess_token());
+                localUserInfo.setToken_type(data.getToken_type());
+                if(mView == null){
+                    return;
                 }
+                mView.fetchLoginSuccess(localUserInfo);
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchFail(msg);
             }
         });
@@ -75,6 +73,9 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
         model.fbLogin(params, new BaseModelResponeListener<String>() {
             @Override
             public void onSuccess(String data) {
+                if(mView == null){
+                    return;
+                }
                 if(!TextUtils.isEmpty(data)){
                     try {
                         int code;
@@ -98,6 +99,9 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchFail(msg);
             }
         });

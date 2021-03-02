@@ -4,10 +4,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.View;
 
-import com.hb.basemodel.base.LoadingDialog;
 import com.qmuiteam.qmui.arch.QMUIFragment;
 import com.qmuiteam.qmui.widget.QMUIWindowInsetLayout;
+import com.project.app.R;
+import com.project.app.ui.dialog.LoadingDialog;
 import com.project.app.ui.dialog.TipDialogUtil;
 
 import androidx.annotation.NonNull;
@@ -17,6 +19,7 @@ public abstract class BaseMvpController<P extends BasePresenter> extends QMUIWin
     public final TipDialogUtil mTipDialogUtil;
     public P mPresenter;
     protected LoadingDialog dialog;
+    private Context mContext;
 
     final Handler mHandler = new Handler(){
         @Override
@@ -27,6 +30,7 @@ public abstract class BaseMvpController<P extends BasePresenter> extends QMUIWin
 
     public BaseMvpController(Context context) {
         super(context);
+        mContext = context;
         mTipDialogUtil = new TipDialogUtil(context,mHandler);
     }
 
@@ -65,6 +69,12 @@ public abstract class BaseMvpController<P extends BasePresenter> extends QMUIWin
             mHomeControlListener.hideProgressDialog();
         }
     }
+
+    public View getEmptyDataView(){
+        View view = View.inflate(mContext,R.layout.layout_empty_nodata,null);
+        return view;
+    }
+
 
     public interface HomeControlListener {
         void startIntent();

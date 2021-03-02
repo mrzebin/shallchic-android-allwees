@@ -17,12 +17,13 @@ public class ActionDeliverDoubleModel implements ActionDeliverDoubleContract.Mod
     }
 
     @Override
-    public void fetchActionFreeOne(int page,int size,BaseModelResponeListener listener) {
+    public void fetchActionFreeOne(String marketType, int page, int size, BaseModelResponeListener listener) {
         String requestType = "0";
         String url = BaseUrlConfig.getRootHost() + UrlConfig.HOME_ACTION_BUY_FREE_ONE;
         HashMap hMap = new HashMap();
         hMap.put("page",page);
         hMap.put("size",size);
+        hMap.put("marketingType",marketType);
 
         OkHttpUtils.get(url, requestType,hMap,new OkHttpUtils.ResultCallback<BaseObjectBean<ActionFreeOneBean>>() {
             @Override
@@ -35,7 +36,7 @@ public class ActionDeliverDoubleModel implements ActionDeliverDoubleContract.Mod
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+
             }
         });
     }

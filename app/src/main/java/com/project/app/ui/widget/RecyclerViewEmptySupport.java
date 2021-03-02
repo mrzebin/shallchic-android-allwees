@@ -29,10 +29,10 @@ public class RecyclerViewEmptySupport extends RecyclerView {
             if (adapter != null && mEmptyView != null) {
                 if (adapter.getItemCount() == 0) {
                     mEmptyView.setVisibility(View.VISIBLE);
-                    RecyclerViewEmptySupport.this.setVisibility(View.GONE);
+                    com.project.app.ui.widget.RecyclerViewEmptySupport.this.setVisibility(View.GONE);
                 } else {
                     mEmptyView.setVisibility(View.GONE);
-                    RecyclerViewEmptySupport.this.setVisibility(View.VISIBLE);
+                    com.project.app.ui.widget.RecyclerViewEmptySupport.this.setVisibility(View.VISIBLE);
                 }
             }
         }

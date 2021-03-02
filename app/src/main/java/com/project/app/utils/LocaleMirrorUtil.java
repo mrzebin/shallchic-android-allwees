@@ -5,12 +5,6 @@ package com.project.app.utils;
  */
 public class LocaleMirrorUtil {
 
-    public static String getCurrentSymbol() {
-        String moneySymbol = "";
-        moneySymbol = LocaleUtil.getInstance().getSymbole();
-        return moneySymbol;
-    }
-
     //判断是不是阿拉伯国家
     public static boolean isAbbr() {
         boolean isAbbrCountry = false;
@@ -21,10 +15,6 @@ public class LocaleMirrorUtil {
             isAbbrCountry = false;
         }
         return isAbbrCountry;
-    }
-
-    public boolean isCustomCountry(){
-        return LocaleUtil.getInstance().getLocaleCustom();
     }
 
 }

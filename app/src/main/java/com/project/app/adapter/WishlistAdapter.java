@@ -1,6 +1,5 @@
 package com.project.app.adapter;
 
-import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -9,7 +8,6 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.module.LoadMoreModule;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.hb.basemodel.config.Constant;
 import com.hb.basemodel.image.ImageLoader;
 import com.project.app.R;
 import com.project.app.activity.HolderActivity;
@@ -26,8 +24,8 @@ public class WishlistAdapter extends BaseQuickAdapter<WishDataBean.ProductDtoWra
     private String pSymbol;
 
     public WishlistAdapter(List<WishDataBean.ProductDtoWrapp> data) {
-        super(R.layout.item_home_classify, data);    pSymbol = LocaleUtil.getInstance().getSymbole();
-
+        super(R.layout.item_favorite, data);
+        pSymbol = LocaleUtil.getInstance().getSymbole();
     }
 
     @Override
@@ -37,11 +35,7 @@ public class WishlistAdapter extends BaseQuickAdapter<WishDataBean.ProductDtoWra
         String mainPhoto = productDto.getMainPhoto();
 
         if(!TextUtils.isEmpty(mainPhoto)){
-            if(mainPhoto.endsWith("jpg") || mainPhoto.endsWith("png")){
-                ImageLoader.getInstance().displayImage(helper.getView(R.id.tv_superClassify),productDto.getMainPhoto() + Constant.mGlobalThumbnailStyle,R.mipmap.allwees_ic_default_goods);
-            }else if (mainPhoto.endsWith("gif")){
-                ImageLoader.getInstance().displayImage(helper.getView(R.id.tv_superClassify),productDto.getMainPhoto(),R.mipmap.allwees_ic_default_goods);
-            }
+            ImageLoader.getInstance().displayImage(helper.getView(R.id.iv_gif_goods),productDto.getMainPhoto(),R.mipmap.allwees_ic_default_goods);
         }
 
         if(!TextUtils.isEmpty(productDto.getPriceRetail()+"")){
@@ -53,6 +47,8 @@ public class WishlistAdapter extends BaseQuickAdapter<WishDataBean.ProductDtoWra
         }
 
         if(productDto.getPriceOrigin() == productDto.getPriceRetail()){    //如果价格一样则不显示原价
+            helper.setVisible(R.id.tv_orignPrice,false);
+        }else if(productDto.getPriceOrigin() == 0){
             helper.setVisible(R.id.tv_orignPrice,false);
         }else{
             TextView tv_orignPrice = helper.getView(R.id.tv_orignPrice);
@@ -69,8 +65,7 @@ public class WishlistAdapter extends BaseQuickAdapter<WishDataBean.ProductDtoWra
             Bundle bundle = new Bundle();
             bundle.putString("uuid", productDto.getUuid());
             bundle.putString("type", "0");
-            Intent intent = HolderActivity.of(getContext(), GoodsDetailFragment.class,bundle);
-            getContext().startActivity(intent);
+            HolderActivity.startFragment(getContext(),GoodsDetailFragment.class,bundle);
         });
     }
 }

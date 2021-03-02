@@ -6,7 +6,6 @@ import com.project.app.bean.AddressBean;
 import com.project.app.bean.CartBuyDataBean;
 import com.project.app.bean.CartCouponsBaean;
 import com.project.app.bean.CartItemReqBean;
-import com.project.app.bean.ChionWrapperBean;
 import com.project.app.bean.ClassifyListBean;
 import com.project.app.bean.PayOrderBean;
 import com.project.app.contract.CartContract;
@@ -24,11 +23,16 @@ public class CartPresenter extends BasePresenter<CartContract.View> implements C
         model.fetchCouponList(new BaseModelResponeListener<CartCouponsBaean>() {
             @Override
             public void onSuccess(CartCouponsBaean data) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchCouponListSuccess(data);
             }
-
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchFail(msg);
             }
         });
@@ -40,11 +44,17 @@ public class CartPresenter extends BasePresenter<CartContract.View> implements C
         model.applyCouponCode(promoCode, new BaseModelResponeListener<CartBuyDataBean>() {
             @Override
             public void onSuccess(CartBuyDataBean data) {
+                if(mView == null){
+                    return;
+                }
                 mView.stopLoading();
                 mView.fetchApplyCouponSuccess(data);
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.stopLoading();
                 mView.fetchFail(msg);
             }
@@ -56,11 +66,17 @@ public class CartPresenter extends BasePresenter<CartContract.View> implements C
         model.fetchCLikeList(currentPage, pageSize, new BaseModelResponeListener<ClassifyListBean>() {
             @Override
             public void onSuccess(ClassifyListBean data) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchMightLikeData(data);
                 mView.stopLoading();
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchFail(msg);
                 mView.stopLoading();
             }
@@ -72,10 +88,16 @@ public class CartPresenter extends BasePresenter<CartContract.View> implements C
         model.deleteItemBuyGoods(itemUuid, skuUuid, type, new BaseModelResponeListener<CartBuyDataBean>() {
             @Override
             public void onSuccess(CartBuyDataBean data) {
+                if(mView == null){
+                    return;
+                }
                 mView.deleteSuccess(data);
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.deleteFail(msg);
             }
         });
@@ -83,15 +105,24 @@ public class CartPresenter extends BasePresenter<CartContract.View> implements C
 
     @Override
     public void requestOrderPay(CartItemReqBean reqBean) {
+        if(mView == null){
+            return;
+        }
         mView.startLoading();
         model.requestOrderPay(reqBean,new BaseModelResponeListener<PayOrderBean>() {
             @Override
             public void onSuccess(PayOrderBean data) {
+                if(mView == null){
+                    return;
+                }
                 mView.stopLoading();
                 mView.fetchCreateOrderSuccess(data);
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.stopLoading();
                 mView.fetchFail(msg);
             }
@@ -103,11 +134,17 @@ public class CartPresenter extends BasePresenter<CartContract.View> implements C
         model.fetchCartData(new BaseModelResponeListener<CartBuyDataBean>() {
             @Override
             public void onSuccess(CartBuyDataBean data) {
-                mView.fetchBuyData(data);
+                if(mView == null){
+                    return;
+                }
+                mView.fetchBuyDataSuccess(data);
                 mView.stopLoading();
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchBuyDataFail(msg);
                 mView.stopLoading();
             }
@@ -119,11 +156,17 @@ public class CartPresenter extends BasePresenter<CartContract.View> implements C
         model.fetchAddressList(new BaseModelResponeListener<AddressBean>() {
             @Override
             public void onSuccess(AddressBean data) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchAddressSuccess(data);
             }
 
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchFail(msg);
             }
         });
@@ -134,26 +177,18 @@ public class CartPresenter extends BasePresenter<CartContract.View> implements C
         model.balanceAmtByCash(cash,new BaseModelResponeListener<CartBuyDataBean>() {
             @Override
             public void onSuccess(CartBuyDataBean data) {
+                if(mView == null){
+                    return;
+                }
                 mView.stopLoading();
-                mView.fetchBuyData(data);
+                mView.fetchBuyDataSuccess(data);
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.stopLoading();
-            }
-        });
-    }
-
-    @Override
-    public void goPayPal(String orderUuid) {
-        model.goPayPal(orderUuid, new BaseModelResponeListener<ChionWrapperBean>() {
-            @Override
-            public void onSuccess(ChionWrapperBean data) {
-                mView.fetchWebPayH5(data);
-            }
-            @Override
-            public void onFail(String msg) {
-                mView.fetchFail(msg);
             }
         });
     }
@@ -164,11 +199,17 @@ public class CartPresenter extends BasePresenter<CartContract.View> implements C
         model.modifyBuyCount(count, incr, skuUuid, itemUuid, new BaseModelResponeListener<CartBuyDataBean>() {
             @Override
             public void onSuccess(CartBuyDataBean data) {
+                if(mView == null){
+                    return;
+                }
                 mView.stopLoading();
                 mView.modifyBuyCountSuccess(data);
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.stopLoading();
                 mView.modifyBuyCountFail(msg);
             }

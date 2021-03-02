@@ -26,7 +26,6 @@ public class SearchTrendingGroup<X extends TextView> extends ViewGroup {
     private int itemBGResNor = R.drawable.goods_item_btn_normal;
     private int itemBGResSel = R.drawable.groupview_selected;
 
-
     private int viewHeight = 0;     //控件的高度
     private int viewWidth  = 0;     //控件的宽度
     private final int textModePadding = 10;
@@ -206,7 +205,7 @@ public class SearchTrendingGroup<X extends TextView> extends ViewGroup {
         return result;
     }
 
-    public void setGroupClickListener(SearchTrendingGroup.OnGroupItemClickListener listener) {
+    public void setGroupClickListener(com.project.app.ui.widget.SearchTrendingGroup.OnGroupItemClickListener listener) {
         this.onGroupItemClickListener = listener;
         for (int i = 0; i < getChildCount(); i++) {
             final X childView = (X) getChildAt(i);

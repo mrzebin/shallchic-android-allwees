@@ -1,9 +1,9 @@
-package com.project.app.bean
+package com.project.app.bean;
 
 class ParseFacebookDeeplinkBean {
     var target_url:String = ""
-    var extras:FacebookExtrasBean ?=null
-    var referer_app_link:FacebookRefreAppBean ?= null
+    var extras:FacebookExtrasBean ?= FacebookExtrasBean()
+    var referer_app_link:FacebookRefreAppBean ?= FacebookRefreAppBean()
 
     class FacebookExtrasBean{
         var sc_deeplink:String = ""

@@ -10,12 +10,12 @@ public interface FlashSaleContract {
 
     interface Model{
         void fetchCartData(BaseModelResponeListener listener);
-        void fetchFSGoodsDetail(String uuid,BaseModelResponeListener listener);
+        void fetchFSGoodsDetail(String uuid, BaseModelResponeListener listener);
         void fetchFlashSale(int type,int page, int size, BaseModelResponeListener listener);
-        void operationAddGoods(int count,boolean incr,String skuUuid,BaseModelResponeListener listener);
+        void operationAddGoods(int count, boolean incr, String skuUuid, BaseModelResponeListener listener);
     }
 
-    interface View extends BaseView{
+    interface View extends BaseView {
         void fetchBuyDataSuccess(CartBuyDataBean result);
         void fetchFlashSaleSuccess(HomeFLashSaleBean result);
         void fetchGoodsInfoSuccess(GoodsDetailInfoBean result);

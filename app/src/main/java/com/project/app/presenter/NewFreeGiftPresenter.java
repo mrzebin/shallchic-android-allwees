@@ -20,10 +20,16 @@ public class NewFreeGiftPresenter extends BasePresenter<NewFreeGiftContract.View
         model.fetchFreeGiftStatus(new BaseModelResponeListener<MarketGiftInfoBean>() {
             @Override
             public void onSuccess(MarketGiftInfoBean data) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchFreeGiftsStatusSuccess(data);
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchFail(msg);
             }
         });
@@ -34,10 +40,16 @@ public class NewFreeGiftPresenter extends BasePresenter<NewFreeGiftContract.View
         model.fetchFreeGiftsCouponStatus(new BaseModelResponeListener<FreeGiftCouponBean>() {
             @Override
             public void onSuccess(FreeGiftCouponBean data) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchFreeGiftsCouponSuccess(data);
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchFail(msg);
             }
         });
@@ -48,11 +60,17 @@ public class NewFreeGiftPresenter extends BasePresenter<NewFreeGiftContract.View
         model.fetchFreeGiftsList(new BaseModelResponeListener<HomeFreeGiftBean>() {
             @Override
             public void onSuccess(HomeFreeGiftBean data) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchGiftsList(data);
             }
 
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchFail(msg);
             }
         });
@@ -63,11 +81,17 @@ public class NewFreeGiftPresenter extends BasePresenter<NewFreeGiftContract.View
         model.operationAddGoods(count, incr, skuUuid, new BaseModelResponeListener() {
             @Override
             public void onSuccess(Object data) {
+                if(mView == null){
+                    return;
+                }
                 mView.addCartSuccess(data.toString());
             }
 
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchFail(msg);
             }
         });

@@ -44,7 +44,7 @@ import java.util.concurrent.CountDownLatch;
  * Handles basic helper functions used throughout the app.
  */
 public class Util {
-    private static final String TAG = Util.class.getSimpleName();
+    private static final String TAG = com.project.app.s3transferutility.Util.class.getSimpleName();
 
     private AmazonS3Client sS3Client;
     private AWSCredentialsProvider sMobileClient;

@@ -66,8 +66,7 @@ class RefundDialogUtil {
             bundle.putString("type","1")
             bundle.putString("webUrl", siteUrl)
             bundle.putString("title", skipRp)
-            val intent = HolderActivity.of(mContext, WebExplorerFragment::class.java, bundle)
-            mContext.startActivity(intent)
+            HolderActivity.startFragment(mContext,WebExplorerFragment::class.java,bundle)
         })
 
         qmui_addToCart = mView.findViewById(R.id.qmui_addToCart)

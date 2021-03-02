@@ -8,7 +8,6 @@ import com.hb.basemodel.config.Constant;
 import com.hb.basemodel.config.api.UrlConfig;
 import com.hb.basemodel.http.OkHttpUtils;
 import com.hb.basemodel.utils.JsonUtils;
-import com.hb.basemodel.utils.LoggerUtil;
 import com.hb.basemodel.utils.SPManager;
 import com.project.app.base.BaseObjectBean;
 import com.project.app.bean.AddressBean;
@@ -62,7 +61,7 @@ public class CartModel implements CartContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+
             }
         });
     }
@@ -87,7 +86,7 @@ public class CartModel implements CartContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onSuccess(e.getMessage());
+
             }
         },params);
     }
@@ -114,7 +113,7 @@ public class CartModel implements CartContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+
             }
         },params);
     }
@@ -124,8 +123,6 @@ public class CartModel implements CartContract.Model {
         String requestType = "4";
         String url = BaseUrlConfig.getRootHost() + UrlConfig.REQUEST_ORDER_PAY_URL;
         List<OkHttpUtils.Param> params = new ArrayList<>();
-        String paramJson = JsonUtils.serialize(reqBean);
-        LoggerUtil.i("------" + paramJson);
         params.add(new OkHttpUtils.Param("params", JsonUtils.serialize(reqBean)));
 
         OkHttpUtils.post(url,requestType,new OkHttpUtils.ResultCallback<BaseObjectBean<PayOrderBean>>() {
@@ -139,7 +136,7 @@ public class CartModel implements CartContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+
             }
         },params);
     }
@@ -164,7 +161,7 @@ public class CartModel implements CartContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+//                listener.onFail(e.getMessage());
             }
         });
     }
@@ -184,13 +181,10 @@ public class CartModel implements CartContract.Model {
                 code = carObj.getInt("code");
                 msg  = carObj.getString("msg");
                 String data = carObj.getString("data");
-
                 if(code == 1){
                     CartBuyDataBean bean = JsonUtils.deserialize(data,CartBuyDataBean.class);
                     if(bean != null){
                         listener.onSuccess(bean);
-                    }else{
-                        listener.onFail("购物车为空");
                     }
                 }else{
                     listener.onFail(msg);
@@ -198,7 +192,7 @@ public class CartModel implements CartContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+
             }
         });
     }
@@ -219,7 +213,7 @@ public class CartModel implements CartContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+
             }
         });
     }
@@ -245,7 +239,7 @@ public class CartModel implements CartContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+
             }
         },params);
     }
@@ -270,7 +264,7 @@ public class CartModel implements CartContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+
             }
         },params);
     }
@@ -301,7 +295,7 @@ public class CartModel implements CartContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+
             }
         },params);
     }

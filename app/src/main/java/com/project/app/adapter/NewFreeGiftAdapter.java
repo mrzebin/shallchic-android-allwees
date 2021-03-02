@@ -9,10 +9,10 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.module.LoadMoreModule;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.hb.basemodel.image.ImageLoader;
-import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 import com.project.app.R;
 import com.project.app.bean.HomeFreeGiftBean;
 import com.project.app.utils.MathUtil;
+import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 
 import org.jetbrains.annotations.NotNull;
 

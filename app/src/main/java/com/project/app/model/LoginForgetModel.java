@@ -18,7 +18,7 @@ public class LoginForgetModel implements LoginForgetPContract.Model {
     }
 
     @Override
-    public void sendTargetEmailCode(String targetEmail,BaseModelResponeListener listener) {
+    public void sendTargetEmailCode(String targetEmail, BaseModelResponeListener listener) {
         String requestType = "0";
         String url = BaseUrlConfig.getRootHost() + UrlConfig.LOGIN_FORGET_PASSWORD + "?email=" + targetEmail;
         HashMap<String,String> params = new HashMap<>();
@@ -43,7 +43,7 @@ public class LoginForgetModel implements LoginForgetPContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+
             }
         });
     }

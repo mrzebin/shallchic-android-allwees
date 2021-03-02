@@ -15,6 +15,12 @@ import com.hb.basemodel.utils.JsonUtils;
 import com.hb.basemodel.utils.SPManager;
 import com.hb.basemodel.utils.ToastUtil;
 import com.hb.basemodel.view.DelEditView;
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
+import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
+import com.scwang.smart.refresh.layout.SmartRefreshLayout;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.project.app.R;
 import com.project.app.adapter.SearchGoodsAdapter;
 import com.project.app.base.BaseMvpQmuiFragment;
@@ -28,15 +34,9 @@ import com.project.app.ui.widget.GlobalClassicsHeader;
 import com.project.app.ui.widget.RecentSearchsGroup;
 import com.project.app.ui.widget.SearchTrendingGroup;
 import com.project.app.utils.SoftKeyboardManager;
-import com.project.app.utils.StatusBarUtils;
-import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
-import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
-import com.scwang.smart.refresh.layout.SmartRefreshLayout;
-import com.scwang.smart.refresh.layout.api.RefreshLayout;
-import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
-import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -46,8 +46,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class SearchGoodsFragment extends BaseMvpQmuiFragment<SearchGoodsPresenter> implements SearchGoodsContract.View {
-    @BindView(R.id.ll_inflate)
-    LinearLayout ll_inflate;
     @BindView(R.id.ll_delete)
     DelEditView ll_delete;
     @BindView(R.id.tv_cancelSearch)
@@ -91,7 +89,6 @@ public class SearchGoodsFragment extends BaseMvpQmuiFragment<SearchGoodsPresente
     @Override
     public void initView() {
         QMUIStatusBarHelper.setStatusBarLightMode(getActivity());
-        StatusBarUtils.setStatusBarView(getContext(),ll_inflate);
         mPresenter = new SearchGoodsPresenter();
         mPresenter.attachView(this);
         initWeight();
@@ -102,29 +99,29 @@ public class SearchGoodsFragment extends BaseMvpQmuiFragment<SearchGoodsPresente
      * 提取历史搜索数据
      */
     private void initRecent() {
-//        String  searchHistoryJson =  SPManager.sGetString(Constant.SP_RECODE_SEARCH_KEYWORD);
-//        if(!TextUtils.isEmpty(searchHistoryJson)){
-//            RecentSearchBean searchBean = JsonUtils.deserialize(searchHistoryJson,RecentSearchBean.class);
-//            List<RecentSearchBean.SearchHistoryItem> items = searchBean.getHistoryItems();
-//            if(DataUtil.idNotNull(items)){      //历史记录不为空
-//                if(ll_searchHistory.getVisibility() == View.VISIBLE){
-//                    ll_recentBranch.setVisibility(View.VISIBLE);
-//                    Collections.reverse(items);
-//                    group_recent.addItemViews(items,RecentSearchsGroup.LINEARLAYOUT_MODE);
-//                    group_recent.setGroupClickListener(new RecentSearchsGroup.OnGroupItemClickListener() {
-//                        @Override
-//                        public void onGroupItemClick(String keyName) {
-//                            if(!TextUtils.isEmpty(keyName)){
-//                                startProgressDialog(getContext());
-//                                ll_delete.editText.setText(keyName);
-//                                mCurrentPage = 1;
-//                                mPresenter.searchGoods(true,mCurrentPage,mPageSize,keyName);
-//                            }
-//                        }
-//                    });
-//                }
-//            }
-//        }
+        String  searchHistoryJson =  SPManager.sGetString(Constant.SP_RECODE_SEARCH_KEYWORD);
+        if(!TextUtils.isEmpty(searchHistoryJson)){
+            RecentSearchBean searchBean = JsonUtils.deserialize(searchHistoryJson,RecentSearchBean.class);
+            List<RecentSearchBean.SearchHistoryItem> items = searchBean.getHistoryItems();
+            if(DataUtil.idNotNull(items)){      //历史记录不为空
+                if(ll_searchHistory.getVisibility() == View.VISIBLE){
+                    ll_recentBranch.setVisibility(View.VISIBLE);
+                    Collections.reverse(items);
+                    group_recent.addItemViews(items,RecentSearchsGroup.TV_MODE);
+                    group_recent.setGroupClickListener(new RecentSearchsGroup.OnGroupItemClickListener() {
+                        @Override
+                        public void onGroupItemClick(String keyName) {
+                            if(!TextUtils.isEmpty(keyName)){
+                                startProgressDialog(getContext());
+                                ll_delete.editText.setText(keyName);
+                                mCurrentPage = 1;
+                                mPresenter.searchGoods(true,mCurrentPage,mPageSize,keyName);
+                            }
+                        }
+                    });
+                }
+            }
+        }
     }
 
     private void initWeight() {
@@ -205,7 +202,7 @@ public class SearchGoodsFragment extends BaseMvpQmuiFragment<SearchGoodsPresente
                             cellItem.add(new RecentSearchBean.SearchHistoryItem(keytag));
                             searchBean.setHistoryItems(cellItem);
                         }
-                        SPManager.sPutString(Constant.SP_RECODE_SEARCH_KEYWORD,JsonUtils.serialize(searchBean));
+                        SPManager.sPutString(Constant.SP_RECODE_SEARCH_KEYWORD, JsonUtils.serialize(searchBean));
                         mPresenter.searchGoods(true,mCurrentPage,mPageSize,keytag);
                         SoftKeyboardManager.hideShowKeyboard(getContext());
                         return true;
@@ -223,7 +220,7 @@ public class SearchGoodsFragment extends BaseMvpQmuiFragment<SearchGoodsPresente
 
             @Override
             public void editHasDataObserve() {
-                tv_cancelSearch.setTextColor(getResources().getColor(R.color.allwees_theme_color));
+                tv_cancelSearch.setTextColor(getResources().getColor(R.color.theme_color));
             }
         });
     }
@@ -340,7 +337,7 @@ public class SearchGoodsFragment extends BaseMvpQmuiFragment<SearchGoodsPresente
             }
             isHasMore = result.isHasMorePages();
             if(!isHasMore){
-                srf_search.finishLoadMoreWithNoMoreData();
+                srf_search.finishLoadMore();
             }
         }else{
             if(DataUtil.idNotNull(result.getResults())){
@@ -348,7 +345,7 @@ public class SearchGoodsFragment extends BaseMvpQmuiFragment<SearchGoodsPresente
             }
             isHasMore = result.isHasMorePages();
             if(!isHasMore){
-                srf_search.finishLoadMoreWithNoMoreData();
+                srf_search.finishLoadMore();
             }
         }
     }

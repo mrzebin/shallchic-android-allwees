@@ -1,15 +1,20 @@
 package com.project.app.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.appsflyer.AFInAppEventParameterName;
 import com.bumptech.glide.Glide;
 import com.hb.basemodel.config.Constant;
 import com.hb.basemodel.config.api.UrlConfig;
@@ -22,6 +27,7 @@ import com.hb.basemodel.utils.ToastUtil;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.project.app.R;
+import com.project.app.activity.HolderActivity;
 import com.project.app.activity.LoginActivity;
 import com.project.app.adapter.DetailCoverAdapter;
 import com.project.app.adapter.GoodsRelativeAdapter;
@@ -30,17 +36,24 @@ import com.project.app.bean.GoodsDetailInfoBean;
 import com.project.app.bean.GoodsRelationBean;
 import com.project.app.config.AppsFlyConfig;
 import com.project.app.contract.GoodsDetailContract;
+import com.project.app.fragment.goods.GoodsSizeChartFragment;
 import com.project.app.presenter.GoodsDetailPresenter;
+import com.project.app.ui.PackageCheckUtil;
+import com.project.app.ui.dialog.DInjectListener;
 import com.project.app.ui.dialog.GDBuyPopupDialogUtil;
 import com.project.app.ui.dialog.GDChooiceDialogUtil;
+import com.project.app.ui.dialog.GDEstimatedTimeUtil;
 import com.project.app.ui.dialog.GDGalleryDialogUtil;
+import com.project.app.ui.dialog.GDWhatsRemindUtil;
 import com.project.app.ui.dialog.GDetailDeliveryUtil;
 import com.project.app.ui.dialog.GDetailDescriptionUtil;
 import com.project.app.ui.dialog.RefundDialogUtil;
 import com.project.app.utils.AppsFlyEventUtils;
 import com.project.app.utils.MathUtil;
+import com.project.app.utils.WhatsAppUtil;
 
 import org.greenrobot.eventbus.EventBus;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,6 +69,8 @@ import butterknife.OnClick;
 public class GoodsDetailFragment extends BaseMvpQmuiFragment<GoodsDetailPresenter> implements GoodsDetailContract.View {
     @BindView(R.id.iv_shoppingCart)
     ImageView iv_shoppingCart;
+    @BindView(R.id.iv_whats)
+    ImageView iv_whats;
     @BindView(R.id.qmui_buy)
     QMUIRoundButton qmui_buy;
     @BindView(R.id.tv_gd_orignPrice)
@@ -88,6 +103,10 @@ public class GoodsDetailFragment extends BaseMvpQmuiFragment<GoodsDetailPresente
     View v_hasCart;
     @BindView(R.id.tv_alBuyCount)
     TextView tv_alBuyCount;
+    @BindView(R.id.ll_gd_estimatedTime)
+    LinearLayout ll_gd_estimatedTime;
+    @BindView(R.id.rl_outWrapGallery)
+    RelativeLayout rl_outWrapGallery;
 
     private String mUuid         = "";
     private int mMaxPage         = 0;
@@ -99,15 +118,16 @@ public class GoodsDetailFragment extends BaseMvpQmuiFragment<GoodsDetailPresente
     private ArrayList<GoodsRelationBean> mGoodsRList;
     private GoodsDetailPresenter mPresenter;
     private DetailCoverAdapter mCoverAdapter;
-//    private GoodsDetailCoverAdapter mCoverAdapter;
     private GoodsRelativeAdapter mRelativeApdater;
     private GoodsDetailInfoBean mGoodsInfoBase;
     private RefundDialogUtil mRefundDialogUtil;
     private GDetailDescriptionUtil mGdetailDecUtil;
-    private GDetailDeliveryUtil mGdtailDeliveryUtil;
-    private GDChooiceDialogUtil mGdChooiceDialogUtil;
+    private GDetailDeliveryUtil  mGdtailDeliveryUtil;
+    private GDChooiceDialogUtil  mGdChooiceDialogUtil;
     private GDBuyPopupDialogUtil mGdBuyPopDialogUtil;
-    private GDGalleryDialogUtil mGdGalleryDialogUtil;
+    private GDGalleryDialogUtil  mGdGalleryDialogUtil;
+    private GDEstimatedTimeUtil  mGdEstimatedTimeUtil;   //预计到达的时间
+    private GDWhatsRemindUtil    mGdWhatsRemindUtil;
 
     public static GoodsDetailFragment newInstance(Bundle bundle) {
         GoodsDetailFragment fragment = new GoodsDetailFragment();
@@ -126,7 +146,15 @@ public class GoodsDetailFragment extends BaseMvpQmuiFragment<GoodsDetailPresente
         mPresenter.attachView(this);
         mUuid = getArguments().getString("uuid");
         QMUIStatusBarHelper.setStatusBarLightMode(getActivity());
+        initMeasureOutWrapGallery();
         initWidget();
+    }
+
+    private void initMeasureOutWrapGallery(){
+        WindowManager manager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.height = manager.getDefaultDisplay().getWidth();
+        rl_outWrapGallery.setLayoutParams(params);
     }
 
     private void displayBuyGoodsNum(){
@@ -137,7 +165,7 @@ public class GoodsDetailFragment extends BaseMvpQmuiFragment<GoodsDetailPresente
             v_hasCart.setVisibility(View.VISIBLE);
             tv_alBuyCount.setVisibility(View.VISIBLE);
             if (cartSkuNum >99){
-                buyNum = cartSkuNum + "+";
+                buyNum = 99 + "+";
             }else{
                 buyNum = String.valueOf(cartSkuNum);
             }
@@ -157,19 +185,46 @@ public class GoodsDetailFragment extends BaseMvpQmuiFragment<GoodsDetailPresente
         rlv_someGoods.setLayoutManager(manager);
         rlv_someGoods.setHasFixedSize(true);
         rlv_someGoods.setAdapter(mRelativeApdater);
-        mGdGalleryDialogUtil = new GDGalleryDialogUtil(getContext(),true,true);
 
-        mGdChooiceDialogUtil = new GDChooiceDialogUtil(getContext(), true, true, (count, isIncrease, skuUuid) -> {
-            if(checkLogin()){
-                mIncreaseNum = count;
-                mPresenter.operationAddGoods(count,isIncrease,skuUuid);
+        mGdGalleryDialogUtil = new GDGalleryDialogUtil(getContext(),true,true);
+        mGdEstimatedTimeUtil = new GDEstimatedTimeUtil(getContext(),true,true);
+        mGdWhatsRemindUtil   = new GDWhatsRemindUtil(getContext(),true,true);
+
+        mGdWhatsRemindUtil.setMListener(new GDWhatsRemindUtil.ICheckInstallWhats() {
+            @Override
+            public void checkInstallWhatsApp() {
+                checkWhatsInstall();
             }
         });
 
-        mRefundDialogUtil   = new RefundDialogUtil(getContext(), true, true, () -> {
-            if(isCanChoice){
+        mGdChooiceDialogUtil = new GDChooiceDialogUtil(getContext(), true, true, new DInjectListener() {
+            @Override
+            public void lookForSizeChart() {
+                if(mGoodsInfoBase == null){
+                    return;
+                }
+                if(!TextUtils.isEmpty(mGoodsInfoBase.getCategoryNo()) && !TextUtils.isEmpty(mGoodsInfoBase.getUuid()) ){
+                    Bundle bundle = new Bundle();
+                    bundle.putString("productUuid",mGoodsInfoBase.getUuid());
+                    bundle.putString("categoryNo",mGoodsInfoBase.getCategoryNo());
+                    HolderActivity.startFragment(getContext(),GoodsSizeChartFragment.class,bundle);
+                }
+            }
+
+            @Override
+            public void buy(int count, boolean isIncrease, @NotNull String skuUuid) {
+                if(checkLogin()){
+                    mIncreaseNum = count;
+                    mPresenter.operationAddGoods(count,isIncrease,skuUuid);
+                }
+            }
+        });
+        mGdChooiceDialogUtil.choiceTargetGoods(mUuid);  //同步选择商品
+
+        mRefundDialogUtil = new RefundDialogUtil(getContext(), true, true, () -> {
+            if (isCanChoice) {
                 mGdChooiceDialogUtil.show();
-            }else{
+            } else {
                 defaultChoiceFirst();
             }
         });
@@ -188,7 +243,6 @@ public class GoodsDetailFragment extends BaseMvpQmuiFragment<GoodsDetailPresente
             }
         });
         mGdBuyPopDialogUtil = new GDBuyPopupDialogUtil(getContext(),true,true);
-
         displayBuyGoodsNum();
     }
 
@@ -201,6 +255,16 @@ public class GoodsDetailFragment extends BaseMvpQmuiFragment<GoodsDetailPresente
             @Override
             public void photoClick(int position) {
                 mGdGalleryDialogUtil.show(position);
+//                Intent intent = new Intent(getActivity(), ZoomIVActivity.class);
+//                intent.putExtra("images", mGoodsInfoBase.getPhotos());//非必须
+//                intent.putExtra("position", position);
+//                int[] location = new int[2];
+//                vp_goodsCover.getLocationOnScreen(location);
+//                intent.putExtra("locationX", location[0]);//必须
+//                intent.putExtra("locationY", location[1]);//必须
+//                intent.putExtra("width", vp_goodsCover.getWidth());//必须
+//                intent.putExtra("height", vp_goodsCover.getHeight());//必须
+//                startActivity(intent);
             }
         });
 
@@ -214,7 +278,7 @@ public class GoodsDetailFragment extends BaseMvpQmuiFragment<GoodsDetailPresente
         });
     }
 
-    @OnClick({R.id.iv_shoppingCart,R.id.iv_goodsDshare,R.id.iv_switchFavorite,R.id.ll_refund,R.id.ll_descrite,R.id.ll_gdDelivery,R.id.qmui_buy,R.id.ll_choiceCAndS,R.id.iv_back})
+    @OnClick({R.id.iv_shoppingCart,R.id.iv_goodsDshare,R.id.iv_switchFavorite,R.id.ll_refund,R.id.ll_descrite,R.id.ll_gdDelivery,R.id.qmui_buy,R.id.ll_choiceCAndS,R.id.iv_back,R.id.ll_gd_estimatedTime,R.id.iv_whats})
     public void onClickViewed(View view){
         switch (view.getId()){
             case R.id.iv_shoppingCart:
@@ -227,6 +291,7 @@ public class GoodsDetailFragment extends BaseMvpQmuiFragment<GoodsDetailPresente
                 String shareUrl = UrlConfig.APP_PREFIX_SHARE_URL + mUuid;
                 String shareTitle = getContext().getResources().getString(R.string.goods_detail_share_tilte);
                 ShareUtils.shareText(getContext(),shareTitle,shareUrl);
+                AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_GOODSDETAIL_SHARE);
                 break;
             case R.id.iv_switchFavorite:
                 if(checkLogin()){
@@ -240,17 +305,20 @@ public class GoodsDetailFragment extends BaseMvpQmuiFragment<GoodsDetailPresente
                     }else{
                         mPresenter.operationFavoriteCancel(mGoodsInfoBase.getUuid());
                     }
+                    AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_GOODSDETAIL_COLLECTION);
                 }
                 break;
             case R.id.ll_refund:
                 if(mGoodsInfoBase != null){
                     mRefundDialogUtil.show();
                 }
+                AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_GOODSDETAIL_30DAYS_RETURN);
                 break;
             case R.id.ll_descrite:
                 if(mGoodsInfoBase != null){
                     mGdetailDecUtil.show(mGoodsInfoBase.getDescription());
                 }
+                AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_GOODSDETAIL_DESCRIPTION);
                 break;
             case R.id.ll_gdDelivery:
                 if(mGoodsInfoBase != null){
@@ -264,8 +332,18 @@ public class GoodsDetailFragment extends BaseMvpQmuiFragment<GoodsDetailPresente
                     }
                     mGdtailDeliveryUtil.show(shippingArrivalDes,shippingPrice,shippingMinDay,shippingMaxDay);
                 }
+                AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_GOODSDETAIL_DELIVERY);
                 break;
             case R.id.qmui_buy:
+                if(isCanChoice){
+                    mGdChooiceDialogUtil.show();
+                }else{
+                    if(checkLogin()){
+                        defaultChoiceFirst();
+                    }
+                }
+                AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_GOODSDETAIL_BUY);
+                break;
             case R.id.ll_choiceCAndS:
                 if(isCanChoice){
                     mGdChooiceDialogUtil.show();
@@ -274,10 +352,37 @@ public class GoodsDetailFragment extends BaseMvpQmuiFragment<GoodsDetailPresente
                         defaultChoiceFirst();
                     }
                 }
+                AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_GOODSDETAIL_COLOR_AND_SIZE);
                 break;
             case R.id.iv_back:
                 popBackStack();
                 break;
+            case R.id.ll_gd_estimatedTime:
+                mGdEstimatedTimeUtil.show();
+                break;
+            case R.id.iv_whats:
+                if(SPManager.sGetBoolean(Constant.SP_NEED_REMIND_LINK_WHATS)){   //为true 则直接跳whatsapp false显示dialog
+                    checkWhatsInstall();
+                }else{
+                    mGdWhatsRemindUtil.show();
+                }
+                break;
+        }
+    }
+
+    /**
+     * 判断有没有安装whatsApp
+     */
+    private void checkWhatsInstall() {
+        String errorInstall = getContext().getResources().getString(R.string.goods_detail_no_install_whats_hint);
+        boolean isInstallWhats = PackageCheckUtil.isAppInstalled(getContext(),Constant.PACKAGE_NAME_WAHTS);
+        String whatsNumber = SPManager.sGetString(Constant.SP_CONTACT_WHATS_NUMBER);
+        if(!isInstallWhats){
+            ToastUtil.showToast(errorInstall);
+        }else{
+            if(!TextUtils.isEmpty(whatsNumber)){
+                WhatsAppUtil.chatInWhatsApp(getContext(),whatsNumber);
+            }
         }
     }
 
@@ -325,7 +430,7 @@ public class GoodsDetailFragment extends BaseMvpQmuiFragment<GoodsDetailPresente
                 isCanChoice = false;
             }
             tv_dGoodsName.setText(mGoodsInfoBase.getName());
-            if(mGoodsInfoBase.getPriceOrigin() == mGoodsInfoBase.getPriceRetail()){
+            if(mGoodsInfoBase.getPriceOrigin() == mGoodsInfoBase.getPriceRetail() || mGoodsInfoBase.getPriceOrigin() == 0){
                 tv_gd_orignPrice.setVisibility(View.GONE);
             }
             tv_gd_orignPrice.setText(MathUtil.Companion.formatPrice(mGoodsInfoBase.getPriceOrigin()));
@@ -388,7 +493,7 @@ public class GoodsDetailFragment extends BaseMvpQmuiFragment<GoodsDetailPresente
         displayBuyGoodsNum();   //购买成功后刷新商品的数量
         mGdBuyPopDialogUtil.show();
         Map<String,Object> addCartEventMap = new HashMap<>();
-        addCartEventMap.put(AppsFlyConfig.AF_EVENT_ADD_TO_CART,SPManager.sGetString(Constant.SP_DEVICE_MODEL));
+        addCartEventMap.put(AFInAppEventParameterName.CUSTOMER_USER_ID,SPManager.sGetString(Constant.SP_DEVICE_ID_FLAG));
         AppsFlyEventUtils.sendAppInnerEvent(addCartEventMap, AppsFlyConfig.AF_EVENT_ADD_TO_CART);
         EventBus.getDefault().post(new RefreshDataEvent(Constant.EVENT_REFRESH_CAR));
     }
@@ -423,6 +528,11 @@ public class GoodsDetailFragment extends BaseMvpQmuiFragment<GoodsDetailPresente
         super.onDestroy();
         Glide.get(getContext()).clearMemory();
         mGdBuyPopDialogUtil.clear();
+        if(mPresenter != null){
+            mPresenter.onDestoryView();
+            mPresenter = null;
+            System.gc();
+        }
     }
 
     @Override

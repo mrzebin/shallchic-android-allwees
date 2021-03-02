@@ -7,12 +7,11 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.appsflyer.AFInAppEventParameterName;
 import com.hb.basemodel.config.Constant;
 import com.hb.basemodel.utils.AppUtils;
 import com.hb.basemodel.utils.JsonUtils;
 import com.hb.basemodel.utils.SPManager;
-import com.qmuiteam.qmui.arch.QMUILatestVisit;
-import com.qmuiteam.qmui.arch.annotation.ActivityScheme;
 import com.project.app.MyApp;
 import com.project.app.R;
 import com.project.app.base.BaseActivity;
@@ -25,6 +24,9 @@ import com.project.app.utils.AppsFlyEventUtils;
 import com.project.app.utils.FileManager;
 import com.project.app.utils.HomeTitlesUtils;
 import com.project.app.utils.LocaleUtil;
+import com.qmuiteam.qmui.arch.QMUILatestVisit;
+import com.qmuiteam.qmui.arch.annotation.ActivityScheme;
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +34,6 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
 
 /**
  * create by hb
@@ -57,6 +58,7 @@ public class LauncherActivity extends BaseActivity implements LauncherContract.V
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launcher);
+        QMUIStatusBarHelper.setStatusBarLightMode(this);
         if((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) >0){
             /**为了防止重复启动多个闪屏页面**/
             finish();
@@ -75,14 +77,19 @@ public class LauncherActivity extends BaseActivity implements LauncherContract.V
             SPManager.sPutBoolean(Constant.SP_INIT,true);
         }
         afRecoceOpen();
-        mPresenter.fetchLocaleInfo();
+        //如果定义了语言则直接进入app
+        if(!SPManager.sGetBoolean(Constant.SP_DEFINE_LANGUATE)){
+            mPresenter.fetchLocaleInfo();
+        }else{
+            initPermission(); //直接进入
+        }
     }
 
     private void afRecoceOpen() {
-        String deviceId = SPManager.sGetString(Constant.SP_DEVICE_MODEL);
+        String deviceId = SPManager.sGetString(Constant.SP_DEVICE_ID_FLAG);
         Map<String,Object> openEventMap = new HashMap<>();
-        openEventMap.put(AppsFlyConfig.AF_EVENT_APP_OPEN,deviceId);
-        AppsFlyEventUtils.sendAppInnerEvent(openEventMap,"af_app_opened");
+        openEventMap.put(AFInAppEventParameterName.CUSTOMER_USER_ID,deviceId);
+        AppsFlyEventUtils.sendAppInnerEvent(openEventMap, AppsFlyConfig.AF_EVENT_APP_OPEN);
     }
 
     private void initPermission() {
@@ -96,7 +103,7 @@ public class LauncherActivity extends BaseActivity implements LauncherContract.V
     /**
      * 初始话语言
      */
-    private void initLanguage(String languateType) {
+    private void initLanguage() {
         boolean isInit = SPManager.sGetBoolean(Constant.SP_INIT_LOCALE);
         if(isInit){
             return;
@@ -110,24 +117,30 @@ public class LauncherActivity extends BaseActivity implements LauncherContract.V
 
     public boolean allPermissionsGranted(){
         for(String permission:PERMISSION_REQUEST){
-           if( ContextCompat.checkSelfPermission(this,permission) != PackageManager.PERMISSION_GRANTED){
-               return false;
-           }
-           if(permission.equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)){
-               SPManager.sPutBoolean(Constant.SP_HAS_WRITE_STORAGE_PERMISSION,true);
-               MyApp.initEnvironment();
-           }
+            if( ContextCompat.checkSelfPermission(this,permission) != PackageManager.PERMISSION_GRANTED){
+                return false;
+            }
+            if(permission.equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+                SPManager.sPutBoolean(Constant.SP_HAS_WRITE_STORAGE_PERMISSION,true);
+                MyApp.initEnvironment();
+            }
         }
         return true;
     }
 
     public void doAfterPermissionsGranted(){
-        Intent intent = QMUILatestVisit.intentOfLatestVisit(this);
-        if(intent == null){
-            intent = new Intent(this, MainActivity.class);
+        if(!SPManager.sGetBoolean(Constant.SP_INIT_GUIDE_FEATURE)){
+            Intent actionFeature = new Intent(this,FeatureGuideActivity.class);
+            startActivity(actionFeature);
+            finish();
+        }else{
+            Intent intent = QMUILatestVisit.intentOfLatestVisit(this);
+            if(intent == null){
+                intent = new Intent(this, MainActivity.class);
+            }
+            startActivity(intent);
+            finish();
         }
-        startActivity(intent);
-        finish();
     }
 
     @Override
@@ -149,13 +162,14 @@ public class LauncherActivity extends BaseActivity implements LauncherContract.V
         if(bean != null){
             LocaleUtil.getInstance().setLocaleBean(bean);   //设置语言环境
             initPermission();
-            mPresenter.fetchNormTitles();
+            SPManager.sPutBoolean(Constant.SP_DEFINE_LANGUATE,true);
+//            mPresenter.fetchNormTitles();
         }
     }
 
     @Override
     public void fetchLocaleInfoFail(String msg) {
-        initLanguage("ar");                   //第一次默认选择中东
+        initLanguage();                   //第一次默认选择中东
         SPManager.sPutBoolean(Constant.SP_INIT_LOCALE,true);
         initPermission();
     }
@@ -171,6 +185,12 @@ public class LauncherActivity extends BaseActivity implements LauncherContract.V
     @Override
     public void fetchHomeTitleFail(String msg) {
 
+    }
+
+    @Override
+    public void exceptNetError() {                          //没有网络的情况
+        initLanguage();                   //第一次默认选择中东
+        initPermission();
     }
 
     @Override
@@ -201,7 +221,16 @@ public class LauncherActivity extends BaseActivity implements LauncherContract.V
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(0,0);
+        overridePendingTransition(R.anim.launcher_scale_enter,R.anim.launcher_scale_exit);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mPresenter != null){
+            mPresenter.onDestoryView();
+            mPresenter = null;
+            System.gc();
+        }
+    }
 }

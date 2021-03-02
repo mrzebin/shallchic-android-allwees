@@ -15,7 +15,6 @@ public class ImageCropUtils {
 
         int item_w = bitmap_w/10;
         int item_h = bitmap_h/3;
-
         cropBitmp = Bitmap.createBitmap(bitmap,item_w*widthNum,item_h*heightNum,item_w,item_h);
         return cropBitmp;
     }
@@ -26,22 +25,12 @@ public class ImageCropUtils {
      */
     public static Bitmap getCropCountryFlag(){
         Bitmap cBitmap = BitmapFactory.decodeResource(MyApp.mContext.getResources(), R.mipmap.ic_country);
-        boolean isCustom = LocaleUtil.getInstance().getLocaleCustom();
         int itemWidth  = 0;
         int itemHeight = 0;
-        if(isCustom){
-            itemWidth  = LocaleUtil.getInstance().getLocaleCustomCountryFlagCloumn();
-            itemHeight = LocaleUtil.getInstance().getLocaleCustomCountryFlagRow();
-        }else{
-            itemWidth  = LocaleUtil.getInstance().getLocaleCountryFlagColumn();
-            itemHeight = LocaleUtil.getInstance().getLocaleCountryFlagRow();
-        }
+        itemWidth  = LocaleUtil.getInstance().getLocaleCountryFlagColumn();
+        itemHeight = LocaleUtil.getInstance().getLocaleCountryFlagRow();
         Bitmap flagBitmap = ImageCropUtils.cropBitmap(cBitmap,itemWidth,itemHeight);
         return flagBitmap;
     }
-
-
-
-
 
 }

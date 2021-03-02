@@ -17,7 +17,7 @@ public class WishListModel implements WishlistContract.Model {
     }
 
     @Override
-    public void fetchWishList(int page,int pageSize,BaseModelResponeListener listener) {
+    public void fetchWishList(int page, int pageSize, BaseModelResponeListener listener) {
         String url = BaseUrlConfig.getRootHost() + UrlConfig.WISH_LIST_FAVORITE_URL;
         String requestType = "0";
         HashMap hMap = new HashMap();
@@ -35,7 +35,7 @@ public class WishListModel implements WishlistContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+//                listener.onFail(e.getMessage());
             }
         });
     }

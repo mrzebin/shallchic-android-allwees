@@ -1,9 +1,6 @@
 package com.project.app.fragment.home.classify;
 
 
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,16 +12,22 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hb.basemodel.config.Constant;
 import com.hb.basemodel.other.UserUtil;
 import com.hb.basemodel.utils.DataUtil;
-import com.hb.basemodel.utils.RecycerLoadMoreScrollView;
 import com.hb.basemodel.utils.ToastUtil;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
+import com.qmuiteam.qmui.widget.QMUIEmptyView;
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
+import com.scwang.smart.refresh.layout.SmartRefreshLayout;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.project.app.R;
 import com.project.app.adapter.CategoryClassifyAdapter;
 import com.project.app.base.BaseMvpQmuiFragment;
 import com.project.app.bean.ClassifyListBean;
-import com.project.app.contract.HomeClassifyContract;
-import com.project.app.presenter.HomeClassifyPresenter;
+import com.project.app.contract.CategoryClassifyContract;
+import com.project.app.presenter.CategoryClassifyPresenter;
+import com.project.app.ui.widget.GlobalClassicsFooter;
+import com.project.app.ui.widget.GlobalClassicsHeader;
 import com.project.app.utils.StatusBarUtils;
 
 import java.util.ArrayList;
@@ -40,51 +43,29 @@ import butterknife.OnClick;
 /**
  * 分类的详情
  */
-public class CategoryClassifyFragment extends BaseMvpQmuiFragment<HomeClassifyPresenter> implements HomeClassifyContract.View, SwipeRefreshLayout.OnRefreshListener {
-    @BindView(R.id.srf_classify)
-    SwipeRefreshLayout mSwipeRefresh;
+public class CategoryClassifyFragment extends BaseMvpQmuiFragment<CategoryClassifyPresenter> implements CategoryClassifyContract.View, SwipeRefreshLayout.OnRefreshListener {
+    @BindView(R.id.srl_category)
+    SmartRefreshLayout srl_category;
     @BindView(R.id.rv_classify)
     RecyclerView rv_classify;
-    @BindView(R.id.rlv_goods)
-    RecycerLoadMoreScrollView rlv_goods;
-    @BindView(R.id.ll_endNoData)
-    LinearLayout ll_endNoData;
     @BindView(R.id.ll_inflateTp)
     LinearLayout ll_inflateTp;
     @BindView(R.id.tv_topTitle)
     TextView tv_topTitle;
     @BindView(R.id.iv_back)
     ImageView iv_back;
+    @BindView(R.id.emptyView)
+    QMUIEmptyView emptyView;
+    @BindView(R.id.ll_endNoData)
+    LinearLayout ll_endNoData;
 
-    private HomeClassifyPresenter mPresenter;
     private CategoryClassifyAdapter mAdapter;
     private final List<ClassifyListBean.ClassifyItem> mCategorys = new ArrayList<>();
     private String mNo;
     private String mCategoryName;
     private int mPageSize = 20;
     private int mCurrentPage = 1;
-    private boolean isLoadMoreEnable = false;
-    private static final int REFRESH_LOADING_TIMEOUT = 3;
-    
-    private final Handler mHandler = new Handler(){
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == REFRESH_LOADING_TIMEOUT) {
-                if (mSwipeRefresh != null) {
-                    mSwipeRefresh.setRefreshing(false);
-                }
-            }
-        }
-    };
-
-    public static CategoryClassifyFragment newInstance(String no) {
-        Bundle bundle = new Bundle();
-        bundle.putString("type",no);
-        CategoryClassifyFragment fragment = new CategoryClassifyFragment();
-        fragment.setArguments(bundle);
-        return fragment;
-    }
+    private boolean isLoadMore = false;
 
     @Override
     public int getLayoutId() {
@@ -94,10 +75,14 @@ public class CategoryClassifyFragment extends BaseMvpQmuiFragment<HomeClassifyPr
     @Override
     public void initView() {
         initTapbar();
-        mPresenter = new HomeClassifyPresenter();
+        mPresenter = new CategoryClassifyPresenter();
         mPresenter.attachView(this);
-        mSwipeRefresh.setOnRefreshListener(this);
-        mSwipeRefresh.setColorSchemeResources(R.color.allwees_theme_color,android.R.color.holo_blue_dark,android.R.color.holo_orange_dark);
+        srl_category.setRefreshHeader(new GlobalClassicsHeader(getContext()));
+        srl_category.setRefreshFooter(new GlobalClassicsFooter(getContext()));
+        srl_category.setHeaderHeight(60);
+        srl_category.setFooterHeight(50);
+        srl_category.setEnableLoadMore(false); //默认不让起有更多数据
+
         GridLayoutManager manager = new GridLayoutManager(getContext(),2);
         rv_classify.setLayoutManager(manager);
         mAdapter = new CategoryClassifyAdapter(mCategorys);
@@ -106,18 +91,26 @@ public class CategoryClassifyFragment extends BaseMvpQmuiFragment<HomeClassifyPr
         mAdapter.setAnimationWithDefault(BaseQuickAdapter.AnimationType.AlphaIn);
         rv_classify.setAdapter(mAdapter);
 
-        rlv_goods.setScrollViewListener(new RecycerLoadMoreScrollView.ScrollViewListener() {
+        srl_category.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onLoadMore() {
-                if (isLoadMoreEnable) {
-                    mCurrentPage++;
-                    mHandler.sendEmptyMessageDelayed(REFRESH_LOADING_TIMEOUT, Constant.DELAY_LOADING_TIME_OUT);
-                    mPresenter.fetchGoodsInfo(mCurrentPage,mPageSize,mNo);
-                }
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                mCurrentPage = 1;
+                isLoadMore = false;
+                srl_category.finishRefresh(Constant.DEFAULT_SMARTLOADING_DELAY_TIMEOUT);
+                mPresenter.fetchGoodsInfo(false,mCurrentPage,mPageSize,mNo);
             }
-            @Override
-            public void onScrollChanged(RecycerLoadMoreScrollView scrollView, int x, int y, int oldx, int oldy) {
+        });
 
+        srl_category.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+                if (isLoadMore) {
+                    mCurrentPage++;
+                    mPresenter.fetchGoodsInfo(false,mCurrentPage,mPageSize,mNo);
+                    srl_category.finishLoadMore(Constant.DEFAULT_SMARTLOADING_DELAY_TIMEOUT);
+                }else{
+                    srl_category.finishLoadMore();
+                }
             }
         });
     }
@@ -125,15 +118,16 @@ public class CategoryClassifyFragment extends BaseMvpQmuiFragment<HomeClassifyPr
     private void initTapbar() {
         mNo = getArguments().getString("type");
         mCategoryName = getArguments().getString("name");
+
         tv_topTitle.setText(mCategoryName);
         StatusBarUtils.setStatusBarView(getActivity(),ll_inflateTp);
         QMUIStatusBarHelper.setStatusBarLightMode(getActivity());
     }
 
+
     @Override
     protected void lazyFetchData() {
-        mHandler.sendEmptyMessageDelayed(REFRESH_LOADING_TIMEOUT, Constant.DELAY_LOADING_TIME_OUT);
-        mPresenter.fetchGoodsInfo(mCurrentPage,mPageSize,mNo);
+        mPresenter.fetchGoodsInfo(false,mCurrentPage,mPageSize,mNo);
     }
 
     @Override
@@ -144,17 +138,28 @@ public class CategoryClassifyFragment extends BaseMvpQmuiFragment<HomeClassifyPr
 
     @Override
     public void fetchCategoryList(ClassifyListBean result) {
+        if(emptyView.isShowing()){
+            emptyView.setVisibility(View.GONE);
+            srl_category.setVisibility(View.VISIBLE);
+        }
         if(result != null){
+            isLoadMore = result.isHasMorePages();
             if(mCurrentPage == 1){
                 if(DataUtil.idNotNull(result.getResults())){
                    mAdapter.setNewInstance(result.getResults());
+                }else{
+                    mAdapter.setNewInstance(new ArrayList<ClassifyListBean.ClassifyItem>());    //注意这里要刷新数据
+                    mAdapter.setEmptyView(getEmptyView());
                 }
             }else{
                 mAdapter.addData(result.getResults());
             }
-            isLoadMoreEnable = result.isHasMorePages();
-            if(!isLoadMoreEnable){
+            if(!isLoadMore){
                 ll_endNoData.setVisibility(View.VISIBLE);
+                srl_category.setEnableLoadMore(false);
+            }else{
+                ll_endNoData.setVisibility(View.GONE);
+                srl_category.setEnableLoadMore(true);
             }
         }
     }
@@ -162,7 +167,6 @@ public class CategoryClassifyFragment extends BaseMvpQmuiFragment<HomeClassifyPr
     @Override
     public void fetchFail(String failReason) {
         ToastUtil.showToast(failReason);
-        mSwipeRefresh.setRefreshing(false);
     }
 
     @Override
@@ -170,6 +174,20 @@ public class CategoryClassifyFragment extends BaseMvpQmuiFragment<HomeClassifyPr
         if(!unknowNet){
             mAdapter.setEmptyView(getNoNetView());
         }
+    }
+
+    public View getEmptyView(){
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_empty_nogoods,null);
+        LinearLayout ll_wrapNoGoods = view.findViewById(R.id.ll_wrapNoGoods);
+        ll_wrapNoGoods.setVisibility(View.VISIBLE);
+        QMUIRoundButton qrb_refreshAgain = view.findViewById(R.id.qrb_refreshAgain);
+        qrb_refreshAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPresenter.fetchGoodsInfo(true,mCurrentPage,mPageSize,mNo);
+            }
+        });
+        return view;
     }
 
     @OnClick({R.id.iv_back})
@@ -184,26 +202,25 @@ public class CategoryClassifyFragment extends BaseMvpQmuiFragment<HomeClassifyPr
         QMUIRoundButton qrb_refreshData = view.findViewById(R.id.qrb_refreshNet);
         qrb_refreshData.setOnClickListener(view1 -> {
             if(UserUtil.getInstance().isLogin()){
-                mPresenter.fetchGoodsInfo(mCurrentPage,mPageSize,mNo);
+                mPresenter.fetchGoodsInfo(true,mCurrentPage,mPageSize,mNo);
             }
         });
         return view;
     }
 
-
     @Override
     public void startLoading() {
-        mSwipeRefresh.setRefreshing(true);
+        startProgressDialog(getContext());
     }
 
     @Override
     public void stopLoading() {
-        mSwipeRefresh.setRefreshing(false);
+        stopProgressDialog();
     }
 
     @Override
     public void showErrorTip(String msg) {
-        mSwipeRefresh.setRefreshing(false);
+
     }
 
     @Override

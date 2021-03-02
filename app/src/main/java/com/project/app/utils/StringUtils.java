@@ -33,7 +33,6 @@ public class StringUtils {
         return zipCode;
     }
 
-
     public static String getRandomString(int length) {
         String base = "abcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();

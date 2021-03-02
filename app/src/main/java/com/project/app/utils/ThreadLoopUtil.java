@@ -4,8 +4,9 @@ import android.text.TextUtils;
 
 import com.hb.basemodel.config.Constant;
 import com.hb.basemodel.utils.JsonUtils;
+import com.hb.basemodel.utils.LoggerUtil;
 import com.hb.basemodel.utils.SPManager;
-import com.project.app.bean.RefundAccessTokenBean;
+import com.project.app.bean.AwsAccessTokenBean;
 import com.project.app.s3transferutility.AwsClient;
 
 import java.io.File;
@@ -14,35 +15,39 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 public class ThreadLoopUtil {
-    private static ThreadLoopUtil mInstance;
     private static AwsClient mAwsClient;
-    private final String accessKey;
-    private final String secretId;
-    private final String sessionId;
-    private final String bucketName;
-    private final String prefixName;
-    private final String awsRegion;
+    private String accessKey;
+    private String secretId;
+    private String sessionId;
+    private String bucketName;
+    private String prefixName;
+    private String awsRegion;
+    public long mFileLength;
 
-    public ThreadLoopUtil(){
-        String awsJson = SPManager.sGetString(Constant.SP_AWS_ACCESS_TOKEN_RFD);
-        RefundAccessTokenBean bean = JsonUtils.deserialize(awsJson,RefundAccessTokenBean.class);
-        accessKey   = bean.getAccessKeyId();
-        secretId    = bean.getSecretAccessKey();
-        sessionId   = bean.getSessionToken();
-        bucketName  = bean.getBucketName();
-        prefixName  = bean.getKeyPrefix();
-        awsRegion   = bean.getRegion();
-        mAwsClient = new AwsClient(accessKey,secretId,sessionId,bucketName,awsRegion);
-    }
-
-    public static ThreadLoopUtil getInstance(){
-        if(mInstance == null){
-            mInstance = new ThreadLoopUtil();
+    public ThreadLoopUtil(Constant.S3Type type){   //上传的类型
+        String awsJson = "";
+        if(type == Constant.S3Type.AVR){
+            awsJson = SPManager.sGetString(Constant.SP_AWS_ACCESS_TOKEN_AVR);
+        }else if(type == Constant.S3Type.REV){
+            awsJson = SPManager.sGetString(Constant.SP_AWS_ACCESS_TOKEN_REV);
+        }else if(type == Constant.S3Type.RFD){
+            awsJson = SPManager.sGetString(Constant.SP_AWS_ACCESS_TOKEN_RFD);
+        }else if(type == Constant.S3Type.FDK){
+            awsJson = SPManager.sGetString(Constant.SP_AWS_ACCESS_TOKEN_FDK);
         }
-        return mInstance;
+        if(!TextUtils.isEmpty(awsJson)){
+            AwsAccessTokenBean bean = JsonUtils.deserialize(awsJson, AwsAccessTokenBean.class);
+            accessKey   = bean.getAccessKeyId();
+            secretId    = bean.getSecretAccessKey();
+            sessionId   = bean.getSessionToken();
+            bucketName  = bean.getBucketName();
+            prefixName  = bean.getKeyPrefix();
+            awsRegion   = bean.getRegion();
+            mAwsClient = new AwsClient(accessKey,secretId,sessionId,bucketName,awsRegion);
+        }
     }
 
-    static class LoopThread extends Thread{
+    class LoopThread extends Thread{
         private final InputStream mIs;
         private final String remoteName;
         private final CallbackListener listener;
@@ -56,8 +61,9 @@ public class ThreadLoopUtil {
         @Override
         public void run() {
             super.run();
-           String result =  mAwsClient.uploadToS3(mIs,remoteName);
+           String result =  mAwsClient.uploadToS3(mFileLength,mIs,remoteName);
            if(TextUtils.isEmpty(result)){
+               LoggerUtil.i("上传失败:" + result);
                listener.s3UploadFail("fail");
            }else{
                listener.s3UploadSuccess(result);
@@ -69,6 +75,7 @@ public class ThreadLoopUtil {
         InputStream is;
         String remoteName = prefixName + "android" + System.currentTimeMillis() + ".jpg";
         try {
+            mFileLength = file.length();
             is = new FileInputStream(file);
             LoopThread tempThread = new LoopThread(is, remoteName, listener);
             tempThread.start();

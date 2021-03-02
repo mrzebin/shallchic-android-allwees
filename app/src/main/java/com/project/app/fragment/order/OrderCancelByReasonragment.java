@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.hb.basemodel.config.Constant;
 import com.hb.basemodel.event.RefreshDataEvent;
+import com.hb.basemodel.utils.LoggerUtil;
 import com.hb.basemodel.utils.ToastUtil;
 import com.qmuiteam.qmui.skin.QMUISkinManager;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
@@ -36,7 +37,7 @@ public class OrderCancelByReasonragment extends BaseMvpQmuiFragment<OrderCancelP
     private String mOrderId;
     private String mItemUuid;
     private Context mContext;
-    private String mCode = "0";
+    private String mCode = "6";
     private String mCancel = "";
     private String[] mCancleTypes    = new String[]{};
 
@@ -56,6 +57,7 @@ public class OrderCancelByReasonragment extends BaseMvpQmuiFragment<OrderCancelP
         Bundle baba = getArguments();
         mItemUuid = baba.getString("orderItemUuid");
         mOrderId  = baba.getString("orderUuid");
+        LoggerUtil.i("orderUuid:" + mOrderId + "--orderItemUuid:" + mItemUuid);
         mCancel = getContext().getResources().getString(R.string.str_cancel);
         mCancleTypes = getContext().getResources().getStringArray(R.array.cancel_reason);
     }
@@ -64,6 +66,7 @@ public class OrderCancelByReasonragment extends BaseMvpQmuiFragment<OrderCancelP
         mContext = getContext();
         mPresenter = new OrderCancelPresenter();
         mPresenter.attachView(this);
+        tv_cancelType.setText(mCancleTypes[0]);
     }
 
     @OnClick({R.id.btn_postRefund,R.id.ll_choiceRefundType,R.id.iv_back})
@@ -74,7 +77,7 @@ public class OrderCancelByReasonragment extends BaseMvpQmuiFragment<OrderCancelP
                 break;
             case R.id.ll_choiceRefundType:
                 showSelectRefundReason(true, true, false,
-                        getResources().getString(R.string.app_please_choice_type), mCancleTypes.length,
+                        getResources().getString(R.string.order_cancel_order_reason_title), mCancleTypes.length,
                         false, false);
                 break;
             case R.id.iv_back:
@@ -85,12 +88,8 @@ public class OrderCancelByReasonragment extends BaseMvpQmuiFragment<OrderCancelP
 
     private void checkInputValid() {
         String note = et_reNote.getText().toString().trim();
-//        if(TextUtils.isEmpty(note)){
-//            String hint = getContext().getString(R.string.str_nin);
-//            ToastUtil.showToast(hint);
-//            return;
-//        }
-        mPresenter.submitCancelReasonToService(mItemUuid,mOrderId,mCode,note,0);
+        String reason = tv_cancelType.getText().toString().trim();
+        mPresenter.submitCancelReasonToService(mItemUuid,mOrderId,reason,note,0);
     }
 
     private void showSelectRefundReason(boolean gravityCenter,
@@ -112,6 +111,8 @@ public class OrderCancelByReasonragment extends BaseMvpQmuiFragment<OrderCancelP
                     dialog.dismiss();
                     if(position < 5){
                         mCode = 6 + position + "";
+                    }else{
+                        mCode = "0";
                     }
                     tv_cancelType.setText(mCancleTypes[position]);
                 });
@@ -129,8 +130,8 @@ public class OrderCancelByReasonragment extends BaseMvpQmuiFragment<OrderCancelP
     @Override
     public void submitCancalSuccess(OrderDetailBean result) {
         String cancelSuccess = getContext().getResources().getString(R.string.cancel_success);
+        EventBus.getDefault().postSticky(new RefreshDataEvent(Constant.EVENT_REFRESH_ORDER_STATE));
         ToastUtil.showToast(cancelSuccess);
-        EventBus.getDefault().postSticky(new RefreshDataEvent(Constant.EVENT_REFUND_SUCCESS));
         popBackStack();
     }
 

@@ -1,9 +1,10 @@
 package com.project.app.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryBean {
-    private List<CategoryItem> categories;
+    private List<CategoryItem> categories = new ArrayList<>();
 
     public List<CategoryItem> getCategories() {
         return categories;
@@ -12,4 +13,5 @@ public class CategoryBean {
     public void setCategories(List<CategoryItem> categories) {
         this.categories = categories;
     }
+
 }

@@ -20,10 +20,16 @@ public class AddressControlPresenter extends BasePresenter<AddressControlContrac
         model.editAddress(params, new BaseModelResponeListener<CreateAddressBean>() {
             @Override
             public void onSuccess(CreateAddressBean data) {
+                if(mView == null){
+                    return;
+                }
                 mView.editAddressResult(data);
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.editAddreddFail(msg);
             }
         });
@@ -34,13 +40,25 @@ public class AddressControlPresenter extends BasePresenter<AddressControlContrac
         model.createAddress(params, new BaseModelResponeListener<CreateAddressBean>() {
             @Override
             public void onSuccess(CreateAddressBean data) {
+                if(mView == null){
+                    return;
+                }
                 mView.addAddressResult(data);
             }
 
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.createAddressFail(msg);
             }
         });
+    }
+
+    @Override
+    public void onDestoryView() {
+        mView = null;
+        System.gc();
     }
 }

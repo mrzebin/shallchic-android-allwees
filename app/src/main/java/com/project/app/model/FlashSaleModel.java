@@ -53,7 +53,7 @@ public class FlashSaleModel implements FlashSaleContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+
             }
         });
     }
@@ -74,7 +74,7 @@ public class FlashSaleModel implements FlashSaleContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+
             }
         });
     }
@@ -100,7 +100,7 @@ public class FlashSaleModel implements FlashSaleContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+
             }
         });
     }
@@ -127,7 +127,7 @@ public class FlashSaleModel implements FlashSaleContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onSuccess(e.getMessage());
+
             }
         },params);
     }

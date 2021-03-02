@@ -6,12 +6,12 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.hb.basemodel.base.LoadingDialog;
 import com.hb.basemodel.utils.AppManager;
 import com.qmuiteam.qmui.arch.QMUIFragment;
 import com.qmuiteam.qmui.arch.SwipeBackLayout;
 import com.qmuiteam.qmui.util.QMUIDisplayHelper;
 import com.project.app.fragment.home.HomeFragment;
+import com.project.app.ui.dialog.LoadingDialog;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -22,6 +22,8 @@ public abstract class BaseMvpQmuiFragment<T extends BasePresenter> extends QMUIF
     public boolean hasFetchData;   // 标识已经触发过懒加载数据
     private Unbinder mUnBinder;
     protected LoadingDialog dialog;
+    private View mView;
+
     private long  dialogCreateTime;
     private final Handler handler = new Handler();
 
@@ -31,13 +33,21 @@ public abstract class BaseMvpQmuiFragment<T extends BasePresenter> extends QMUIF
 
     protected abstract void lazyFetchData();
 
+    public View getmView() {
+        return mView;
+    }
+
+    public void setmView(View mView) {
+        this.mView = mView;
+    }
+
     @Override
     protected View onCreateView() {
-        View view = LayoutInflater.from(getContext()).inflate(getLayoutId(),null);
-        mUnBinder = ButterKnife.bind(this,view);
+        mView = LayoutInflater.from(getContext()).inflate(getLayoutId(),null);
+        mUnBinder = ButterKnife.bind(this,mView);
         this.initView();
         isViewPrepared = true;
-        return view;
+        return mView;
     }
 
     @Override
@@ -83,10 +93,16 @@ public abstract class BaseMvpQmuiFragment<T extends BasePresenter> extends QMUIF
      * 开启加载效果
      */
     public void startProgressDialog(Context context) {
+//        if(mLoadingUtil == null){
+//            mLoadingUtil = new HLoadingDialogUtil(new WeakReference<>(context), R.style.hLoadingStyle);
+//            mLoadingUtil.setCancalAble(false);
+//            mLoadingUtil.setCancelOutSideAble(false);
+//            mLoadingUtil.create();
+//            mLoadingUtil.show();
+//        }
         if (dialog == null ||!dialog.isShowing()) {
             dialogCreateTime = System.currentTimeMillis();
             dialog = new LoadingDialog(context);
-            dialog.setLoadingInformation("");
             dialog.show();
         }
     }
@@ -96,6 +112,9 @@ public abstract class BaseMvpQmuiFragment<T extends BasePresenter> extends QMUIF
      */
     public void stopProgressDialog() {
         dismissLoadingDialog(null);
+//        if(mZDialog != null){
+//            mZDialog.dismiss();
+//        }
     }
 
     /**

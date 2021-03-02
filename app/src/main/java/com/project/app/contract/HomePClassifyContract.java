@@ -2,42 +2,34 @@ package com.project.app.contract;
 
 import com.hb.basemodel.base.BaseModelResponeListener;
 import com.hb.basemodel.base.BaseView;
-import com.project.app.bean.ActionFreeOneBean;
+import com.project.app.base.BasePresenter;
 import com.project.app.bean.ClassifyListBean;
-import com.project.app.bean.HomeBannerBean;
-import com.project.app.bean.HomeFLashSaleBean;
-import com.project.app.bean.HomeFreeGiftBean;
+import com.project.app.bean.HomePopularLastOrderBean;
 
 public interface HomePClassifyContract {
 
     interface Model{
-        void fetchFreeGift(BaseModelResponeListener listener);
-        void fetchGoodsInfo(int page,int size,String no,BaseModelResponeListener listener);
-        void fetchBannerInfo(String url,BaseModelResponeListener listener);
-        void fetchFlashSale(int page,int size,BaseModelResponeListener listener);
-        void fetchActionFreeOne(BaseModelResponeListener listener);
+        void fetchLastOrderInfo(BaseModelResponeListener listener);
+        void fetchGoodsInfo(int page, int size, String no, BaseModelResponeListener listener);
         void fetchHomePopularMax(BaseModelResponeListener listener);
+        void fetchHomeAction(BaseModelResponeListener listener);
     }
 
-    interface View extends BaseView{
-        void fetchFreeGiftSuccess(HomeFreeGiftBean result);
+    interface View extends BaseView {
         void fetchCategoryList(ClassifyListBean result);
-        void fetchBannerSuccess(HomeBannerBean result);
-        void fetchFlashSaleSuccess(HomeFLashSaleBean result);
-        void fetchFlashSaleFail(String result);
-        void fetchActionFreeOneSuccess(ActionFreeOneBean result);
         void fetchHomePopularMaxSuccess(String result);
+        void fetchHomeActionMaxSuccess(String result);
+       void fetchLastOrdersSuccess(HomePopularLastOrderBean result);
         void fetchFail(String failReason);
         void fetchNetWorkState(boolean unknowNet);
+        void checkEmptyView();
     }
 
-    interface Presenter{
-        void fetchFreeGift();
+    interface Presenter extends BasePresenter.IBasePresenter{
+        void fetchLastOrderInfo();
         void fetchGoodsInfo(int page,int size,String no);
-        void fetchBannerInfo();
-        void fetchFlashSale(int page,int size);
-        void fetchActionFreeOne();    //买一送一活动
         void fetchHomePopularMax();
+        void fetchHomeAction();
     }
 
 }

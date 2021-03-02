@@ -1,6 +1,5 @@
 package com.project.app.adapter;
 
-import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -9,7 +8,6 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.module.LoadMoreModule;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.hb.basemodel.config.Constant;
 import com.hb.basemodel.image.ImageLoader;
 import com.project.app.R;
 import com.project.app.activity.HolderActivity;
@@ -26,20 +24,15 @@ public class CartMLikeAdapter extends BaseQuickAdapter<ClassifyListBean.Classify
     private String pSymbol;
 
     public CartMLikeAdapter(List<ClassifyListBean.ClassifyItem> data) {
-        super(R.layout.item_home_classify, data);
+        super(R.layout.item_cart_might_like, data);
         pSymbol = LocaleUtil.getInstance().getSymbole();
     }
 
     @Override
     protected void convert(@NotNull BaseViewHolder helper, ClassifyListBean.ClassifyItem goodInfo) {
         String mainPhoto = goodInfo.getMainPhoto();
-
         if(!TextUtils.isEmpty(mainPhoto)){
-            if(mainPhoto.endsWith("png") || mainPhoto.endsWith("jpg")){
-                ImageLoader.getInstance().displayImage(helper.getView(R.id.tv_superClassify),mainPhoto + Constant.mGlobalThumbnailStyle,R.mipmap.allwees_ic_default_goods);
-            }else if(mainPhoto.endsWith("gif")){
-                ImageLoader.getInstance().displayImage(helper.getView(R.id.tv_superClassify),mainPhoto,R.mipmap.allwees_ic_default_goods);
-            }
+            ImageLoader.getInstance().displayImage(helper.getView(R.id.iv_gif_goods),mainPhoto,R.mipmap.allwees_ic_default_goods);
         }
 
         if(!TextUtils.isEmpty(goodInfo.getPriceRetail()+"")){
@@ -67,8 +60,7 @@ public class CartMLikeAdapter extends BaseQuickAdapter<ClassifyListBean.Classify
             Bundle bundle = new Bundle();
             bundle.putString("uuid", goodInfo.getUuid());
             bundle.putString("type", "0");
-            Intent intent = HolderActivity.of(getContext(), GoodsDetailFragment.class,bundle);
-            getContext().startActivity(intent);
+            HolderActivity.startFragment(getContext(),GoodsDetailFragment.class,bundle);
         });
     }
 }

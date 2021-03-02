@@ -8,11 +8,11 @@ public interface AddressManagerContract {
 
     interface Model{
         void fetchAddressList(BaseModelResponeListener listener);
-        void deleteSpecifyAddress(String addressId,BaseModelResponeListener listener);
-        void selectAddress(String addressId,BaseModelResponeListener listener);
+        void deleteSpecifyAddress(String addressId, BaseModelResponeListener listener);
+        void selectAddress(String addressId, BaseModelResponeListener listener);
     }
 
-    interface View extends BaseView{
+    interface View extends BaseView {
         void fetchFail(String failReason);
         void fetchAddressSuccess(AddressBean result);
         void deleteAddressSuccess();

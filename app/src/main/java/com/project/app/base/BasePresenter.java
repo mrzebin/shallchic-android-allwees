@@ -19,4 +19,10 @@ public class BasePresenter<V extends BaseView>{
         return mView != null;
     }
 
+
+    public interface IBasePresenter{
+        void onDestoryView();
+    }
+
+
 }

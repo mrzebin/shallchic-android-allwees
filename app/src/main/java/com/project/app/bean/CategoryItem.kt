@@ -1,8 +1,11 @@
-package com.project.app.bean
+package com.project.app.bean;
 
 class CategoryItem{
-    var type:Int = 0
     var no:String = ""
+    var type:Int = 0
+    var level:Int = 0
     var name:String = ""
-    var img:String = ""
+//    var nameEn:String = ""
+//    var nameZh:String = ""
+//    var nameAr:String = ""
 }

@@ -33,7 +33,7 @@ public class EarnFragment extends BaseMvpQmuiFragment implements SwipeRefreshLay
 
     private void initWidget() {
         mSwipeRefresh.setOnRefreshListener(this);
-        mSwipeRefresh.setColorSchemeResources(R.color.allwees_theme_color,android.R.color.holo_blue_dark,android.R.color.holo_orange_dark);
+        mSwipeRefresh.setColorSchemeResources(R.color.theme_color,android.R.color.holo_blue_dark,android.R.color.holo_orange_dark);
         rv_earn.setLayoutManager(new LinearLayoutManager(getContext()));
 
     }

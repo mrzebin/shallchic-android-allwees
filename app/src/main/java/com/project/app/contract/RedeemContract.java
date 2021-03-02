@@ -8,12 +8,12 @@ import com.project.app.bean.RedeemBean;
 public interface RedeemContract {
 
     interface Model{
-        void upUsePointChangeCoupon(String cpUuid,BaseModelResponeListener listener);
-        void fetchRedeemInfo(int page,int pageSize,BaseModelResponeListener listener);
+        void upUsePointChangeCoupon(String cpUuid, BaseModelResponeListener listener);
+        void fetchRedeemInfo(int page, int pageSize, BaseModelResponeListener listener);
         void fetchBindPointInfo(BaseModelResponeListener listener);
     }
 
-    interface View extends BaseView{
+    interface View extends BaseView {
         void upChagePointSuccess();
         void fetchPointSuccess(MeBindCPBean result);
         void fetchRedeemInfoSuccess(RedeemBean result);

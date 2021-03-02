@@ -1,7 +1,8 @@
 package com.project.app.fragment.pay;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hb.basemodel.config.Constant;
 import com.hb.basemodel.event.RefreshDataEvent;
+import com.hb.basemodel.other.UserUtil;
 import com.hb.basemodel.utils.DataUtil;
 import com.hb.basemodel.utils.SPManager;
 import com.hb.basemodel.utils.ToastUtil;
@@ -18,9 +20,11 @@ import com.project.app.activity.HolderActivity;
 import com.project.app.adapter.CartMLikeAdapter;
 import com.project.app.base.BaseMvpQmuiFragment;
 import com.project.app.bean.ClassifyListBean;
+import com.project.app.bean.OrderDetailBean;
 import com.project.app.contract.PayStatusContract;
 import com.project.app.fragment.order.OrderDetailFragment;
 import com.project.app.presenter.PayStatusPresenter;
+import com.project.app.utils.MathUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -34,22 +38,21 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class PayStatusFragment extends BaseMvpQmuiFragment<PayStatusPresenter> implements PayStatusContract.View {
-    @BindView(R.id.tv_payDetail_dec)
-    TextView tv_payDetail_dec;
+    @BindView(R.id.tv_payDetail_describe)
+    TextView tv_payDetailDescribe;
     @BindView(R.id.tv_lookOtherOrder)
     TextView tv_lookOtherOrder;
     @BindView(R.id.tv_paySBackHome)
     TextView tv_paySBackHome;
     @BindView(R.id.rlv_cartMightLike)
     RecyclerView rlv_cartMightLike;
-    private CartMLikeAdapter mAdapter;
+    @BindView(R.id.tv_cashBackDecribute)
+    TextView tv_cashBackDecribute;
 
     private final int mPageSize    = 20;
     private final int mCurrentPage = 6;
-    private boolean isLoadMoreEnable = false;
-    private boolean isPrepared = false;
     private String mOrderId;
-    private String mOrderType;
+    private CartMLikeAdapter mAdapter;
     private final List<ClassifyListBean.ClassifyItem> mCategorys = new ArrayList<>();
 
     @Override
@@ -69,10 +72,8 @@ public class PayStatusFragment extends BaseMvpQmuiFragment<PayStatusPresenter> i
             case R.id.tv_lookOtherOrder:
                 Bundle bundle = new Bundle();
                 bundle.putString("orderId",mOrderId);
-                bundle.putString("orderType",mOrderType);
                 popBackStack();
-                Intent intent = HolderActivity.of(getContext(), OrderDetailFragment.class,bundle);
-                getContext().startActivity(intent);
+                HolderActivity.startFragment(getContext(),OrderDetailFragment.class,bundle);
                 break;
             case R.id.tv_paySBackHome:
                 EventBus.getDefault().post(new RefreshDataEvent(Constant.EVENT_DEEPLINK_HOME));
@@ -85,17 +86,20 @@ public class PayStatusFragment extends BaseMvpQmuiFragment<PayStatusPresenter> i
         Bundle bundle = getArguments();
         if(bundle != null){
             mOrderId = bundle.getString("orderId");
-            mOrderType = bundle.getString("orderType");
         }
     }
 
     private void initWidget() {
-        String hint = getContext().getResources().getString(R.string.ps_hint_1);
         QMUIStatusBarHelper.setStatusBarLightMode(getActivity());
+        String hint = getContext().getResources().getString(R.string.pay_success_email_hint);
+        String email = UserUtil.getInstance().getBaseUserInfo().getEmail();
+
         mPresenter = new PayStatusPresenter();
         mPresenter.attachView(this);
-        String email = SPManager.sGetString( "email");
-        tv_payDetail_dec.setText(hint + email);
+        if(!TextUtils.isEmpty(email)){
+            tv_payDetailDescribe.setVisibility(View.VISIBLE);
+            tv_payDetailDescribe.setText(Html.fromHtml(hint + "<font color=\"#31B5ED\">" + email + "</font>"));
+        }
         GridLayoutManager manager = new GridLayoutManager(getContext(),2);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         rlv_cartMightLike.setLayoutManager(manager);
@@ -114,6 +118,37 @@ public class PayStatusFragment extends BaseMvpQmuiFragment<PayStatusPresenter> i
         mPresenter.fetchCLikeList(mCurrentPage,mPageSize);
     }
 
+    //获取订单详情成功
+    @Override
+    public void fetchOrderCashBackAmtSuccess(OrderDetailBean result) {
+        StringBuffer sbLink = new StringBuffer();
+        Double cashBackPrice = result.getCashBackAmt();
+        String cashBackPriceHint = getContext().getResources().getString(R.string.pay_success_cash_back_hint);
+        if(cashBackPrice >0 ){
+            sbLink.append(MathUtil.Companion.formatPrice(cashBackPrice));
+            sbLink.append(" ");
+            sbLink.append(cashBackPriceHint);
+            tv_cashBackDecribute.setVisibility(View.VISIBLE);
+            tv_cashBackDecribute.setText(sbLink.toString());
+        }else{
+            tv_cashBackDecribute.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void fetchMightLikeData(ClassifyListBean result) {
+        if(result != null){
+            if(mCurrentPage == 6){
+                if(DataUtil.idNotNull(result.getResults())){
+                    mAdapter.setNewInstance(result.getResults());
+                }
+            }else{
+                mAdapter.addData(result.getResults());
+            }
+        }
+    }
+
+
     @Override
     public void startLoading() {
 
@@ -127,21 +162,6 @@ public class PayStatusFragment extends BaseMvpQmuiFragment<PayStatusPresenter> i
     @Override
     public void showErrorTip(String msg) {
 
-    }
-
-    @Override
-    public void fetchMightLikeData(ClassifyListBean result) {
-        if(result != null){
-            isPrepared = true;
-            if(mCurrentPage == 6){
-                if(DataUtil.idNotNull(result.getResults())){
-                    mAdapter.setNewInstance(result.getResults());
-                }
-            }else{
-                mAdapter.addData(result.getResults());
-            }
-            isLoadMoreEnable = result.isHasMorePages();
-        }
     }
 
     @Override

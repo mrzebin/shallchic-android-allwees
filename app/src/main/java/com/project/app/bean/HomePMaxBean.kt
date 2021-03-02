@@ -1,4 +1,6 @@
-package com.project.app.bean
+package com.project.app.bean;
+
+import java.util.*
 
 /**
  * 首页的聚合数据

@@ -1,4 +1,4 @@
-package com.project.app.bean
+package com.project.app.bean;
 
 class RewardDashbBean {
     var current:Int = 0

@@ -1,6 +1,5 @@
 package com.project.app.fragment;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,12 +25,9 @@ import com.project.app.R;
 import com.project.app.activity.HolderActivity;
 import com.project.app.base.BaseMvpQmuiFragment;
 import com.project.app.fragment.pay.PayStatusFragment;
+import com.project.app.utils.FileManager;
 
 import org.greenrobot.eventbus.EventBus;
-
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -56,6 +52,7 @@ public class WebExplorerFragment extends BaseMvpQmuiFragment {
     private String mTitle;
     private String mPayUuid;
     private String mCreditHtml;  //信用卡使用的html
+    private String mJsCredit;
 
     @Override
     public int getLayoutId() {
@@ -66,6 +63,11 @@ public class WebExplorerFragment extends BaseMvpQmuiFragment {
     public void initView() {
         initTopbar();
         initWebView();
+        initData();
+    }
+
+    private void initData() {
+        mJsCredit = FileManager.readAssetFile(Constant.ASSERT_INTERCEPT_POST_PARAMS);
     }
 
     @Override
@@ -74,7 +76,7 @@ public class WebExplorerFragment extends BaseMvpQmuiFragment {
     }
 
     @OnClick({R.id.iv_back})
-    public void onClickViewed(View view){
+    public void onClickViewed(View view) {
         if (view.getId() == R.id.iv_back) {
             popBackStack();
         }
@@ -82,16 +84,16 @@ public class WebExplorerFragment extends BaseMvpQmuiFragment {
 
     private void initTopbar() {
         Bundle bundle = getArguments();
-        if(bundle != null){
+        if (bundle != null) {
             mLoadUrl = bundle.getString("webUrl");
-            mType    = bundle.getString("type");
-            if(mType.equals("1")){
-                mTitle   = bundle.getString("title");
-            }else if(mType.equals("0")){
+            mType = bundle.getString("type");
+            if (mType.equals("1")) {
+                mTitle = bundle.getString("title");
+            } else if (mType.equals("0")) {
                 mPayUuid = bundle.getString("payUuid");
-            }else if(mType.equals("3")){
+            } else if (mType.equals("3")) {
                 mCreditHtml = bundle.getString("payParams");
-                mPayUuid =    "";
+                mPayUuid = bundle.getString("payUuid");
             }
         }
         tv_topTitle.setText(mTitle);
@@ -106,10 +108,9 @@ public class WebExplorerFragment extends BaseMvpQmuiFragment {
         settings.setJavaScriptEnabled(true);
         settings.setJavaScriptCanOpenWindowsAutomatically(true);
 
-        settings.setUseWideViewPort(true);
         settings.setLoadWithOverviewMode(true);
         settings.setSupportZoom(true);
-        settings.setBuiltInZoomControls(true);
+        settings.setBuiltInZoomControls(false);
         settings.setDisplayZoomControls(false);
 
         settings.setAllowFileAccess(true);
@@ -128,28 +129,20 @@ public class WebExplorerFragment extends BaseMvpQmuiFragment {
         String appCachePath = MyApp.mContext.getCacheDir().getAbsolutePath();
         settings.setAppCachePath(appCachePath);
 
-//        wb_explore.setWebViewClient(new WriteHandlingWebViewClient(wb_explore));
-
         wb_explore.setWebViewClient(new WebViewClient() {
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-                if(mType.equals("3")){
+                LoggerUtil.e(request.getUrl().toString());
+                if (mType.equals("3")) {
                     Uri uri = request.getUrl();
                     String scheme = uri.getScheme();
-                    String requestMethod = request.getMethod();
-                    LoggerUtil.i("请求的方式:" + requestMethod);
-
-                    Map<String,String> requestMap = request.getRequestHeaders();
-
-                    if(scheme.equalsIgnoreCase("http") || scheme.equalsIgnoreCase("https")){
+                    if (scheme.equalsIgnoreCase("http") || scheme.equalsIgnoreCase("https")) {
                         String interceptUrl = request.getUrl().toString();
-                        if(interceptUrl.equalsIgnoreCase(Constant.PAYMENT_CREDIT_URL_STATUS)){
-                            EventBus.getDefault().post(new RefreshDataEvent(Constant.REFRESH_AFTER_PAY_CARDATA));   //刷新购物车
+                        if(interceptUrl.endsWith("/order/cod/" + mPayUuid)){                                              //跳转到详情页面,注意域名不要写死 https://sa.shallchic.com/order/cod/7f8f89dc9e1049509b531f0d8c89372b
+                            EventBus.getDefault().post(new RefreshDataEvent(Constant.REFRESH_AFTER_PAY_CARDATA));         //刷新购物车
                             Bundle bundle = getArguments();
                             bundle.putString("orderId",mPayUuid);
-                            bundle.putString("orderType","Paid");
-                            Intent goSuccess = HolderActivity.of(getContext(), PayStatusFragment.class,bundle);
-                            getContext().startActivity(goSuccess);
+                            HolderActivity.startFragment(getContext(),PayStatusFragment.class,bundle);
                             clearHolderStack();   //清理holderActivity的栈
                         }
                     }
@@ -165,6 +158,7 @@ public class WebExplorerFragment extends BaseMvpQmuiFragment {
             @Override
             public void onPageFinished(WebView webView, String s) {
                 super.onPageFinished(webView, s);
+                webView.loadUrl("javascript:" + mJsCredit);   //注入post的js
             }
 
             @Override
@@ -195,28 +189,31 @@ public class WebExplorerFragment extends BaseMvpQmuiFragment {
             @Override
             public void onReceivedTitle(WebView webView, String title) {
                 super.onReceivedTitle(webView, title);
-                String webTitle = webView.getTitle() == null?"":webView.getTitle();
-                if(mType.equals("0")){
-                    if(tv_topTitle != null){
+                String webTitle = webView.getTitle() == null ? "" : webView.getTitle();
+                if (mType.equals("0")) {
+                    if (tv_topTitle != null) {
                         tv_topTitle.setText(webTitle);
-                        if(title.equalsIgnoreCase("Pay Succeed")){
+                        if (title.equalsIgnoreCase("Pay Succeed")) {
                             EventBus.getDefault().post(new RefreshDataEvent(Constant.REFRESH_AFTER_PAY_CARDATA));
                             popBackStack();
                             Bundle bundle = getArguments();
-                            bundle.putString("orderId",mPayUuid);
-                            bundle.putString("orderType","Paid");
-                            Intent goSuccess = HolderActivity.of(getContext(), PayStatusFragment.class,bundle);
-                            getContext().startActivity(goSuccess);
-                        }else if(title.equalsIgnoreCase("Pay Cancel")){
+                            bundle.putString("orderId", mPayUuid);
+                            HolderActivity.startFragment(getContext(),PayStatusFragment.class,bundle);
+                        } else if (title.equalsIgnoreCase("Pay Cancel")) {
                             popBackStack();
                         }
                     }
-                }else if(mType.equals("3")){
-                    if(tv_topTitle != null){
-                        tv_topTitle.setText(webTitle);
+                } else if (mType.equals("3")) {
+                    if (tv_topTitle != null) {
+                        if (webTitle.equals("about:blank")) {
+                            String loaddingTitle = getContext().getResources().getString(R.string.loadding);
+                            tv_topTitle.setText(loaddingTitle);
+                        } else {
+                            tv_topTitle.setText(webTitle);
+                        }
                     }
-                }else{
-                    if(tv_topTitle != null){
+                } else {
+                    if (tv_topTitle != null) {
                         tv_topTitle.setText(webTitle);
                     }
                 }
@@ -225,83 +222,33 @@ public class WebExplorerFragment extends BaseMvpQmuiFragment {
             @Override
             public void onProgressChanged(WebView webView, int progress) {
                 super.onProgressChanged(webView, progress);
-                if(DEF <= progress){
-                    if(mNumberProgressBar != null){
+                if (DEF <= progress) {
+                    if (mNumberProgressBar != null) {
                         mNumberProgressBar.setVisibility(View.GONE);
                     }
-                }else{
-                    if(mNumberProgressBar != null){
+                } else {
+                    if (mNumberProgressBar != null) {
                         mNumberProgressBar.setProgress(progress);
                     }
                 }
             }
         });
 
-        if(mType.equals("3")){
-//            String requestBody = getCreditPayRequest();
-            tv_topTitle.setText("loading");
-            wb_explore.loadDataWithBaseURL(null,mCreditHtml,"text/html","utf-8",null);
-        }else{
+        if (mType.equals("3")) {
+            wb_explore.loadDataWithBaseURL(null, mCreditHtml, "text/html", "utf-8", null);
+        } else {
             wb_explore.loadUrl(mLoadUrl);
         }
-    }
 
-//    public String getCreditPayRequest(){
-//        HashMap<String,String> params = new HashMap<>();
-//        params.put("account",mCreditObject.getAccount());
-//        params.put("terminal",mCreditObject.getTerminal());
-//        params.put("signValue",mCreditObject.getSignValue());
-//        params.put("backUrl",mCreditObject.getBackUrl());
-//        params.put("noticeUrl",mCreditObject.getNoticeUrl());
-//        params.put("methods",mCreditObject.getMethods());
-//        params.put("pages",mCreditObject.getPages());
-//        params.put("order_number",mCreditObject.getOrder_number());
-//        params.put("order_currency",mCreditObject.getOrder_currency());
-//        params.put("order_amount",mCreditObject.getOrder_amount());
-//        params.put("billing_firstName",mCreditObject.getBilling_firstName());
-//        params.put("billing_lastName",mCreditObject.getBilling_lastName());
-//        params.put("billing_email",mCreditObject.getBilling_email());
-//        params.put("billing_phone",mCreditObject.getBilling_phone());
-//        params.put("billing_country",mCreditObject.getBilling_country());
-//        params.put("billing_state",mCreditObject.getBilling_state());
-//        params.put("billing_city",mCreditObject.getBilling_city());
-//        params.put("billing_address",mCreditObject.getBilling_address());
-//        params.put("billing_zip",mCreditObject.getBilling_zip());
-//        params.put("ship_firstName",mCreditObject.getShip_firstName());
-//        params.put("ship_lastName",mCreditObject.getShip_lastName());
-//        params.put("ship_phone",mCreditObject.getShip_phone());
-//        params.put("ship_country",mCreditObject.getShip_country());
-//        params.put("ship_state",mCreditObject.getShip_state());
-//        params.put("ship_city",mCreditObject.getShip_city());
-//        params.put("ship_addr",mCreditObject.getShip_addr());
-//        params.put("ship_zip",mCreditObject.getShip_zip());
-//        params.put("productSku",mCreditObject.getProductSku());
-//        params.put("productName",mCreditObject.getProductName());
-//        params.put("productNum",mCreditObject.getProductNum());
-//        return  attachHttpGetParams(params);
-//    }
-
-    public static String attachHttpGetParams(HashMap<String,String> params){
-        Iterator<String> keys = params.keySet().iterator();
-        Iterator<String> values = params.values().iterator();
-        StringBuilder stringBuffer = new StringBuilder();
-        for (int i=0;i<params.size();i++ ) {
-            String value= String.valueOf(values.next());
-            stringBuffer.append(keys.next()).append("=").append(value);
-            if (i!=params.size()-1) {
-                stringBuffer.append("&");
-            }
-        }
-        return stringBuffer.toString();
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK){
-            if(wb_explore != null && wb_explore.canGoBack()){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (wb_explore != null && wb_explore.canGoBack()) {
                 wb_explore.goBack();
                 return true;
-            }else{
+            } else {
                 popBackStack();
             }
         }
@@ -311,7 +258,7 @@ public class WebExplorerFragment extends BaseMvpQmuiFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(wb_explore != null){
+        if (wb_explore != null) {
             wb_explore.destroy();   //释放资源
         }
     }

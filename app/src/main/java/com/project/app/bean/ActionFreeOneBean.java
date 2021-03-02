@@ -1,13 +1,14 @@
 package com.project.app.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 买一送一活动
  */
 public class ActionFreeOneBean {
-    private String buyAndFreeUrl;
-    private ActionFreeOneMainBean results;
+    private String buyAndFreeUrl = "";
+    private ActionFreeOneMainBean results = new ActionFreeOneMainBean();
 
     public String getBuyAndFreeUrl() {
         return buyAndFreeUrl;
@@ -26,19 +27,19 @@ public class ActionFreeOneBean {
     }
 
     public static class ClassifyItem{
-        String uuid;
-        private int status;
-        private String name;
-        private String mainPhoto;
-        private String currency;
-        private int salesTotal;
-        private int marketingType;
-        private double priceOrigin;
-        private double priceRetail;
-        private double priceShip;
-        private int displayAs;
-        private String statusDesc;
-        private String discountOff;
+        String uuid = "";
+        private int status = 0;
+        private String name = "";
+        private String mainPhoto = "";
+        private String currency = "";
+        private int salesTotal = 0;
+        private int marketingType = 0;
+        private double priceOrigin = 0.0;
+        private double priceRetail = 0.0;
+        private double priceShip = 0.0;
+        private int displayAs = 0;
+        private String statusDesc = "" ;
+        private String discountOff = "";
 
         public String getCurrency() {
             return currency;
@@ -146,13 +147,13 @@ public class ActionFreeOneBean {
     }
 
     public class ActionFreeOneMainBean{
-        private int current;
-        private int lastPage;
-        private int size;
-        private int total;
-        private int count;
-        private boolean hasMorePages;
-        private List<ClassifyItem> results;
+        private int current = 0;
+        private int lastPage = 0;
+        private int size = 0;
+        private int total = 0;
+        private int count = 0;
+        private boolean hasMorePages = false;
+        private List<ClassifyItem> results = new ArrayList<>();
 
         public int getCurrent() {
             return current;

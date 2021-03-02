@@ -16,7 +16,7 @@ import java.util.List;
 public class OrderDetailMoel implements OrderDetailContract.Model {
 
     @Override
-    public void fetchDetailData(String orderNo, String orderType, BaseModelResponeListener listener) {
+    public void fetchDetailData(String orderNo, BaseModelResponeListener listener) {
         String url = BaseUrlConfig.getRootHost() + UrlConfig.ORDER_DETAIL_URL + orderNo;
         String requestType = "0";
         HashMap<String,String> params = new HashMap<>();
@@ -32,7 +32,7 @@ public class OrderDetailMoel implements OrderDetailContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+//                listener.onFail(e.getMessage());
             }
         });
     }
@@ -54,7 +54,7 @@ public class OrderDetailMoel implements OrderDetailContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+//                listener.onFail(e.getMessage());
             }
         });
     }
@@ -73,7 +73,7 @@ public class OrderDetailMoel implements OrderDetailContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+//                listener.onFail(e.getMessage());
             }
         },params);
     }

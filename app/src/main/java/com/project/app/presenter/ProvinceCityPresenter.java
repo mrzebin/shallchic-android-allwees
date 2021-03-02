@@ -17,16 +17,25 @@ public class ProvinceCityPresenter extends BasePresenter<ProvinceCityContract.Vi
 
     @Override
     public void fetchCityList(String regionId, String provinceId) {
+        if(mView == null){
+            return;
+        }
         mView.startLoading();
         model.fetchCityList(regionId,provinceId,new BaseModelResponeListener<List<ProvinceBean>>() {
             @Override
             public void onSuccess(List<ProvinceBean> response) {
+                if(mView == null){
+                    return;
+                }
                 mView.stopLoading();
                 mView.fetchCityListSuccess(response);
             }
 
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.stopLoading();
                 mView.fetchFail(msg);
             }
@@ -35,15 +44,24 @@ public class ProvinceCityPresenter extends BasePresenter<ProvinceCityContract.Vi
 
     @Override
     public void fetchProvinceList(String region) {
+        if(mView == null){
+            return;
+        }
         mView.startLoading();
         model.fetchProvinceList(region,new BaseModelResponeListener<List<ProvinceBean>>() {
             @Override
             public void onSuccess(List<ProvinceBean> response) {
+                if(mView == null){
+                    return;
+                }
                 mView.stopLoading();
                 mView.fetchProvinceListSuccess(response);
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.stopLoading();
                 mView.fetchFail(msg);
             }

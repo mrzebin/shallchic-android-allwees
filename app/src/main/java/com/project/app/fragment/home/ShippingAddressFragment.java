@@ -1,6 +1,5 @@
 package com.project.app.fragment.home;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -54,6 +53,8 @@ public class ShippingAddressFragment extends BaseMvpQmuiFragment<AddressControlP
     TextView et_addresZip;
     @BindView(R.id.et_contactPhone)
     EditText et_contactPhone;
+    @BindView(R.id.et_spareContactPhone)
+    EditText et_spareContactPhone;
     @BindView(R.id.qmui_addressSave)
     QMUIRoundButton qmui_addressSave;
     @BindView(R.id.tv_topTitle)
@@ -80,8 +81,12 @@ public class ShippingAddressFragment extends BaseMvpQmuiFragment<AddressControlP
     TextView tv_address_city;
     @BindView(R.id.tv_areaCode)
     TextView tv_areaCode;
-    @BindView(R.id.v_divisi)
-    View v_divisi;
+    @BindView(R.id.tv_spareAreaCode)
+    TextView tv_spareAreaCode;
+    @BindView(R.id.tv_addressType_Home)
+    TextView tv_addressType_Home;
+    @BindView(R.id.tv_addressType_Work)
+    TextView tv_addressType_Work;
 
     private AddressBean.AddressItem mSigleAddress;
     private String mFirstName;
@@ -93,6 +98,7 @@ public class ShippingAddressFragment extends BaseMvpQmuiFragment<AddressControlP
     private String mCity;
     private String mZipCode;
     private String mPhone;                //手机号码
+    private String mShareMobile;                //备用的手机号码
     private String mPhoneAreaCode = "";   //手机号码区号
     private String mCountryCode = "53950000";  //沙特:48650000  阿拉伯:2610000
     private String mDefaultCountry = "";
@@ -100,12 +106,12 @@ public class ShippingAddressFragment extends BaseMvpQmuiFragment<AddressControlP
     private int mCountryType  = -1;    //默认为美国 1阿拉伯 2为沙特
     private int mRequestType;
     private boolean isDefault = false;
-    private boolean isCustomCountry = false;
     private CountryCropBean.CountryItem mWinCountry;
     public  final static int INDEX_ACTION_ADD_ADDRESS_USER = 0;
     public  final static int INDEX_ACTION_ADD_ADDRESS_ME = 2;
     public  final static int INDEX_ACTION_EDIT = 1;     //编辑操作
     private static int INDEX_ACTION_NONE = 0;           //0为新创建 1为修改 2为管理新增
+    private int mChoiceAddressType = -1;   //0为office 1为work
 
     private final HashMap<String,String> mRequestParams = new HashMap<>();
 
@@ -137,17 +143,11 @@ public class ShippingAddressFragment extends BaseMvpQmuiFragment<AddressControlP
                 mDefaultCountry  = mSigleAddress.getCountry();       //国家的名字
                 mEditProvince    = mSigleAddress.getProvinceRegion(); //获取省份
             }else{
-                isCustomCountry = LocaleUtil.getInstance().getLocaleCustom();
-                if(isCustomCountry){
-                    mCountryCode    = LocaleUtil.getInstance().getLocalCustomRegion();   //自己切换的家国
-                    mDefaultCountry = LocaleUtil.getInstance().getLocalCustomNameEn();
-                    mPhoneAreaCode  = LocaleUtil.getInstance().getCustomPhoneAreaCode();
-                }else{
-                    mCountryCode = LocaleUtil.getInstance().getRegion();
-                    mDefaultCountry = LocaleUtil.getInstance().getCoungryName();
-                    mPhoneAreaCode = LocaleUtil.getInstance().getPhoneAreaCode();
-                }
+                mCountryCode    = LocaleUtil.getInstance().getRegion();
+                mDefaultCountry = LocaleUtil.getInstance().getCoungryName();
+                mPhoneAreaCode  = LocaleUtil.getInstance().getPhoneAreaCode();
                 tv_areaCode.setText("+" + mPhoneAreaCode);
+                tv_spareAreaCode.setText("+" +  mPhoneAreaCode);
                 tv_selectCountry.setText(mDefaultCountry);
             }
         }
@@ -163,7 +163,7 @@ public class ShippingAddressFragment extends BaseMvpQmuiFragment<AddressControlP
     private void bindData() {
         getCountryType();
         if (INDEX_ACTION_NONE == 1) {
-            editChannel();
+            editChannel();      //当它为编辑的时候显示的状态
         }
     }
 
@@ -171,9 +171,8 @@ public class ShippingAddressFragment extends BaseMvpQmuiFragment<AddressControlP
         if(mSigleAddress != null){
             String phoneNum  = mSigleAddress.getPhone();
             if(phoneNum.contains("(")){
-                int lastBrackets = phoneNum.lastIndexOf(")");
-                mPhoneAreaCode  = phoneNum.substring(1,lastBrackets);     //手机号码区号
-                mPhone = phoneNum.substring(lastBrackets+1,phoneNum.length());  //手机号码
+                mPhoneAreaCode  = parseMobileArea(phoneNum);     //手机号码区号
+                mPhone = parseMobileNumber(phoneNum);            //手机号码
             }else{
                 mPhone = phoneNum;    //如果编辑的手机号码没有区号,则获取本地的手机区号
                 getPhoneAreaCode();
@@ -182,14 +181,21 @@ public class ShippingAddressFragment extends BaseMvpQmuiFragment<AddressControlP
         }
     }
 
+    //提取手机号码
+    private String parseMobileNumber(String phoneNum){
+        int lastBrackets = phoneNum.lastIndexOf(")");
+        return phoneNum.substring(lastBrackets+1,phoneNum.length());
+    }
+
+    //提取手机号码的区域
+    private String parseMobileArea(String phoneNum){
+        int lastBrackets = phoneNum.lastIndexOf(")");
+        return  phoneNum.substring(1,lastBrackets);     //手机号码区号
+    }
+
     //获取手机区号
     public void getPhoneAreaCode(){
-        isCustomCountry = LocaleUtil.getInstance().getLocaleCustom();
-        if(isCustomCountry){
-            mPhoneAreaCode  = LocaleUtil.getInstance().getCustomPhoneAreaCode();
-        }else{
-            mPhoneAreaCode = LocaleUtil.getInstance().getPhoneAreaCode();
-        }
+        mPhoneAreaCode = LocaleUtil.getInstance().getPhoneAreaCode();
     }
 
     //展示不同的国家的显示方式
@@ -217,7 +223,7 @@ public class ShippingAddressFragment extends BaseMvpQmuiFragment<AddressControlP
         }
     }
 
-    @OnClick({R.id.qmui_addressSave,R.id.ll_choiceP,R.id.ll_choiceCity,R.id.iv_back})
+    @OnClick({R.id.qmui_addressSave,R.id.ll_choiceP,R.id.ll_choiceCity,R.id.iv_back,R.id.tv_addressType_Work,R.id.tv_addressType_Home})
     public void onClickViewed(View view){
         switch (view.getId()){
             case R.id.qmui_addressSave:
@@ -238,8 +244,7 @@ public class ShippingAddressFragment extends BaseMvpQmuiFragment<AddressControlP
                         pBundle.putString("region","-1");
                     }
                 }
-                Intent goPc = HolderActivity.of(getContext(), SelectProvinceCityFragment.class,pBundle);
-                getContext().startActivity(goPc);
+                HolderActivity.startFragment(getContext(),SelectProvinceCityFragment.class,pBundle);
                 break;
             case R.id.ll_choiceCity:
                 mRequestType = 1;
@@ -254,8 +259,7 @@ public class ShippingAddressFragment extends BaseMvpQmuiFragment<AddressControlP
                         cBundle.putString("region","-1");  //国家区号
                         cBundle.putString("regionCity","-1");          //省份区号
                     }
-                    Intent goCity = HolderActivity.of(getContext(), SelectProvinceCityFragment.class,cBundle);
-                    getContext().startActivity(goCity);
+                    HolderActivity.startFragment(getContext(),SelectProvinceCityFragment.class,cBundle);
                 }else{
                     if(mCountryType == 0 || mCountryType == 1|| mCountryType == 2){   //0为美国 1为阿拉伯 2为沙特
                         if(TextUtils.isEmpty(provinceName)){
@@ -269,22 +273,45 @@ public class ShippingAddressFragment extends BaseMvpQmuiFragment<AddressControlP
                                 cBundle.putString("region","-1");  //国家区号
                                 cBundle.putString("regionCity","-1");          //省份区号
                             }
-                            Intent goCity = HolderActivity.of(getContext(), SelectProvinceCityFragment.class,cBundle);
-                            getContext().startActivity(goCity);
+                            HolderActivity.startFragment(getContext(),SelectProvinceCityFragment.class,cBundle);
                         }
                     }else if(mCountryType == 3){    //3为其他国家
                         cBundle.putString("region","-1");
                         cBundle.putString("regionCity","-1");
-                        Intent goCity = HolderActivity.of(getContext(), SelectProvinceCityFragment.class,cBundle);
-                        getContext().startActivity(goCity);
+                        HolderActivity.startFragment(getContext(),SelectProvinceCityFragment.class,cBundle);
                     }
                 }
                 break;
             case R.id.iv_back:
                 popBackStack();
                 break;
+            case R.id.tv_addressType_Home:
+                mChoiceAddressType = 0;
+                switchAddressType(mChoiceAddressType);
+                break;
+            case R.id.tv_addressType_Work:
+                mChoiceAddressType = 1;
+                switchAddressType(mChoiceAddressType);
+                break;
         }
     }
+
+
+    private void switchAddressType(int type){
+        if(type == 0){
+            tv_addressType_Home.setSelected(true);
+            tv_addressType_Work.setSelected(false);
+            tv_addressType_Home.setTextColor(getContext().getResources().getColor(R.color.theme_color));
+            tv_addressType_Work.setTextColor(getContext().getResources().getColor(R.color.color_999));
+        }else if(type == 1){
+            tv_addressType_Home.setSelected(false);
+            tv_addressType_Work.setSelected(true);
+            tv_addressType_Home.setTextColor(getContext().getResources().getColor(R.color.color_999));
+            tv_addressType_Work.setTextColor(getContext().getResources().getColor(R.color.theme_color));
+        }
+    }
+
+
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvented(RefreshDataEvent event){
@@ -332,6 +359,14 @@ public class ShippingAddressFragment extends BaseMvpQmuiFragment<AddressControlP
         String note      = et_addresNote.getText().toString().trim();
         String province  = tv_selectProvince.getText().toString().trim();
         String city      = tv_address_city.getText().toString().trim();
+        String otherPhone = et_spareContactPhone.getText().toString().trim();
+        String addressTag = "";
+
+        if(mChoiceAddressType == 0){
+            addressTag = "Office";
+        }else if(mChoiceAddressType == 1){
+            addressTag = "work";
+        }
 
         if(TextUtils.isEmpty(firstName)){
             ToastUtil.showToast(hintInfo);
@@ -370,15 +405,17 @@ public class ShippingAddressFragment extends BaseMvpQmuiFragment<AddressControlP
             }
         }
 
-        mFirstName = firstName;
-        mLastName  = lastName;
-        mAddress1  = address1;
-        mAddress2  = address2;
-        mZipCode   = zipCode;
-        mPhone     = phone;
+        mFirstName   = firstName;
+        mLastName    = lastName;
+        mAddress1    = address1;
+        mAddress2    = address2;
+        mZipCode     = zipCode;
+        mPhone       = phone;
+        mShareMobile = otherPhone;
 
         if(!TextUtils.isEmpty(mPhoneAreaCode)){
             mPhone = "(" + mPhoneAreaCode + ")" + phone;
+            mShareMobile = "(" + mPhoneAreaCode + ")" + otherPhone;
         }
 
         if(INDEX_ACTION_NONE == 1){
@@ -388,18 +425,21 @@ public class ShippingAddressFragment extends BaseMvpQmuiFragment<AddressControlP
         }
 
         if(mCountryType == 0){
-            mRequestParams.put("addressLine1",address1);
-            mRequestParams.put("addressLine2",address2);
-            mRequestParams.put("city",city);
-            mRequestParams.put("country",mCountryCode);
             mRequestParams.put("firstName",firstName);
             mRequestParams.put("lastName",lastName);
             mRequestParams.put("phone",mPhone);
+            mRequestParams.put("country",mCountryCode);
             mRequestParams.put("province",province);
+            mRequestParams.put("city",city);
+
+            mRequestParams.put("addressLine1",address1);
+            mRequestParams.put("addressLine2",address2);
             mRequestParams.put("zipCode",mZipCode);
             mRequestParams.put("isDefault",String.valueOf(isDefault));
             mRequestParams.put("itu","1");
             mRequestParams.put("note",note);
+            mRequestParams.put("mobile",mShareMobile);
+            mRequestParams.put("addressTag",addressTag);
         }else if(mCountryType == 1||mCountryType == 2){
             mRequestParams.put("street",mAddress1);
             mRequestParams.put("addressLine1",mAddress2 + "#div#" + mZipCode);
@@ -412,6 +452,8 @@ public class ShippingAddressFragment extends BaseMvpQmuiFragment<AddressControlP
             mRequestParams.put("isDefault",String.valueOf(isDefault));
             mRequestParams.put("itu","1");
             mRequestParams.put("note",note);
+            mRequestParams.put("mobile",mShareMobile);
+            mRequestParams.put("addressTag",addressTag);
         }else {
             mRequestParams.put("addressLine1",address1);
             mRequestParams.put("addressLine2",address2);
@@ -425,6 +467,8 @@ public class ShippingAddressFragment extends BaseMvpQmuiFragment<AddressControlP
             mRequestParams.put("isDefault",String.valueOf(isDefault));
             mRequestParams.put("itu","1");
             mRequestParams.put("note",note);
+            mRequestParams.put("mobile",mShareMobile);
+            mRequestParams.put("addressTag",addressTag);
         }
         return true;
     }
@@ -432,14 +476,12 @@ public class ShippingAddressFragment extends BaseMvpQmuiFragment<AddressControlP
     //修改时候的地址信息提取
     private void inflateInitAddress() {
         mProvinceId = mSigleAddress.getProvince();  //修改的时候获取省份id
-
         if(!TextUtils.isEmpty(mSigleAddress.getFirstName())){
             et_addressFirstN.setText(mSigleAddress.getFirstName());
         }
         if(!TextUtils.isEmpty(mSigleAddress.getLastName())){
             et_addressLastN.setText(mSigleAddress.getLastName());
         }
-
         if(!TextUtils.isEmpty(mSigleAddress.getAddressLine2())){
             et_secondAddress.setText(mSigleAddress.getAddressLine2());
         }
@@ -454,8 +496,13 @@ public class ShippingAddressFragment extends BaseMvpQmuiFragment<AddressControlP
         }
         if(!TextUtils.isEmpty(mSigleAddress.getPhone())){
             tv_areaCode.setText("+" + mPhoneAreaCode);
+            tv_spareAreaCode.setText("+" +  mPhoneAreaCode);
             et_contactPhone.setText(mPhone);
         }
+        if(!TextUtils.isEmpty(mSigleAddress.getMobile())){
+            et_spareContactPhone.setText(parseMobileNumber(mSigleAddress.getMobile()));
+        }
+
         if(!TextUtils.isEmpty(mSigleAddress.getNote())){
             et_addresNote.setText(mSigleAddress.getNote());
         }
@@ -481,6 +528,14 @@ public class ShippingAddressFragment extends BaseMvpQmuiFragment<AddressControlP
                 et_defaultAddress.setText(mSigleAddress.getAddressLine1());
             }
         }
+
+        if(mSigleAddress.getAddressTag().equals("Office")){
+            mChoiceAddressType = 0;
+            switchAddressType(mChoiceAddressType);
+        }else if(mSigleAddress.getAddressTag().equals("work")){
+            mChoiceAddressType = 1;
+            switchAddressType(mChoiceAddressType);
+        }
     }
 
     private void postToService() {
@@ -493,7 +548,6 @@ public class ShippingAddressFragment extends BaseMvpQmuiFragment<AddressControlP
             mPresenter.createAddress(mRequestParams);
         }
     }
-
 
     @Override
     protected void lazyFetchData() {
@@ -563,5 +617,10 @@ public class ShippingAddressFragment extends BaseMvpQmuiFragment<AddressControlP
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        if(mPresenter != null){
+            mPresenter.onDestoryView();
+            mPresenter = null;
+            System.gc();
+        }
     }
 }

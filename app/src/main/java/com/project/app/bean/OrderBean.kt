@@ -1,4 +1,4 @@
-package com.project.app.bean
+package com.project.app.bean;
 
 class OrderBean {
     var current:Int = 0
@@ -60,14 +60,16 @@ class OrderBean {
     }
 
     class OrderItems{
+        var orderUuid:String = ""
         var uuid:String = ""
         var productUuid:String = ""
         var skuUuid:String = ""
-        var product:Product ?=null
-        var sku:Sku ?= null
+        var product:Product = Product()
+        var sku:Sku = Sku()
         var reviewAble:Boolean = false
         var refundAble:Boolean = false
         var receiveAble:Boolean = false
+        var cancelAble:Boolean  = false
         var quantity:Int = 0
         var price:Double = 0.0
         var amt:Double = 0.0

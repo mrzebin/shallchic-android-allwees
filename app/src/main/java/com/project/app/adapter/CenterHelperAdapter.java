@@ -28,7 +28,7 @@ public class CenterHelperAdapter extends BaseQuickAdapter<String, BaseViewHolder
         int position = getItemPosition(bean);
         helper.setText(R.id.tv_earnTitle,bean);
 
-        if(position == 2){
+        if(position == 3){
             Bitmap bitmap = ImageCropUtils.getCropCountryFlag();
             helper.setVisible(R.id.iv_iconCountry,true);
             helper.setImageBitmap(R.id.iv_iconCountry,bitmap);

@@ -6,16 +6,18 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hb.basemodel.base.BaseUserInfo;
 import com.hb.basemodel.config.api.UrlConfig;
+import com.hb.basemodel.image.ImageLoader;
 import com.hb.basemodel.other.UserUtil;
-import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 import com.project.app.R;
 import com.project.app.activity.HolderActivity;
 import com.project.app.activity.LoginActivity;
+import com.project.app.activity.SettingHolderActivity;
 import com.project.app.adapter.CenterHelperAdapter;
 import com.project.app.adapter.EarnFunctionsAdapter;
 import com.project.app.adapter.MeOrderFunAdapter;
@@ -23,15 +25,21 @@ import com.project.app.base.BaseController;
 import com.project.app.bean.EarnItemBean;
 import com.project.app.bean.MeBindCPBean;
 import com.project.app.bean.OrderFunctionBean;
+import com.project.app.config.AppsFlyConfig;
 import com.project.app.contract.MeContract;
 import com.project.app.fragment.WebExplorerFragment;
+import com.project.app.fragment.account.UpdateProfileFragment;
+import com.project.app.fragment.cashback.CashBackRecommendFragment;
+import com.project.app.fragment.contact.ContactUsFragment;
 import com.project.app.fragment.earn.RewardFragment;
 import com.project.app.fragment.earn.SchallCashFragment;
 import com.project.app.fragment.earn.SchallCashTestFragment;
 import com.project.app.fragment.notify.NotifyCenterFragment;
 import com.project.app.presenter.MePresenter;
+import com.project.app.utils.AppsFlyEventUtils;
 import com.project.app.utils.LocaleUtil;
 import com.project.app.utils.MathUtil;
+import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,8 +66,6 @@ public class MeController extends BaseController<MePresenter> implements MeContr
     TextView tv_clientnName;
     @BindView(R.id.tv_goLogin)
     TextView tv_goLogin;
-    @BindView(R.id.tv_browseAllOrder)
-    TextView tv_browseAllOrder;
     @BindView(R.id.tv_scCash)
     TextView tv_scCash;
     @BindView(R.id.tv_meBindPoints)
@@ -70,6 +76,8 @@ public class MeController extends BaseController<MePresenter> implements MeContr
     QMUIRadiusImageView qmiv_meHeader;
     @BindView(R.id.tv_mePointsSuffix)
     TextView tv_pointsSuffix;
+    @BindView(R.id.ll_me_cashBackDetect)
+    LinearLayout ll_me_cashBackDetect;
 
     private String mGoPrivacyp;
     private MeOrderFunAdapter mFunAdapter;
@@ -93,13 +101,15 @@ public class MeController extends BaseController<MePresenter> implements MeContr
             OrderFunctionBean bean = new OrderFunctionBean();
             bean.setIndex(i);
             bean.setFunName(funName[i]);
-            if(i==0){
+            if(i ==0){
+                bean.setResId(R.mipmap.allwees_ic_mine_penging);
+            }if(i==1){
                 bean.setResId(R.mipmap.allwees_ic_mine_awaitingpayment);
-            }else if(i==1){
-                bean.setResId(R.mipmap.allwees_ic_mine_awaitingshiped);
             }else if(i==2){
-                bean.setResId(R.mipmap.allwees_ic_mine_awaitingforreview);
+                bean.setResId(R.mipmap.allwees_ic_mine_awaitingshiped);
             }else if(i==3){
+                bean.setResId(R.mipmap.allwees_ic_mine_awaitingforreview);
+            }else if(i==4){
                 bean.setResId(R.mipmap.allwees_ic_mine_awaitingshipment);
             }
             mOrderFuns.add(bean);
@@ -108,18 +118,21 @@ public class MeController extends BaseController<MePresenter> implements MeContr
         for(String item:earns){
             mEarnBeans.add(new EarnItemBean(item,""));
         }
-
         String[] settingFun = getContext().getResources().getStringArray(R.array.me_helpers);
         mSettingHelper.addAll(Arrays.asList(settingFun));
         mPresenter = new MePresenter();
         mPresenter.attachView(this);
+
+        //显示初始化数据
+        BaseUserInfo meInfo = UserUtil.getInstance().getBaseUserInfo();
+        inflateDataToView(meInfo);
         onRefreshView();
     }
 
     private void initView() {
         mFunAdapter = new MeOrderFunAdapter(mOrderFuns);
         mGoPrivacyp = getContext().getResources().getString(R.string.login_pp);
-        GridLayoutManager manager = new GridLayoutManager(getContext(),4);
+        GridLayoutManager manager = new GridLayoutManager(getContext(),5);
         rlv_orderFuns.setLayoutManager(manager);
         rlv_orderFuns.setAdapter(mFunAdapter);
         LinearLayoutManager llManager = new LinearLayoutManager(getContext());
@@ -132,8 +145,8 @@ public class MeController extends BaseController<MePresenter> implements MeContr
 
         mHelperAdatper.setOnItemClickListener((adapter, view, position) -> {
             if(position == 0){
-                Intent goNotify = HolderActivity.of(getContext(), NotifyCenterFragment.class);
-                getContext().startActivity(goNotify);
+                HolderActivity.startFragment(getContext(),NotifyCenterFragment.class);
+                AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_ME_NOTIFICATION);
             }else if(position == 1){
                 Bundle bundle = new Bundle();
                 String siteUrl = "";
@@ -145,21 +158,20 @@ public class MeController extends BaseController<MePresenter> implements MeContr
                 bundle.putString("webUrl", siteUrl);
                 bundle.putString("type","1");
                 bundle.putString("title",mGoPrivacyp);
-                Intent intent = HolderActivity.of(getContext(), WebExplorerFragment.class,bundle);
-                getContext().startActivity(intent);
+                HolderActivity.startFragment(getContext(),WebExplorerFragment.class,bundle);
             }else if(position == 2){
-                Intent goSetting = HolderActivity.of(getContext(),SettingFragment.class);
-                getContext().startActivity(goSetting);
+                HolderActivity.startFragment(getContext(), ContactUsFragment.class);
+            }else if(position == 3){
+                HolderActivity.startFragment(getContext(), SettingFragment.class);
+                AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_ME_SETTING);
             }
         });
 
         mEarnAdapter.setOnItemClickListener((adapter, view, position) -> {
             if(position == 0){
-                Intent scash = HolderActivity.of(getContext(), SchallCashTestFragment.class);
-                getContext().startActivity(scash);
+                HolderActivity.startFragment(getContext(),SchallCashTestFragment.class);
             }else if(position == 1){
-                Intent scash = HolderActivity.of(getContext(), RewardFragment.class);
-                getContext().startActivity(scash);
+                HolderActivity.startFragment(getContext(),RewardFragment.class);
             }
         });
 
@@ -169,36 +181,43 @@ public class MeController extends BaseController<MePresenter> implements MeContr
                 Intent goLogin = new Intent(getContext(), LoginActivity.class);
                 getContext().startActivity(goLogin);
             }else{
-                String orderName = "All";
+                String orderName = "ALL";
                 if(position == 0){
-                    orderName = "WAIT_SHIP";
+                    orderName = "PENDING";
+                    AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_ME_ORDER_PENDING);
                 }else if(position == 1){
-                    orderName = "SHIPPED";
+                    orderName = "WAIT_SHIP";
+                    AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_ME_ORDER_PAID);
                 }else if(position == 2){
-                    orderName = "REVIEW";
+                    orderName = "SHIPPED";
+                    AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_ME_ORDER_SHIPPED);
                 }else if(position == 3){
+                    orderName = "REVIEW";
+                    AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_ME_ORDER_REVIEW);
+                }else if(position == 4){
                     orderName = "REFUNDED";
+                    AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_ME_ORDER_REFUND);
                 }
                 Bundle bundle = new Bundle();
                 bundle.putString("typeName",orderName);
-                Intent intent = HolderActivity.of(getContext(),OrderFragment.class,bundle);
-                getContext().startActivity(intent);
+                HolderActivity.startFragment(getContext(),OrderFragment.class,bundle);
             }
         });
     }
 
     public void onRefreshView() {
         if(UserUtil.getInstance().isLogin()){
-            mPresenter.fetchUserInfo();
-            bindCacheUserInfo();
+            mPresenter.fetchUserInfo();       //刷新用户信息
         }else{
-            tv_scCash.setVisibility(GONE);
             tv_goLogin.setVisibility(VISIBLE);
+            tv_scCash.setVisibility(GONE);
+            ll_me_cashBackDetect.setVisibility(GONE);
             tv_clientnName.setVisibility(GONE);
+            qmiv_meHeader.setImageResource(R.mipmap.allwees_ic_default_header);
         }
     }
 
-    @OnClick({R.id.cl_userInfo,R.id.tv_browseAllOrder,R.id.rl_cashDetail,R.id.rl_reward,R.id.qmiv_meHeader})
+    @OnClick({R.id.cl_userInfo,R.id.rl_allOrder,R.id.rl_cashDetail,R.id.rl_reward,R.id.qmiv_meHeader,R.id.tv_clientnName,R.id.ll_me_cashBackDetect})
     public void onClickViewed(View view){
         switch (view.getId()){
             case R.id.cl_userInfo:
@@ -207,15 +226,15 @@ public class MeController extends BaseController<MePresenter> implements MeContr
                     getContext().startActivity(skipIntent);
                 }
                 break;
-            case R.id.tv_browseAllOrder:
+            case R.id.rl_allOrder:
                 if(!UserUtil.getInstance().isLogin()){
                     Intent skipIntent = new Intent(getContext(), LoginActivity.class);
                     getContext().startActivity(skipIntent);
                 }else{
                     Bundle bundle = new Bundle();
-                    bundle.putString("typeName","All");
-                    Intent intent = HolderActivity.of(getContext(),OrderFragment.class,bundle);
-                    getContext().startActivity(intent);
+                    bundle.putString("typeName","ALL");
+                    HolderActivity.startFragment(getContext(),OrderFragment.class,bundle);
+                    AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_ME_ORDER_ALL);
                 }
                 break;
             case R.id.rl_cashDetail:
@@ -223,8 +242,7 @@ public class MeController extends BaseController<MePresenter> implements MeContr
                     Intent skipIntent = new Intent(getContext(), LoginActivity.class);
                     getContext().startActivity(skipIntent);
                 }else{
-                    Intent goCash = HolderActivity.of(getContext(), SchallCashFragment.class);
-                    getContext().startActivity(goCash);
+                    HolderActivity.startFragment(getContext(),SchallCashFragment.class);
                 }
                 break;
             case R.id.rl_reward:
@@ -232,12 +250,27 @@ public class MeController extends BaseController<MePresenter> implements MeContr
                     Intent skipIntent = new Intent(getContext(), LoginActivity.class);
                     getContext().startActivity(skipIntent);
                 }else{
-                    Intent scash = HolderActivity.of(getContext(), RewardFragment.class);
-                    getContext().startActivity(scash);
+                    HolderActivity.startFragment(getContext(),RewardFragment.class);
+                    AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_ME_REWARDS);
                 }
                 break;
+            case R.id.ll_me_cashBackDetect:    //返现的入口
+                HolderActivity.startFragment(getContext(),CashBackRecommendFragment.class);
+                break;
             case R.id.qmiv_meHeader:
-                
+                if(UserUtil.getInstance().isLogin()){
+                    SettingHolderActivity.startFragment(getContext(),UpdateProfileFragment.class);
+                }else{
+                    Intent skipIntent = new Intent(getContext(), LoginActivity.class);
+                    getContext().startActivity(skipIntent);
+                }
+                AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_ME_HEADER_ICON);
+                break;
+            case R.id.tv_clientnName:
+                if(UserUtil.getInstance().isLogin()){
+                    SettingHolderActivity.startFragment(getContext(),UpdateProfileFragment.class);
+                }
+                AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_ME_HEADER_ICON);
                 break;
         }
     }
@@ -252,30 +285,32 @@ public class MeController extends BaseController<MePresenter> implements MeContr
             tv_clientnName.setVisibility(GONE);
             tv_meBindPoints.setVisibility(GONE);
             tv_pointsSuffix.setVisibility(GONE);
-        }
-    }
-
-    public void bindCacheUserInfo() {
-        BaseUserInfo meInfo = UserUtil.getInstance().getBaseUserInfo();
-        if(meInfo != null){
-            inflateDataToView(meInfo);
+            ll_me_cashBackDetect.setVisibility(GONE);
+            qmiv_meHeader.setImageResource(R.mipmap.allwees_ic_default_header);
         }
     }
 
     private void inflateDataToView(BaseUserInfo result){
-        String cash = result.getCashs();
-        String point = result.getPoints();
-        if(TextUtils.isEmpty(cash) || TextUtils.isEmpty(point)){
-            return;
+        if(result != null){
+            String cash = result.getCashs();
+            String point = result.getPoints();
+            if(TextUtils.isEmpty(cash) || TextUtils.isEmpty(point)){
+                return;
+            }
+            String avatarUrl    = result.getAvatar();
+            if(!TextUtils.isEmpty(avatarUrl)){  //刷新头像
+                ImageLoader.getInstance().displayImage(qmiv_meHeader,avatarUrl,R.mipmap.allwees_ic_default_header);
+            }
+            tv_goLogin.setVisibility(GONE);
+            tv_clientnName.setVisibility(VISIBLE);
+            tv_clientnName.setText(result.getFirstName() + result.getLastName());
+            tv_scCash.setVisibility(VISIBLE);
+            tv_scCash.setText(MathUtil.Companion.formatPrice(Double.parseDouble(result.getCashs())));
+            tv_meBindPoints.setVisibility(VISIBLE);
+            tv_pointsSuffix.setVisibility(VISIBLE);
+            ll_me_cashBackDetect.setVisibility(VISIBLE);
+            tv_meBindPoints.setText(doubleTrans(Double.parseDouble(result.getPoints())));
         }
-        tv_goLogin.setVisibility(GONE);
-        tv_clientnName.setVisibility(VISIBLE);
-        tv_clientnName.setText(result.getFirstName() + result.getLastName());
-        tv_scCash.setVisibility(VISIBLE);
-        tv_scCash.setText(MathUtil.Companion.formatPrice(Double.parseDouble(result.getCashs())));
-        tv_meBindPoints.setVisibility(VISIBLE);
-        tv_pointsSuffix.setVisibility(VISIBLE);
-        tv_meBindPoints.setText(doubleTrans(Double.parseDouble(result.getPoints())));
     }
 
     public void fetchLocaleLanguage() {
@@ -291,6 +326,7 @@ public class MeController extends BaseController<MePresenter> implements MeContr
             }else{
                 tv_goLogin.setVisibility(VISIBLE);
                 tv_clientnName.setVisibility(GONE);
+                ll_me_cashBackDetect.setVisibility(GONE);
             }
         }
     }

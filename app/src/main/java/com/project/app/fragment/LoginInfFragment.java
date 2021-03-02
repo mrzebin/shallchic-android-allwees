@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,10 +30,11 @@ import com.hb.basemodel.view.SuperEditView;
 import com.project.app.R;
 import com.project.app.activity.HolderActivity;
 import com.project.app.base.BaseMvpQmuiFragment;
+import com.project.app.config.AppsFlyConfig;
 import com.project.app.contract.LoginContract;
 import com.project.app.presenter.LoginPresenter;
+import com.project.app.utils.AppsFlyEventUtils;
 import com.project.app.utils.LocaleUtil;
-import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -53,18 +55,15 @@ public class LoginInfFragment extends BaseMvpQmuiFragment<LoginPresenter> implem
     @BindView(R.id.et_loginPassword)
     SuperEditView et_loginPassword;
     @BindView(R.id.btn_postLogin)
-    QMUIRoundButton btn_postLogin;
+    Button btn_postLogin;
     @BindView(R.id.tv_retrivePw)
     TextView tv_retrivePw;
-//    @BindView(R.id.tb_eye)
-//    ToggleButton tb_eye;
     @BindView(R.id.iv_thirdLogin_facebook)
     ImageView iv_thirdLogin_facebook;
     @BindView(R.id.iv_thirdLogin_google)
     ImageView iv_thirdLogin_google;
     @BindView(R.id.login_button)
     LoginButton mFackbookLogin;
-
 
     private String mAccount;
     private String mAccountPw;
@@ -117,7 +116,6 @@ public class LoginInfFragment extends BaseMvpQmuiFragment<LoginPresenter> implem
 
             }
         });
-        btn_postLogin.setChangeAlphaWhenPress(true);
     }
 
     private boolean inputValid(){
@@ -145,16 +143,11 @@ public class LoginInfFragment extends BaseMvpQmuiFragment<LoginPresenter> implem
             ToastUtil.showToast(invalidEmail);
             return false;
         }
-        if(mAccountPw.length() <8){
+        if(mAccountPw.length() <6){
             String invalidPs = getContext().getResources().getString(R.string.hint_ps_length);
             ToastUtil.showToast(invalidPs);
             return false;
         }
-//        if(!RxRegTool.isPassword(mAccountPw)){
-//            ToastUtil.showToast("The password must contain 8 to 16\n" +
-//                    "Passwords 8 to 16 Numbers mixed with letters cannot have first letters as Numbers");
-//            return false;
-//        }
         return true;
     }
 
@@ -165,14 +158,15 @@ public class LoginInfFragment extends BaseMvpQmuiFragment<LoginPresenter> implem
                 if(inputValid() && verifyInputValid()){
                     mGrantType = "password";
                     login();
+                    AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_LOGIN_APPLY);
                 }
                 break;
             case R.id.tv_retrivePw:
                 Bundle bundle = new Bundle();
                 String targetE = et_loginEmail.editText.getText().toString().trim();
                 bundle.putString("email",targetE);
-                Intent goForgetP = HolderActivity.of(getContext(),ForgetPasswordFragment.class,bundle);
-                getContext().startActivity(goForgetP);
+                HolderActivity.startFragment(getContext(),ForgetPasswordFragment.class,bundle);
+                AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_LOGIN_FORGET_PASSWORD);
                 break;
             case R.id.ll_login_goPrivacy:
                 Bundle goP = new Bundle();
@@ -185,10 +179,10 @@ public class LoginInfFragment extends BaseMvpQmuiFragment<LoginPresenter> implem
                 goP.putString("type","1");
                 goP.putString("webUrl", skipUrl);
                 goP.putString("title",mGoPrivacyp);
-                Intent intent = HolderActivity.of(getContext(), WebExplorerFragment.class,goP);
-                getContext().startActivity(intent);
+                HolderActivity.startFragment(getContext(),WebExplorerFragment.class,goP);
                 break;
             case R.id.iv_thirdLogin_facebook:
+                AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_LOGIN_FACEBOOK);
                 if(!TextUtils.isEmpty(mFbToken)){
                     fbLogin(mFbToken);
                 }else{
@@ -269,8 +263,7 @@ public class LoginInfFragment extends BaseMvpQmuiFragment<LoginPresenter> implem
 
     @Override
     public void fetchFail(String failReason) {
-        String toast_loginFail =  getResources().getString(R.string.login_fail);
-        ToastUtil.showToast(toast_loginFail);
+        ToastUtil.showToast(failReason);
     }
 
     @Override
@@ -303,3 +296,4 @@ public class LoginInfFragment extends BaseMvpQmuiFragment<LoginPresenter> implem
         mCallbackManager.onActivityResult(requestCode,resultCode,data);
     }
 }
+

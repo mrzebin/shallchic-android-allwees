@@ -1,10 +1,10 @@
-package com.project.app.bean
+package com.project.app.bean;
 
 class MarketGiftInfoBean {
     var completed:Boolean = false
     var applied:Boolean = false
-    var coupon:CouponItem? = null
-
+    var coupon:CouponItem = CouponItem()
+    
     class CouponItem{
         var status:Int = 0
         var updatedAt:Long = 0

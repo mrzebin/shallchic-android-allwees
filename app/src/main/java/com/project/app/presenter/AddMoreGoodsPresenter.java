@@ -18,13 +18,27 @@ public class AddMoreGoodsPresenter extends BasePresenter<AddMoreGoodsContract.Vi
         model.fetchGoodsList(categoryNo, currentPage, pagetSize, new BaseModelResponeListener<AddMoreListBean>() {
             @Override
             public void onSuccess(AddMoreListBean data) {
+                if(mView == null){
+                    return;
+                }
+               mView.loadMatchViewStatus(0);
                mView.stopLoading();
                mView.fetchSuccess(data);
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
+                mView.loadMatchViewStatus(0);
                 mView.stopLoading();
             }
         });
+    }
+
+    @Override
+    public void onDestoryView() {
+        mView = null;
+        System.gc();
     }
 }

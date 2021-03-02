@@ -28,13 +28,13 @@ import com.qmuiteam.qmui.widget.dialog.QMUIBottomSheet;
 import com.project.app.R;
 import com.project.app.adapter.RefundPostPhotosAdapter;
 import com.project.app.base.BaseMvpQmuiFragment;
+import com.project.app.bean.AwsAccessTokenBean;
 import com.project.app.bean.OrderDetailBean;
-import com.project.app.bean.RefundAccessTokenBean;
 import com.project.app.contract.OrderRefundContract;
 import com.project.app.presenter.OrderRefundPresenter;
-import com.project.app.s3transferutility.Util;
 import com.project.app.utils.FileManager;
 import com.project.app.utils.FileUtil;
+import com.project.app.utils.FilterUpProfilePhotoUrl;
 import com.project.app.utils.PhotoUtils;
 import com.project.app.utils.ThreadLoopUtil;
 
@@ -46,7 +46,6 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -77,19 +76,19 @@ public class OrderRefundDetailFragment extends BaseMvpQmuiFragment<OrderRefundPr
     private RefundPostPhotosAdapter mAdapter;
     private Context mContext;
     private Uri mImageUri;
-    private static Util util;
     private FileManager fileManager;
     private PhotoUtils photoUtils;
     private String mCode = "2";
-    private final int compassSize = 200;
+    private final int compassSize = 100;
     private String mCamerFilePath;
     private ThreadLoopUtil mTreadLoopUtil;
     private File mTargetFile;
+    private int mMaxPhotos = 9;   //最多上传8张图片
 
     private static final int LUBAN_COMPASS_SUCCESS = 1;
     private static final int LUBAN_COMPASS_FAIL    = 2;
     private static final int AWS_UPLOAD_BEGING     = 3;
-    private static final List<String> upRefunds = new ArrayList<>();
+    private final List<String> upRefunds = new ArrayList<>();
     private String mCancel = "";
 
     private final List<String> mRefundDatas = new ArrayList<>();
@@ -136,7 +135,7 @@ public class OrderRefundDetailFragment extends BaseMvpQmuiFragment<OrderRefundPr
 
     private void beginUpload(){
         startLoading();
-        mTreadLoopUtil = new ThreadLoopUtil();
+        mTreadLoopUtil = new ThreadLoopUtil(Constant.S3Type.getUpType(2));
         mTreadLoopUtil.startUploadFile(mTargetFile, new ThreadLoopUtil.CallbackListener() {
             @Override
             public void s3UploadSuccess(String result) {
@@ -171,6 +170,7 @@ public class OrderRefundDetailFragment extends BaseMvpQmuiFragment<OrderRefundPr
         mContext = getContext();
         mPresenter = new OrderRefundPresenter();
         mPresenter.attachView(this);
+        fileManager = new FileManager(getContext());
         GridLayoutManager manager = new GridLayoutManager(getContext(),4);
         rlv_chooseImg.setLayoutManager(manager);
         mAdapter = new RefundPostPhotosAdapter(mRefundDatas);
@@ -178,6 +178,10 @@ public class OrderRefundDetailFragment extends BaseMvpQmuiFragment<OrderRefundPr
         mAdapter.setListener(new RefundPostPhotosAdapter.ChoiceCallbackListener() {
             @Override
             public void choicePhotoByFunction() {
+                if(mAdapter.getItemCount() >= mMaxPhotos){
+                    ToastUtil.showToast(getResources().getString(R.string.review_order_limit_photos_length));
+                    return;
+                }
                 showSimpleBottomSheetList(true, true, false,
                         getResources().getString(R.string.app_please_up_method), selectItemList.length,
                         false, false);
@@ -258,12 +262,8 @@ public class OrderRefundDetailFragment extends BaseMvpQmuiFragment<OrderRefundPr
 
     private void checkInputValid() {
         String note = et_reNote.getText().toString().trim();
-        if(TextUtils.isEmpty(note)){
-            String hint = getContext().getString(R.string.str_nin);
-            ToastUtil.showToast(hint);
-            return;
-        }
-        mPresenter.submitRefundReasonToService(mItemUuid,mOrderId,upRefunds,mCode,note,0);
+        String reason = tv_refundType.getText().toString().trim();
+        mPresenter.submitRefundReasonToService(mItemUuid,mOrderId,FilterUpProfilePhotoUrl.filterS3PhotoUrl(upRefunds),reason,note,0);
     }
 
     private void showSelectRefundReason(boolean gravityCenter,
@@ -283,13 +283,84 @@ public class OrderRefundDetailFragment extends BaseMvpQmuiFragment<OrderRefundPr
                 .setCancelText(mCancel)
                 .setOnSheetItemClickListener((dialog, itemView, position, tag) -> {
                     dialog.dismiss();
-                    mCode = position + 2 + "";
+                    if(position == mRefundType.length-1){
+                        mCode = "0";
+                    }else{
+                        mCode = position + 2 + "";
+                    }
                     tv_refundType.setText(mRefundType[position]);
                 });
         for(int i=0;i<itemCount;i++){
             builder.addItem(mRefundType[i]);
         }
         builder.build().show();
+    }
+
+    private void choicePhotoByUser(int position){
+        if(position == 0){
+            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
+                if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                    this.requestPermissions(mPermission_storage,1);
+                    return;
+                }
+                if(ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+                    this.requestPermissions(mPermission_storage,1);
+                    return;
+                }
+                Intent catureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if(catureIntent.resolveActivity(getActivity().getPackageManager()) != null){
+                    File photoFile;
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+                        mImageUri = photoUtils.buildUri(getActivity());
+                    }else{
+                        photoFile = photoUtils.createImageFile(mContext);
+                        if (photoFile != null) {
+                            mCamerFilePath = photoFile.getAbsolutePath();
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                //适配Android 7.0文件权限，通过FileProvider创建一个content类型的Uri
+                                mImageUri = FileProvider.getUriForFile(getActivity(), mContext.getPackageName() + ".FileProvider", photoFile);
+                            } else {
+                                mImageUri = Uri.fromFile(photoFile);
+                            }
+                        }
+                    }
+                    if(mImageUri != null){
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                            photoUtils.takePictureWithQ(this, mImageUri);
+                        } else {
+                            photoUtils.takePicture(this,mImageUri);
+                        }
+                    }
+                }
+            }
+        }else if(position == 1){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+                    this.requestPermissions(mPermission_storage,1);
+                    return;
+                }
+            }
+            photoUtils.selectPicture(this);
+        }
+    }
+
+    private int mRecodePosition = 0;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(allPermissionsGranted()){
+            choicePhotoByUser(mRecodePosition);
+        }
+    }
+
+    public boolean allPermissionsGranted(){
+        for(String permission:mPermission_storage){
+            if( ContextCompat.checkSelfPermission(getContext(),permission) != PackageManager.PERMISSION_GRANTED){
+                return false;
+            }
+        }
+        return true;
     }
 
     private void showSimpleBottomSheetList(boolean gravityCenter,
@@ -309,51 +380,8 @@ public class OrderRefundDetailFragment extends BaseMvpQmuiFragment<OrderRefundPr
                 .setCancelText(mCancel)
                 .setOnSheetItemClickListener((dialog, itemView, position, tag) -> {
                     dialog.dismiss();
-                    if(position == 0){
-                        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
-                            if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-                                ActivityCompat.requestPermissions(getActivity(),mPermission_storage,1);
-                                return;
-                            }
-                            if(ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-                                ActivityCompat.requestPermissions(getActivity(),mPermission_storage,1);
-                                return;
-                            }
-                            Intent catureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            if(catureIntent.resolveActivity(getActivity().getPackageManager()) != null){
-                                File photoFile;
-                                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
-                                    mImageUri = photoUtils.buildUri(getActivity());
-                                }else{
-                                    photoFile = photoUtils.createImageFile(mContext);
-                                    if (photoFile != null) {
-                                        mCamerFilePath = photoFile.getAbsolutePath();
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                            //适配Android 7.0文件权限，通过FileProvider创建一个content类型的Uri
-                                            mImageUri = FileProvider.getUriForFile(getActivity(), mContext.getPackageName() + ".FileProvider", photoFile);
-                                        } else {
-                                            mImageUri = Uri.fromFile(photoFile);
-                                        }
-                                    }
-                                }
-                                if(mImageUri != null){
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                                        photoUtils.takePictureWithQ(OrderRefundDetailFragment.this, mImageUri);
-                                    } else {
-                                        photoUtils.takePicture(OrderRefundDetailFragment.this,mImageUri);
-                                    }
-                                }
-                            }
-                        }
-                    }else if(position == 1){
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-                                ActivityCompat.requestPermissions(getActivity(),mPermission_storage,1);
-                                return;
-                            }
-                        }
-                        photoUtils.selectPicture(OrderRefundDetailFragment.this);
-                    }
+                    mRecodePosition = position;
+                    choicePhotoByUser(position);
                 });
         for(int i=0;i<itemCount;i++){
             builder.addItem(selectItemList[i]);
@@ -366,7 +394,7 @@ public class OrderRefundDetailFragment extends BaseMvpQmuiFragment<OrderRefundPr
         if(TextUtils.isEmpty(awsJson)){
             mPresenter.fetchUploadToken(mAccessType);
         }else{
-            RefundAccessTokenBean bean = JsonUtils.deserialize(awsJson,RefundAccessTokenBean.class);
+            AwsAccessTokenBean bean = JsonUtils.deserialize(awsJson, AwsAccessTokenBean.class);
             if(bean != null){
                 long previousTime = bean.getHistoryTime();
                 long currentTime  = System.currentTimeMillis();
@@ -402,8 +430,8 @@ public class OrderRefundDetailFragment extends BaseMvpQmuiFragment<OrderRefundPr
     public void postRefundSuccess(OrderDetailBean result) {
         String hint = getContext().getString(R.string.refund_success);
         ToastUtil.showToast(hint);
+        EventBus.getDefault().postSticky(new RefreshDataEvent(Constant.EVENT_REFRESH_ORDER_STATE));
         popBackStack();
-        EventBus.getDefault().postSticky(new RefreshDataEvent(Constant.EVENT_REFUND_SUCCESS));
     }
 
     @Override
@@ -412,7 +440,7 @@ public class OrderRefundDetailFragment extends BaseMvpQmuiFragment<OrderRefundPr
     }
 
     @Override
-    public void fetchUAccessTokenSuccess(RefundAccessTokenBean result) {
+    public void fetchUAccessTokenSuccess(AwsAccessTokenBean result) {
         if(result != null){
             result.setHistoryTime(System.currentTimeMillis());
             SPManager.sPutString(Constant.SP_AWS_ACCESS_TOKEN_RFD, JsonUtils.serialize(result));
@@ -439,11 +467,6 @@ public class OrderRefundDetailFragment extends BaseMvpQmuiFragment<OrderRefundPr
                     break;
                 case PhotoUtils.INTENT_SELECT:
                     photoUtils.onActivityResult(this,requestCode,resultCode,data);
-//                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
-//                        photoUtils.onActivityResult(getActivity(), requestCode, resultCode, data,mImageUri);     //使用uri路径回调
-//                    }else{
-//                        photoUtils.onActivityResult(getActivity(),requestCode,resultCode,data,mCamerFilePath);    //使用真实路径回调
-//                    }
                     break;
             }
         }

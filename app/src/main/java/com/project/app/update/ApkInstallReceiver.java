@@ -11,7 +11,6 @@ import android.webkit.MimeTypeMap;
 
 import com.hb.basemodel.config.Constant;
 import com.hb.basemodel.utils.SPManager;
-import com.project.app.R;
 
 import java.io.File;
 
@@ -36,13 +35,15 @@ public class ApkInstallReceiver extends BroadcastReceiver {
      * 安装apk
      */
     private void installApk(Context context,long downloadId,String apkPath) {
-        String applicationId = context.getResources().getString(R.string.application_id);
         long downId = SPManager.sGetLong(DownloadManager.EXTRA_DOWNLOAD_ID, -1L);
         if(downloadId == downId) {
             File apkFile = new File(apkPath);
             Uri uri = null;
             DownloadManager downManager= (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
             Uri downloadUri = downManager.getUriForDownloadedFile(downloadId);
+            if(downloadUri == null){
+                return;
+            }
             SPManager.sPutString("downloadApk",downloadUri.getPath());
             Intent install= new Intent(Intent.ACTION_VIEW);
             if (downloadUri != null) {
@@ -51,7 +52,7 @@ public class ApkInstallReceiver extends BroadcastReceiver {
                 }else{
                     install.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     uri = FileProvider.getUriForFile(context,
-                            applicationId + ".FileProvider",
+                            Constant.APPLICATION_ID + ".FileProvider",
                             apkFile);
                     install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                     install.setDataAndType(uri, "application/vnd.android.package-archive");

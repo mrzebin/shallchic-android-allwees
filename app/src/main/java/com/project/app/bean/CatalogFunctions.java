@@ -1,7 +1,7 @@
 package com.project.app.bean;
 
 public class CatalogFunctions {
-    private String functionName;
+    private String functionName = "";
 
     public CatalogFunctions(String functionName) {
         this.functionName = functionName;

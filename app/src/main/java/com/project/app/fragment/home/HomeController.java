@@ -1,7 +1,6 @@
 package com.project.app.fragment.home;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,19 +20,19 @@ import com.project.app.adapter.BaseFragmentAdapter;
 import com.project.app.base.BaseController;
 import com.project.app.bean.CategoryBean;
 import com.project.app.bean.CategoryItem;
+import com.project.app.config.AppsFlyConfig;
 import com.project.app.fragment.home.classify.HomeClassifyFragment;
 import com.project.app.fragment.home.classify.HomePClassifyFragment;
 import com.project.app.fragment.search.SearchGoodsFragment;
 import com.project.app.ui.NoScrollViewPager;
+import com.project.app.utils.AppsFlyEventUtils;
 import com.project.app.utils.HomeTitlesUtils;
 import com.project.app.utils.LocaleUtil;
 import com.project.app.utils.StatusBarUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
@@ -53,10 +52,10 @@ public class HomeController extends BaseController {
     private int mCurrentItemCount = 0;
     private final FragmentManager mFragmentManager;
     private final List<QMUIFragment> mFragments = new ArrayList<>();
-    private final Map<ContentPage, View> mPageMap = new HashMap<>();
     private List<CategoryItem> mTitleCategory;
     private HomeTitlesUtils mHomeTitleUtils;
     private BaseFragmentAdapter mAdapter;
+    private HomePClassifyFragment mPopularFragment;
 
     public HomeController(Context context, FragmentManager childFragmentManager) {
         super(context);
@@ -73,7 +72,7 @@ public class HomeController extends BaseController {
         builder.setTypeface(null, Typeface.DEFAULT);
         builder.setNormalColor(getContext().getResources().getColor(R.color.white))
                 .setSelectColor(getContext().getResources().getColor(R.color.white))
-                .setTextSize(QMUIDisplayHelper.dp2px(mContext,13),QMUIDisplayHelper.dp2px(mContext,14))
+                .setTextSize(QMUIDisplayHelper.dp2px(mContext,13), QMUIDisplayHelper.dp2px(mContext,14))
                 .setDynamicChangeIconColor(false)
                 .skinChangeWithTintColor(false);
 
@@ -82,6 +81,7 @@ public class HomeController extends BaseController {
             tab.setText(item.getName());
             mTabSegment.addTab(tab);
         }
+
         int space = QMUIDisplayHelper.dp2px(getContext(),16);
         mTabSegment.setIndicator(new QMUITabIndicator(QMUIDisplayHelper.dp2px(getContext(),2),false,true));
         mTabSegment.setIndicator(new QMUITabIndicator(ContextCompat.getDrawable(getContext(),R.drawable.bg_home_indicator),false,false));
@@ -111,7 +111,6 @@ public class HomeController extends BaseController {
 
             }
         });
-
         vp_home.setCurrentItem(mCurrentItemCount);
         vp_home.setOffscreenPageLimit(2);
         vp_home.setNoScroll(false);     //让其可以滚动
@@ -128,20 +127,37 @@ public class HomeController extends BaseController {
 
     private void initView() {
         mContext = getContext();
-        HostMasterListener listener = fragment -> mHomeControlListener.startFragment(fragment);
+        HostMasterListener listener = new HostMasterListener() {
+            @Override
+            public void startFragment(QMUIFragment fragment) {
+
+            }
+            @Override
+            public void moveUpHideTabSegment() {
+                mTabSegment.setVisibility(GONE);
+            }
+
+            @Override
+            public void moveDownShowTabSegment() {
+
+            }
+        };
+
         mHomeTitleUtils = HomeTitlesUtils.getInstance();
         CategoryBean bean = mHomeTitleUtils.getAppCategorys();
-        mTitleCategory = bean.getCategories();
-
+        mTitleCategory    = bean.getCategories();
         if(isRever){
             Collections.reverse(mTitleCategory);
             mCurrentItemCount = mTitleCategory.size();
+        }else{
+            mCurrentItemCount = 0;
         }
 
         if(DataUtil.idNotNull(mTitleCategory)){
             for(CategoryItem item:mTitleCategory){
                 if(item.getNo().equals("P01")){
-                    mFragments.add(HomePClassifyFragment.newInstance(item.getNo(),listener));
+                    mPopularFragment = HomePClassifyFragment.newInstance(item.getNo(),listener);
+                    mFragments.add(mPopularFragment);
                 }else{
                     mFragments.add(HomeClassifyFragment.newInstance(item.getNo(),listener));
                 }
@@ -151,17 +167,19 @@ public class HomeController extends BaseController {
         vp_home.setAdapter(mAdapter);
     }
 
-    @OnClick({R.id.iv_home_search})
+    @OnClick({R.id.ll_homeSearch})
     public void onClickViewed(View view){
         switch (view.getId()){
-            case R.id.iv_home_search:
-                Intent searchIntent = HolderActivity.of(mContext, SearchGoodsFragment.class);
-                mContext.startActivity(searchIntent);
+            case R.id.ll_homeSearch:
+                HolderActivity.startFragment(mContext,SearchGoodsFragment.class);
+                AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_SEARCH);
                 break;
         }
     }
 
-
+    public void hideTabSegement() {
+        mTabSegment.setVisibility(GONE);
+    }
 
     public enum ContentPage{
         Item0(0),
@@ -216,11 +234,15 @@ public class HomeController extends BaseController {
     }
 
     public void onRefreshView() {
-
+        if(mPopularFragment != null){
+            mPopularFragment.lazyFetchData();
+        }
     }
 
     public interface HostMasterListener{
         void startFragment(QMUIFragment fragment);
+        void moveUpHideTabSegment();
+        void moveDownShowTabSegment();
     }
 
 }

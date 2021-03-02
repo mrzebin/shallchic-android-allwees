@@ -13,10 +13,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.ScaleAnimation;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.hb.basemodel.utils.ToastUtil;
+import com.hb.basemodel.view.DelEditView;
 import com.project.app.R;
 
 /**
@@ -31,14 +32,15 @@ public class PmPayBindPhoneDialog {
     private TextView tv_pm_targetPhone;
     private TextView tv_sendVc;
     private TextView tv_confirmP;
+    private TextView tv_notReceiveVerifyCode;
     private ImageView iv_close_dialogVc;
-    private EditText et_vrifyCode;
+    private DelEditView et_verifyCode;
     private CountDownTimer timer;
     private final long expire = 60 *1000;   //倒计时60s
 
     public PmPayBindPhoneDialog(Context context, boolean isCancelable, boolean iscancelOutside){
         this.mContext = context;
-        mDialog = new Dialog(context, R.style.transparentFrameWindowStyle);
+        mDialog = new Dialog(context, R.style.ScaleDialog);
         mDialog.setCancelable(isCancelable);
         mDialog.setCanceledOnTouchOutside(iscancelOutside);
         build();
@@ -53,6 +55,7 @@ public class PmPayBindPhoneDialog {
         WindowManager.LayoutParams wlp = window.getAttributes();
         window.setGravity(Gravity.CENTER);
         wlp.width = (int) (display.getWidth()*0.8);
+        wlp.height = display.getHeight();
         window.setAttributes(wlp);
         initChildView();
         initAnim();
@@ -69,10 +72,11 @@ public class PmPayBindPhoneDialog {
         tv_pm_targetPhone = mView.findViewById(R.id.tv_pm_targetPhone);
         tv_sendVc = mView.findViewById(R.id.tv_sendVc);
         tv_confirmP = mView.findViewById(R.id.tv_confirmP);
-        et_vrifyCode = mView.findViewById(R.id.et_vrifyCode);
+        et_verifyCode = mView.findViewById(R.id.et_verifyCode);
         iv_close_dialogVc = mView.findViewById(R.id.iv_close_dialogVc);
+        tv_notReceiveVerifyCode = mView.findViewById(R.id.tv_notReceiveVerifyCode);
 
-        et_vrifyCode.addTextChangedListener(new TextWatcher() {
+        et_verifyCode.editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -102,11 +106,13 @@ public class PmPayBindPhoneDialog {
         });
 
         tv_confirmP.setOnClickListener(view -> {
-            String code = et_vrifyCode.getText().toString().trim();
+            String code = et_verifyCode.editText.getText().toString().trim();
             if(!TextUtils.isEmpty(code)){
                 if(listener != null){
                     listener.confirmPay(code);
                 }
+            }else{
+                ToastUtil.showToast(mContext.getResources().getString(R.string.please_enter_verify_code));
             }
         });
 
@@ -116,27 +122,39 @@ public class PmPayBindPhoneDialog {
             }
         });
 
+        tv_notReceiveVerifyCode.setOnClickListener(view -> {
+
+        });
+    }
+
+    public void startTimer(){
         timer = new CountDownTimer(expire, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
+                if(millisUntilFinished/1000 <=45){
+                    tv_notReceiveVerifyCode.setVisibility(View.VISIBLE);
+                }
                 tv_sendVc.setText(millisUntilFinished/1000 + "s");
             }
             @Override
             public void onFinish() {
-                tv_sendVc.setText("Resend");
+                tv_sendVc.setText(mContext.getResources().getString(R.string.str_resend));
                 tv_sendVc.setClickable(true);
             }
         };
-    }
-
-
-    public void startTimer(){
         timer.start();
     }
 
     public void show(){
         if(mDialog != null){
+            tv_sendVc.setClickable(true);
+            tv_sendVc.setText(mContext.getResources().getString(R.string.str_resend));
+            tv_notReceiveVerifyCode.setVisibility(View.INVISIBLE);
             mDialog.show();
+            if(timer != null){
+                timer.cancel();
+                timer = null;
+            }
         }
     }
 
@@ -152,8 +170,10 @@ public class PmPayBindPhoneDialog {
     }
 
     public void clear() {
-        timer.cancel();
-        timer = null;
+        if(timer != null){
+            timer.cancel();
+            timer = null;
+        }
     }
 
     public Reject_callBack listener;

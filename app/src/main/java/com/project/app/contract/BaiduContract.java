@@ -13,7 +13,7 @@ public interface BaiduContract {
         }
     }
 
-    interface View extends BaseView{
+    interface View extends BaseView {
         void loginSuccess(String result);
         void loginFail(String failReason);
     }

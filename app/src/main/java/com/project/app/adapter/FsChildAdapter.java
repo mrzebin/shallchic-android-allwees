@@ -7,15 +7,16 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.hb.basemodel.config.Constant;
 import com.hb.basemodel.image.ImageLoader;
 import com.hb.basemodel.uicomponent.roundview.RoundLinearLayout;
-import com.qmuiteam.qmui.util.QMUIDisplayHelper;
-import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 import com.project.app.R;
 import com.project.app.bean.HomeFLashSaleBean;
+import com.project.app.config.AppsFlyConfig;
+import com.project.app.utils.AppsFlyEventUtils;
 import com.project.app.utils.LocaleUtil;
 import com.project.app.utils.MathUtil;
+import com.qmuiteam.qmui.util.QMUIDisplayHelper;
+import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -38,7 +39,7 @@ public class FsChildAdapter extends BaseQuickAdapter<HomeFLashSaleBean.FlashSale
         tv_fsOriginP.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
 
         if(!TextUtils.isEmpty(data.getMainPhoto())){
-            ImageLoader.getInstance().displayImage(qiv_cover,data.getMainPhoto() + Constant.mGlobalThumbnailStyle,R.mipmap.allwees_ic_default_goods);
+            ImageLoader.getInstance().displayImage(qiv_cover,data.getMainPhoto(),R.mipmap.allwees_ic_default_goods);
         }
 
         if(!TextUtils.isEmpty(data.getName())){
@@ -78,6 +79,7 @@ public class FsChildAdapter extends BaseQuickAdapter<HomeFLashSaleBean.FlashSale
         helper.getView(R.id.tv_fsAtc).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_FLASH_SALE_GOODSITEM);
                 if(listener != null){
                     listener.fastBuyTarget(data);
                 }

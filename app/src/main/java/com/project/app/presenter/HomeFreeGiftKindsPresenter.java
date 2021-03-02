@@ -18,11 +18,17 @@ public class HomeFreeGiftKindsPresenter extends BasePresenter<HomeFreeGiftKindsC
         model.fetchFreeGift(page, pageSize, url, new BaseModelResponeListener<FreeGiftBean>() {
             @Override
             public void onSuccess(FreeGiftBean data) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchFreeGiftSuccess(data);
             }
 
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.fetchFail(msg);
             }
         });

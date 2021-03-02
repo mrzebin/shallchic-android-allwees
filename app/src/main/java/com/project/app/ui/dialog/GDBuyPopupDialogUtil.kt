@@ -7,6 +7,7 @@ import android.widget.ImageView
 import com.hb.basemodel.config.Constant
 import com.hb.basemodel.image.ImageLoader
 import com.project.app.R
+import com.project.app.activity.HolderActivity
 import java.util.*
 
 /**
@@ -59,7 +60,7 @@ class GDBuyPopupDialogUtil {
     }
 
     fun lazzyImageUrl(url:String){
-        ImageLoader.getInstance().displayImage(iv_thumb, url + Constant.mGlobalThumbnailStyle, R.mipmap.allwees_ic_default_goods)
+        ImageLoader.getInstance().displayImage(iv_thumb, url, R.mipmap.allwees_ic_default_goods)
     }
 
     fun dismiss(){

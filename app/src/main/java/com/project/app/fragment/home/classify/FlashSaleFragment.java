@@ -10,11 +10,11 @@ import android.widget.TextView;
 import com.hb.basemodel.config.Constant;
 import com.hb.basemodel.event.RefreshDataEvent;
 import com.hb.basemodel.utils.SPManager;
-import com.project.app.utils.StringUtils;
 import com.qmuiteam.qmui.arch.QMUIFragment;
 import com.project.app.R;
 import com.project.app.adapter.BaseState2Adapter;
 import com.project.app.base.BaseMvpQmuiFragment;
+import com.project.app.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

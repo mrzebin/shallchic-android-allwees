@@ -17,10 +17,11 @@ public class ScModel implements ScContract.Model {
     }
 
     @Override
-    public void fetchScHistory(BaseModelResponeListener listener) {
+    public void fetchScHistory(int current, int size, BaseModelResponeListener listener) {
         String requestType = "0";
         String url = BaseUrlConfig.getRootHost() + UrlConfig.EARN_SHCALL_CASH_HISTORY;
         HashMap<String,String> params = new HashMap<>();
+
 
         OkHttpUtils.get(url,requestType,params,new OkHttpUtils.ResultCallback<BaseObjectBean<ScCashBean>>() {
             @Override
@@ -33,7 +34,7 @@ public class ScModel implements ScContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+//                listener.onFail(e.getMessage());
             }
         });
     }
@@ -43,6 +44,7 @@ public class ScModel implements ScContract.Model {
         String requestType = "0";
         String url = BaseUrlConfig.getRootHost() + UrlConfig.FETCH_ME_CASH_URL;
         HashMap<String,String> params = new HashMap<>();
+
 
         OkHttpUtils.get(url,requestType,params,new OkHttpUtils.ResultCallback<BaseObjectBean<MeBindCPBean>>() {
             @Override
@@ -55,7 +57,7 @@ public class ScModel implements ScContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+//                listener.onFail(e.getMessage());
             }
         });
     }

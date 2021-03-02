@@ -1,6 +1,5 @@
 package com.project.app.adapter;
 
-import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -9,7 +8,6 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.hb.basemodel.config.Constant;
 import com.hb.basemodel.image.ImageLoader;
 import com.project.app.R;
 import com.project.app.activity.HolderActivity;
@@ -31,7 +29,7 @@ public class GoodsRelativeAdapter extends BaseQuickAdapter<GoodsRelationBean, Ba
     private List<GoodsRelationBean> mDatas;
 
     public GoodsRelativeAdapter(@Nullable List<GoodsRelationBean> data) {
-        super(R.layout.item_home_classify, data);
+        super(R.layout.item_goods_detail_relative, data);
         this.mDatas = data;
         pSymbol = LocaleUtil.getInstance().getSymbole();
     }
@@ -39,10 +37,10 @@ public class GoodsRelativeAdapter extends BaseQuickAdapter<GoodsRelationBean, Ba
     @Override
     protected void convert(@NotNull BaseViewHolder helper, GoodsRelationBean goodInfo) {
         String free = getContext().getString(R.string.str_free);
-
         if(!TextUtils.isEmpty(goodInfo.getMainPhoto())){
-            ImageLoader.getInstance().displayImage(helper.getView(R.id.tv_superClassify),goodInfo.getMainPhoto() + Constant.mGlobalThumbnailStyle,R.mipmap.allwees_ic_default_goods);
+            ImageLoader.getInstance().displayImage(helper.getView(R.id.iv_gif_goods),goodInfo.getMainPhoto(),R.mipmap.allwees_ic_default_goods);
         }
+
         if(!TextUtils.isEmpty(goodInfo.getPriceRetail()+"")){
             if(goodInfo.getPriceRetail() == 0 ){
                 helper.setText(R.id.tv_discountPrice,free);
@@ -70,10 +68,8 @@ public class GoodsRelativeAdapter extends BaseQuickAdapter<GoodsRelationBean, Ba
                 Bundle bundle = new Bundle();
                 bundle.putString("uuid", goodInfo.getUuid());
                 bundle.putString("type", "1");
-                Intent intent = HolderActivity.of(getContext(), GoodsDetailFragment.class,bundle);
-                getContext().startActivity(intent);
+                HolderActivity.startFragment(getContext(),GoodsDetailFragment.class,bundle);
             }
         });
     }
-
 }

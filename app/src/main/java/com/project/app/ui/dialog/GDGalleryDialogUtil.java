@@ -16,7 +16,6 @@ import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.hb.basemodel.config.Constant;
 import com.hb.basemodel.image.ImageConfig;
 import com.hb.basemodel.image.ImageLoader;
 import com.hb.basemodel.image.LoadListener;
@@ -180,7 +179,7 @@ public class GDGalleryDialogUtil {
         @NonNull
         @Override
         public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(mContext).inflate(R.layout.item_gallery_loading,parent,false);
+            View view = LayoutInflater.from(mContext).inflate(R.layout.item_gallery_placeholder,parent,false);
             return new BaseViewHolder(view);
         }
 
@@ -205,7 +204,7 @@ public class GDGalleryDialogUtil {
             });
 
             if(!TextUtils.isEmpty(loadUrl)){
-                ImageLoader.getInstance().displayImage(pv_zoom,loadUrl + Constant.mGlobalThumbnailStyle,new ImageConfig(builder));   //要防止内存溢出
+                ImageLoader.getInstance().displayImage(pv_zoom,loadUrl,new ImageConfig(builder));   //要防止内存溢出
             }else{
                 pv_zoom.setImageResource(R.mipmap.allwees_ic_default_goods);
             }

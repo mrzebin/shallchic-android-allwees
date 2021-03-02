@@ -1,25 +1,33 @@
 package com.project.app.fragment.pay;
 
-import android.content.Intent;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.appsflyer.AFInAppEventParameterName;
 import com.hb.basemodel.config.Constant;
-import com.hb.basemodel.utils.LoggerUtil;
+import com.hb.basemodel.utils.JsonUtils;
 import com.hb.basemodel.utils.SPManager;
 import com.hb.basemodel.utils.ToastUtil;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
+import com.qmuiteam.qmui.widget.QMUIEmptyView;
+import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
+import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.project.app.R;
 import com.project.app.activity.HolderActivity;
+import com.project.app.adapter.PaymentCastDetailAdapter;
 import com.project.app.base.BaseMvpQmuiFragment;
+import com.project.app.bean.CartItemReqBean;
 import com.project.app.bean.ChionWrapperBean;
 import com.project.app.bean.PayOrderBean;
+import com.project.app.bean.PaymentCastBean;
 import com.project.app.bean.PaymentCheckBean;
 import com.project.app.config.AppsFlyConfig;
 import com.project.app.contract.PaymentContract;
@@ -36,6 +44,8 @@ import java.util.List;
 import java.util.Map;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -47,52 +57,70 @@ public class PaymentFragment extends BaseMvpQmuiFragment<PaymentPresenter> imple
     TextView tv_topTitle;
     @BindView(R.id.iv_back)
     ImageView iv_back;
-    @BindView(R.id.tv_pm_confirmPay)
-    TextView tv_pm_confirmPay;
-    @BindView(R.id.cl_useDebitC)
-    ConstraintLayout cl_useDebitC;
-    @BindView(R.id.cl_usePaypal)
-    ConstraintLayout cl_usePaypal;
-    @BindView(R.id.cl_useCashDelivery)
-    ConstraintLayout cl_useCashDelivery;
+    @BindView(R.id.srl_payParent)
+    SmartRefreshLayout srl_payParent;
+    @BindView(R.id.emptyView)
+    QMUIEmptyView emptyView;
+    @BindView(R.id.btn_pm_confirmPay)
+    QMUIRoundButton btn_pm_confirmPay;
+    @BindView(R.id.cl_payByDebitCard)
+    ConstraintLayout cl_payByDebitCard;
+    @BindView(R.id.cl_payByPaypal)
+    ConstraintLayout cl_payByPaypal;
+    @BindView(R.id.cl_payByCashDelivery)
+    ConstraintLayout cl_payByCashDelivery;
     @BindView(R.id.iv_applyCash)
     ImageView iv_applyCash;
     @BindView(R.id.iv_pm_usePaypal)
-    ImageView iv_pm_usePaypal;
+    ImageView iv_pm_usePaypal; 
     @BindView(R.id.iv_pm_useDelivery)
     ImageView iv_pm_useDelivery;
-    @BindView(R.id.tv_payTotalP)
-    TextView tv_payTotalP;
-    @BindView(R.id.tv_payProductP)
-    TextView tv_payProductP;
-    @BindView(R.id.tv_payShippingP)
-    TextView tv_payShippingP;
-    @BindView(R.id.tv_payDiscountP)
-    TextView tv_payDiscountP;
-    @BindView(R.id.rl_discount)
-    RelativeLayout rl_discount;
+    @BindView(R.id.tv_payTotalPrice)
+    TextView tv_payTotalPrice;
     @BindView(R.id.tv_pm_useDeliveryDes)
     TextView tv_pm_useDeliveryDes;
-    @BindView(R.id.tv_sunit)
-    TextView tv_sunit;
+    @BindView(R.id.iv_arrowExtension)
+    ImageView iv_arrowExtension;
+    @BindView(R.id.ll_arrow)
+    LinearLayout ll_arrow;
+    @BindView(R.id.tv_castBackHint)
+    TextView tv_castBackHint;
+    @BindView(R.id.ll_cashBackWrapper)
+    LinearLayout ll_cashBackWrapper;
+    @BindView(R.id.v_paypal)
+    View v_paypal;
+    @BindView(R.id.v_cash)
+    View v_cash;
+    @BindView(R.id.rlv_castPayPrice)   //计算的价格
+    RecyclerView rlv_castPayPrice;
 
     private PmPayBindPhoneDialog mPayBindDialog;
     private String mOrderId;
-    private Double mCodDeductP;
-    private Double mAmtP;
-    private Double mProductP;
-    private Double mShippingP;
-    private Double mCouponP;
-    private Double mOriginSp;
-    private Double mDeductionPrice;
     private String mRegion;
     private String mPhoneNum;
-    private String p_unit;
+    private boolean isInit = false;    //判断是不是初始化
     private boolean isAbbr = false;   //判断是不是中东国家
+    private boolean isShippingCart = true; //判断是不是购物车
     private String mHintCod = "";
     private int mPayType   = 0;      //支付类型:0信用卡支付 1paypal支付 2cod支付
-
+    private Animation mArrowExtension;
+    private String mCodShippingLinkPrefix;
+    private String mCodShippingLinkSuffix;
+    private PayOrderBean mPayOrderBean;    //进来时候传的数据
+    private CartItemReqBean mRequestOrderFrom;
     final List<ImageView> mivChoices = new ArrayList<>();
+    private List<PaymentCastBean> mPaymentItems = new ArrayList<>();
+    private final String PAYMENT_TYPE_PAYPAL = "PAYPAL";
+    private final String PAYMENT_TYPE_PAYBY = "PAYBY";
+    private final String PAYMENT_TYPE_OCEANPAY = "OCEANPAY";
+    private final String PAYMENT_TYPE_VISA = "VISA";
+    private final String PAYMENT_TYPE_MASTERCARD = "MASTERCARD";
+    private final String PAYMENT_TYPE_AMEX = "AMEX";
+    private final String PAYMENT_TYPE_JCB = "JCB";
+    private final String PAYMENT_TYPE_DISCOVER = "DISCOVER";
+    private final String PAYMENT_TYPE_COUPON = "COUPON";
+    private final String PAYMENT_TYPE_COD = "COD";
+    private PaymentCastDetailAdapter mCastAdapter;
 
     @Override
     public int getLayoutId() {
@@ -108,40 +136,97 @@ public class PaymentFragment extends BaseMvpQmuiFragment<PaymentPresenter> imple
     private void initBundle() {
         Bundle bundle = getArguments();
         if(bundle != null){
-            mOrderId          = bundle.getString("uuid");
-            mPhoneNum         = bundle.getString("phoneNum");
-            mCodDeductP       = bundle.getDouble("codDeductP");
-            mAmtP             = bundle.getDouble("amtP");
-            mProductP         = bundle.getDouble("productP");
-            mShippingP        = bundle.getDouble("shippingP");
-            mCouponP          = bundle.getDouble("couponP");
-            mOriginSp         = bundle.getDouble("originShipping");
-            mRegion           = bundle.getString("region");
-            mDeductionPrice   = bundle.getDouble("deductionPrice");
-            LoggerUtil.i("mDeductionPrice:" + mDeductionPrice);
+            mPhoneNum             = bundle.getString("phoneNum");
+            mRegion               = bundle.getString("region");
+            String holoPayOrder   = bundle.getString("orderPayResult");
+            String requestForm    = bundle.getString("orderForm");
+            mPayOrderBean         = JsonUtils.deserialize(holoPayOrder,PayOrderBean.class);
+            mRequestOrderFrom     = JsonUtils.deserialize(requestForm,CartItemReqBean.class);
         }
     }
 
-    @OnClick({R.id.iv_back,R.id.tv_pm_confirmPay,R.id.cl_useDebitC,R.id.cl_usePaypal,R.id.cl_useCashDelivery})
+    private void entiryGlobalValue(PayOrderBean bean){
+        if(bean == null){
+            return;
+        }
+        mOrderId              = bean.getUuid();
+        List<PaymentCastBean> tempTolls = new ArrayList<>();
+        //total
+        tv_payTotalPrice.setText(MathUtil.Companion.formatPrice(bean.getAmt()));
+        //item total
+        if(isShippingCart){
+            tempTolls.add(new PaymentCastBean(getResources().getString(R.string.pm_prefix_tag_product_total),MathUtil.Companion.formatPrice(bean.getOriginalAmtProduct()),0));
+        }else{
+            tempTolls.add(new PaymentCastBean(getResources().getString(R.string.pm_prefix_tag_product_total),MathUtil.Companion.formatPrice(bean.getAmtProductAfterAdd()),0));
+        }
+
+        //shipping
+        double shippingPrice = bean.getAmtShipping();
+        if(shippingPrice == 0){ //这个是免运费
+            String freeShippingPrefix = getResources().getString(R.string.str_upper_free);
+            if(isShippingCart){
+                tempTolls.add(new PaymentCastBean(getResources().getString(R.string.pm_prefix_tag_shipping),MathUtil.Companion.formatPrice(bean.getOriginalAmtShipping()),1,1,freeShippingPrefix));
+            }else{
+                tempTolls.add(new PaymentCastBean(getResources().getString(R.string.pm_prefix_tag_shipping),MathUtil.Companion.formatPrice(bean.getAmtShippingAfterAdd()),1,1,freeShippingPrefix));
+            }
+        }else{
+            tempTolls.add(new PaymentCastBean(getResources().getString(R.string.pm_prefix_tag_shipping),MathUtil.Companion.formatPrice(bean.getAmtShipping()),0));
+        }
+
+        //couponPrice
+        if(bean.getAmtProductDiscount() > 0){
+            String model_couponPrice = "-" + MathUtil.Companion.formatPrice(bean.getAmtProductDiscount());
+            tempTolls.add(new PaymentCastBean(getResources().getString(R.string.pm_prefix_tag_Discount),model_couponPrice,1));
+        }
+
+        if(!TextUtils.isEmpty(bean.getPromoCode())){
+            String promoCode = bean.getPromoCode();
+            tempTolls.add(new PaymentCastBean(getResources().getString(R.string.pm_prefix_tag_promo_code),promoCode,1));
+        }
+
+        //dutyPrice
+        if(bean.getDuty() > 0){
+            tempTolls.add(new PaymentCastBean(getResources().getString(R.string.pm_prefix_tag_duty),MathUtil.Companion.formatPrice(bean.getDuty()),2));
+        }
+
+        //commissionPrice
+        if(bean.getCommission() > 0){
+            tempTolls.add(new PaymentCastBean(getResources().getString(R.string.pm_prefix_tag_commission),MathUtil.Companion.formatPrice(bean.getCommission()),2));
+        }
+
+        //backcashPrice
+        if(bean.getCashBackAmt() > 0){
+            tv_castBackHint.setText(MathUtil.Companion.formatPrice(bean.getCashBackAmt()) + " " + getResources().getString(R.string.pm_cast_back_reward_amt_prefix));
+        }
+        mCastAdapter.setNewInstance(tempTolls);
+    }
+
+    @OnClick({R.id.iv_back,R.id.btn_pm_confirmPay,R.id.cl_payByDebitCard,R.id.cl_payByPaypal,R.id.cl_payByCashDelivery,R.id.iv_arrowExtension})
     public void onClickViewed(View view){
         switch (view.getId()){
             case R.id.iv_back:
                 popBackStack();
                 break;
-            case R.id.tv_pm_confirmPay:
-                acrossCheck();
+            case R.id.btn_pm_confirmPay:
+                mPresenter.createPayOrder(mRequestOrderFrom);
                 break;
-            case R.id.cl_useDebitC:
+            case R.id.cl_payByDebitCard:
                 mPayType = 0;
                 resetIvState();
+                lazyFetchData();
                 break;
-            case R.id.cl_usePaypal:
+            case R.id.cl_payByPaypal:
                 mPayType = 1;
                 resetIvState();
+                lazyFetchData();
                 break;
-            case R.id.cl_useCashDelivery:
+            case R.id.cl_payByCashDelivery:
                 mPayType = 2;
                 resetIvState();
+                lazyFetchData();
+                break;
+            case R.id.iv_arrowExtension:
+
                 break;
         }
     }
@@ -155,28 +240,39 @@ public class PaymentFragment extends BaseMvpQmuiFragment<PaymentPresenter> imple
             mPresenter.checkCod(mOrderId);
         }
         Map<String,Object> buyEventMap = new HashMap<>();
-        buyEventMap.put(AppsFlyConfig.AF_EVENT_PURCHASE, SPManager.sGetString(Constant.SP_DEVICE_MODEL));
+        buyEventMap.put(AFInAppEventParameterName.CUSTOMER_USER_ID, SPManager.sGetString(Constant.SP_DEVICE_ID_FLAG));
         AppsFlyEventUtils.sendAppInnerEvent(buyEventMap, AppsFlyConfig.AF_EVENT_PURCHASE);
     }
 
+    //注意每次调用都要刷新接口
     private void resetIvState(){
         for(int i=0;i<mivChoices.size();i++){
-            mivChoices.get(i).setImageResource(R.mipmap.ic_select_unpayment);
+            mivChoices.get(i).setImageResource(R.mipmap.allwees_circle_yellow_default);
         }
-        mivChoices.get(mPayType).setImageResource(R.mipmap.allwees_ic_landain);
+        mivChoices.get(mPayType).setImageResource(R.mipmap.allwees_circle_yellow_select);
     }
 
     private void initWidget() {
         QMUIStatusBarHelper.setStatusBarLightMode(getActivity());
+        btn_pm_confirmPay.setChangeAlphaWhenPress(true);
         mPresenter = new PaymentPresenter();
         mPresenter.attachView(this);
+        isAbbr = LocaleMirrorUtil.isAbbr();
         mivChoices.add(iv_applyCash);
         mivChoices.add(iv_pm_usePaypal);
         mivChoices.add(iv_pm_useDelivery);
-        String prefixShip = getContext().getResources().getString(R.string.pm_cod_prefix);
-        String suffixShip = getContext().getResources().getString(R.string.pm_cod_suffix);
-        String hint_sFree = getContext().getResources().getString(R.string.str_free);
-        mPayBindDialog    = new PmPayBindPhoneDialog(getContext(),true,true);
+
+        rlv_castPayPrice.setLayoutManager(new LinearLayoutManager(getContext()));
+        mCastAdapter = new PaymentCastDetailAdapter(mPaymentItems);
+        rlv_castPayPrice.setAdapter(mCastAdapter);
+        entiryGlobalValue(mPayOrderBean);
+
+        mArrowExtension = AnimationUtils.loadAnimation(getContext(),R.anim.anim_arrow_hide_or_show_extension_paystatus);    //箭头显示或隐藏的动画
+        mArrowExtension.setInterpolator(new LinearInterpolator());
+
+        mCodShippingLinkPrefix = getContext().getResources().getString(R.string.pm_cod_prefix);
+        mCodShippingLinkSuffix = getContext().getResources().getString(R.string.pm_cod_suffix);
+        mPayBindDialog    = new PmPayBindPhoneDialog(getContext(),false,false);
 
         mPayBindDialog.setListener(new PmPayBindPhoneDialog.Reject_callBack() {
             @Override
@@ -190,56 +286,29 @@ public class PaymentFragment extends BaseMvpQmuiFragment<PaymentPresenter> imple
             }
         });
 
-        p_unit = LocaleMirrorUtil.getCurrentSymbol();
-        isAbbr = LocaleMirrorUtil.isAbbr();
-
         if(isAbbr){
             mPayType = 2;     //默认cod
             resetIvState();   //默认选中货到付款
-            cl_usePaypal.setVisibility(View.GONE);
+            cl_payByPaypal.setVisibility(View.GONE);
+            v_paypal.setVisibility(View.GONE);
         }else{
-            mPayType = 1;    //默认paypal
+            mPayType = 0;    //默认信用卡
             resetIvState();
-            cl_useCashDelivery.setVisibility(View.GONE);
+            cl_payByCashDelivery.setVisibility(View.GONE);
+            v_cash.setVisibility(View.GONE);
         }
-
-        if(mShippingP == 0){
-            if(mOriginSp >0){
-                tv_payShippingP.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-                tv_payShippingP.setText(MathUtil.Companion.formatPrice(mOriginSp));
-                tv_sunit.setText(hint_sFree);
-            }
-        }else{
-            tv_payShippingP.getPaint().setFlags(Paint.ANTI_ALIAS_FLAG);
-            tv_payShippingP.setText( MathUtil.Companion.formatPrice(mShippingP));
-        }
-
-        if(mCodDeductP == 0){
-            tv_pm_useDeliveryDes.setVisibility(View.GONE);
-        }else{
-            mHintCod = prefixShip +" " + mCodDeductP+p_unit + " " + suffixShip;
-            tv_pm_useDeliveryDes.setText(mHintCod);
-        }
-
-        if(mCouponP == 0){
-            rl_discount.setVisibility(View.GONE);
-        }else{
-            tv_payDiscountP.setVisibility(View.VISIBLE);
-        }
-
-        tv_payTotalP.setText(MathUtil.Companion.formatPrice(mAmtP));
-        tv_payProductP.setText(MathUtil.Companion.formatPrice(mProductP));
-        tv_payDiscountP.setText("-" +  MathUtil.Companion.formatPrice(mCouponP));
     }
 
     @Override
     protected void lazyFetchData() {
-
-    }
-
-    @Override
-    public void fetchFail(String failReason) {
-        ToastUtil.showToast(failReason);
+        if(mPayType == 0){
+            mRequestOrderFrom.setPaymentType(PAYMENT_TYPE_OCEANPAY);
+        }else if(mPayType == 1){
+            mRequestOrderFrom.setPaymentType(PAYMENT_TYPE_PAYPAL);
+        }else if(mPayType == 2){
+            mRequestOrderFrom.setPaymentType(PAYMENT_TYPE_COD);
+        }
+        mPresenter.refreshPayOrder(isInit,mRequestOrderFrom);
     }
 
     @Override
@@ -268,6 +337,8 @@ public class PaymentFragment extends BaseMvpQmuiFragment<PaymentPresenter> imple
         if(result.getPhoneCheck()){
             mPayBindDialog.syncData(mPhoneNum);
             mPayBindDialog.show();
+        }else{
+            mPresenter.codPay(mOrderId,mPhoneNum,"");
         }
     }
 
@@ -277,9 +348,7 @@ public class PaymentFragment extends BaseMvpQmuiFragment<PaymentPresenter> imple
         popBackStack();
         Bundle bundle = new Bundle();
         bundle.putString("orderId",result.getUuid());
-        bundle.putString("orderType",result.getStateDesc());
-        Intent goSuccess = HolderActivity.of(getContext(), PayStatusFragment.class,bundle);
-        getContext().startActivity(goSuccess);
+        HolderActivity.startFragment(getContext(), com.project.app.fragment.pay.PayStatusFragment.class,bundle);
     }
 
     @Override
@@ -292,8 +361,7 @@ public class PaymentFragment extends BaseMvpQmuiFragment<PaymentPresenter> imple
                 bundle.putString("webUrl",approvalURL);
                 bundle.putString("type","0");
                 bundle.putString("payUuid",result.getOrderUuid());
-                Intent goWebPay = HolderActivity.of(getContext(), WebExplorerFragment.class,bundle);
-                getContext().startActivity(goWebPay);
+                HolderActivity.startFragment(getContext(),WebExplorerFragment.class,bundle);
             }
         }
     }
@@ -307,15 +375,49 @@ public class PaymentFragment extends BaseMvpQmuiFragment<PaymentPresenter> imple
             bundle.putString("webUrl", url);
             bundle.putString("type","3");
             bundle.putString("payParams", result);
-            bundle.putString("payUuid","");
-            Intent intent = HolderActivity.of(getContext(), WebExplorerFragment.class,bundle);
-            getContext().startActivity(intent);
+            bundle.putString("payUuid",mOrderId);
+            HolderActivity.startFragment(getContext(),WebExplorerFragment.class,bundle);
         }
     }
 
     @Override
     public void fetchCreditPayFail(String result) {
         ToastUtil.showToast(result);
+    }
+
+    @Override
+    public void fetchRefreshOrderSuccess(PayOrderBean result) {      //生成订单成功
+        isInit = true;                                              //已经初始化
+        if(emptyView.getVisibility() == View.VISIBLE){
+            emptyView.setVisibility(View.GONE);
+            srl_payParent.setVisibility(View.VISIBLE);
+        }
+        if(result != null){
+            isShippingCart = false;
+            entiryGlobalValue(result);
+        }
+    }
+
+    //生成订单成功
+    @Override
+    public void fetchCreateOrderSuccess(PayOrderBean result) {
+        if(result == null){
+            return;
+        }
+        if(!TextUtils.isEmpty(result.getUuid())){
+            mOrderId = result.getUuid();
+            acrossCheck();
+        }
+    }
+
+    @Override
+    public void fetchFail(String failReason) {
+        ToastUtil.showToast(failReason);
+        isInit = true;              //已经初始化
+        if(emptyView.getVisibility() == View.VISIBLE){
+            emptyView.setVisibility(View.GONE);
+            srl_payParent.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

@@ -4,9 +4,9 @@ import android.text.TextUtils;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.project.app.utils.StringUtils;
 import com.project.app.R;
 import com.project.app.bean.ScCashBean;
+import com.project.app.utils.StringUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -31,6 +31,7 @@ public class ScHistoryAdapter extends BaseQuickAdapter<ScCashBean.CashItem, Base
         }
         if(cashItem.getStatus() == 0){
             helper.setText(R.id.tv_sc_money,"-" + cashItem.getValue());
+            helper.setTextColor(R.id.tv_sc_money,getContext().getResources().getColor(R.color.color_red));
         }else{
             helper.setText(R.id.tv_sc_money,"+" + cashItem.getValue());
         }

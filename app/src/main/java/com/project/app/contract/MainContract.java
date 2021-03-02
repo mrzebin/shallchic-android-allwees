@@ -8,7 +8,7 @@ public interface MainContract {
 
     }
 
-    interface View extends BaseView{
+    interface View extends BaseView {
 
     }
 

@@ -1,15 +1,35 @@
 package com.project.app.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CartItemReqBean {
-    String shippingAddressUuid;
-    String userCouponUuid;
-    List<Items> items;
-    String type;
-    Double amtCash;
-    String platform;
+    String shippingAddressUuid = "";
+    String userCouponUuid = "";
+    List<Items> items = new ArrayList<>();
+    String type = "";
+    Double amtCash = 0.0;
+    String platform = "";
     String Xplatform = "ANDROID";
+    String uuid = "";
+    String paymentType = null;
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getPaymentType() {
+        return paymentType;
+    }
+
+    public void setPaymentType(String paymentType) {
+        this.paymentType = paymentType;
+    }
+
     //注意 x-platform 头部添加ANDROID
 
     public String getXplatform() {
@@ -68,9 +88,9 @@ public class CartItemReqBean {
     }
 
     public static class Items{
-        private String skuUuid;
-        private Integer quantity;
-        private String productUuid;
+        private String skuUuid = "";
+        private Integer quantity = 0;
+        private String productUuid = "";
 
         public String getProductUuid() {
             return productUuid;

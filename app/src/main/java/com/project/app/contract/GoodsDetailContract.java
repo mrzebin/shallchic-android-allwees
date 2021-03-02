@@ -2,6 +2,7 @@ package com.project.app.contract;
 
 import com.hb.basemodel.base.BaseModelResponeListener;
 import com.hb.basemodel.base.BaseView;
+import com.project.app.base.BasePresenter;
 import com.project.app.bean.GoodsDetailInfoBean;
 import com.project.app.bean.GoodsRelationBean;
 
@@ -14,12 +15,12 @@ public interface GoodsDetailContract {
     interface Model{
         void fetchCoverList(String uuid, BaseModelResponeListener listener);
         void fetchRelativeBox(String uuid, BaseModelResponeListener listener);
-        void operationFavoriteAdd(String uuid,BaseModelResponeListener listener);
-        void operationFavoriteCancel(String uuid,BaseModelResponeListener listener);
-        void operationAddGoods(int count,boolean incr,String skuUuid,BaseModelResponeListener listener);
+        void operationFavoriteAdd(String uuid, BaseModelResponeListener listener);
+        void operationFavoriteCancel(String uuid, BaseModelResponeListener listener);
+        void operationAddGoods(int count, boolean incr, String skuUuid, BaseModelResponeListener listener);
     }
 
-    interface View extends BaseView{
+    interface View extends BaseView {
         void fetchCoverSuccess(GoodsDetailInfoBean result);
         void fetchCoverRSuccess(List<GoodsRelationBean> result);
         void fetchSuccess(String msg);
@@ -29,7 +30,7 @@ public interface GoodsDetailContract {
         void refreshRemoveWishFavorite();
     }
 
-    interface Presenter{
+    interface Presenter extends BasePresenter.IBasePresenter {
         void fetchCoverList(String uuid);
         void fetchRelativeBox(String uuid);
         void operationFavoriteAdd(String uuid);

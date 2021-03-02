@@ -8,7 +8,9 @@ import com.hb.basemodel.base.BaseUserInfo;
 import com.hb.basemodel.config.BaseUrlConfig;
 import com.hb.basemodel.config.api.UrlConfig;
 import com.hb.basemodel.http.OkHttpUtils;
+import com.hb.basemodel.utils.JsonUtils;
 import com.project.app.base.BaseObjectBean;
+import com.project.app.bean.LoginTokenMeBean;
 import com.project.app.contract.LoginContract;
 
 import java.util.ArrayList;
@@ -39,32 +41,39 @@ public class LoginModel implements LoginContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+//                listener.onFail(e.getMessage());
             }
         },params);
     }
 
     @Override
     public void login(Map<String, String> requestMap, BaseModelResponeListener listener) {
-        String requestType = "1";
+        String requestType = "0";
         String url = BaseUrlConfig.getRootHost() + UrlConfig.LOGIN_LOGIN_ULR;
-        List<OkHttpUtils.Param> params = new ArrayList<>();
+        HashMap<String,String> paramMap = new HashMap<>();
 
         for(Map.Entry<String,String> cell : requestMap.entrySet()){
-            params.add(new OkHttpUtils.Param(cell.getKey(),cell.getValue()));
+            paramMap.put(cell.getKey(),cell.getValue());
         }
-        OkHttpUtils.post(url, requestType,new OkHttpUtils.ResultCallback<String>() {
+
+        String converUrl = OkHttpUtils.attachHttpGetParams(url,paramMap);    //注意这个接口不是标准的post请求
+        List<OkHttpUtils.Param> params = new ArrayList<>();
+
+        OkHttpUtils.post(converUrl, requestType,new OkHttpUtils.ResultCallback<String>() {
             @Override
             public void onSuccess(String response){
                 if(!TextUtils.isEmpty(response)){
-                    listener.onSuccess(response);
-                }else{
-                    listener.onFail("login error");
+                    LoginTokenMeBean tokenBean = JsonUtils.deserialize(response,LoginTokenMeBean.class);
+                    if(tokenBean.getCode() == 1){
+                        listener.onSuccess(tokenBean);
+                    }else{
+                        listener.onFail(tokenBean.getMsg());
+                    }
                 }
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+
             }
         },params);
     }
@@ -85,7 +94,7 @@ public class LoginModel implements LoginContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+//                listener.onFail(e.getMessage());
             }
         });
     }
@@ -107,7 +116,7 @@ public class LoginModel implements LoginContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+//                listener.onFail(e.getMessage());
             }
         });
     }

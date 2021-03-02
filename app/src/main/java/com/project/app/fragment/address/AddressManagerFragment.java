@@ -1,6 +1,5 @@
 package com.project.app.fragment.address;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -16,6 +15,9 @@ import com.hb.basemodel.utils.ToastUtil;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
+import com.scwang.smart.refresh.layout.SmartRefreshLayout;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.project.app.R;
 import com.project.app.activity.HolderActivity;
 import com.project.app.adapter.AddressMaangerAdapter;
@@ -24,6 +26,7 @@ import com.project.app.bean.AddressBean;
 import com.project.app.contract.AddressManagerContract;
 import com.project.app.fragment.home.ShippingAddressFragment;
 import com.project.app.presenter.AddressManagerPresenter;
+import com.project.app.ui.widget.GlobalClassicsHeader;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -32,15 +35,15 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class AddressManagerFragment extends BaseMvpQmuiFragment<AddressManagerPresenter> implements AddressManagerContract.View, SwipeRefreshLayout.OnRefreshListener {
+public class AddressManagerFragment extends BaseMvpQmuiFragment<AddressManagerPresenter> implements AddressManagerContract.View{
     @BindView(R.id.srl_addressBook)
-    SwipeRefreshLayout mSwipeRefresh;
+    SmartRefreshLayout srl_addressBook;
     @BindView(R.id.rlv_addressList)
     RecyclerView rlv_addressList;
     @BindView(R.id.btn_userA)
@@ -49,9 +52,10 @@ public class AddressManagerFragment extends BaseMvpQmuiFragment<AddressManagerPr
     TextView tv_topTitle;
     @BindView(R.id.iv_back)
     ImageView iv_back;
+    @BindView(R.id.tv_addressBookFlavor)
+    TextView tv_addressBookFlavor;
 
     private String mType = "0"; //0购物车进入 1设置进入(方便通知刷新地址)
-    private boolean isPrepared = false;
     private AddressMaangerAdapter mAdapter;
     private List<AddressBean.AddressItem> addressList;
 
@@ -76,13 +80,13 @@ public class AddressManagerFragment extends BaseMvpQmuiFragment<AddressManagerPr
     private void initWidget() {
         EventBus.getDefault().register(this);
         QMUIStatusBarHelper.setStatusBarLightMode(getActivity());
-        mSwipeRefresh.setOnRefreshListener(this);
-        mSwipeRefresh.setColorSchemeResources(R.color.allwees_theme_color,android.R.color.holo_blue_dark,android.R.color.holo_orange_dark);
-
         addressList = new ArrayList<>();
         mPresenter = new AddressManagerPresenter();
         mPresenter.attachView(this);
-
+        initSmartRefreshLayout();
+        if(mType.equals("1")){
+            tv_addressBookFlavor.setText(getResources().getString(R.string.address_b_file));
+        }
         rlv_addressList.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new AddressMaangerAdapter(addressList,Integer.valueOf(mType));
         mAdapter.addFooterView(getFooterView());
@@ -102,11 +106,17 @@ public class AddressManagerFragment extends BaseMvpQmuiFragment<AddressManagerPr
         }
     }
 
-    @Override
-    public void onRefresh() {
-        isPrepared = false;
-        mPresenter.fetchAddressList();
-        initLoadStyle();
+    private void initSmartRefreshLayout() {
+        srl_addressBook.setRefreshHeader(new GlobalClassicsHeader(getContext()));
+        srl_addressBook.setHeaderHeight(60);
+
+        srl_addressBook.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                mPresenter.fetchAddressList();
+                srl_addressBook.finishRefresh(Constant.DEFAULT_SMARTLOADING_DELAY_TIMEOUT);
+            }
+        });
     }
 
     private View getFooterView() {
@@ -114,8 +124,7 @@ public class AddressManagerFragment extends BaseMvpQmuiFragment<AddressManagerPr
         view.setOnClickListener(view1 -> {
             Bundle bundle = new Bundle();
             bundle.putInt("type",ShippingAddressFragment.INDEX_ACTION_ADD_ADDRESS_ME);
-            Intent goEditAddress = HolderActivity.of(getContext(), ShippingAddressFragment.class,bundle);
-            getContext().startActivity(goEditAddress);
+            HolderActivity.startFragment(getContext(),ShippingAddressFragment.class,bundle);
         });
         return view;
     }
@@ -128,17 +137,6 @@ public class AddressManagerFragment extends BaseMvpQmuiFragment<AddressManagerPr
                 popBackStack();
                 break;
         }
-    }
-
-    private void initLoadStyle(){
-        if(!isPrepared){
-            mSwipeRefresh.setRefreshing(true);
-        }
-        mSwipeRefresh.postDelayed(() -> {
-            if(mSwipeRefresh != null){
-                mSwipeRefresh.setRefreshing(false);
-            }
-        },Constant.DELAY_LOADING_TIME_OUT);
     }
 
     private void showDeleteDialog(int position,String addressId){
@@ -173,7 +171,6 @@ public class AddressManagerFragment extends BaseMvpQmuiFragment<AddressManagerPr
     @Override
     protected void lazyFetchData() {
         mPresenter.fetchAddressList();
-        initLoadStyle();
     }
 
     @Override
@@ -198,27 +195,24 @@ public class AddressManagerFragment extends BaseMvpQmuiFragment<AddressManagerPr
 
     @Override
     public void fetchAddressSuccess(AddressBean result) {
+        srl_addressBook.finishRefresh();
         if(result != null){
-            isPrepared = true;
             if(DataUtil.idNotNull(result.getResults())){
                 addressList = result.getResults();
-                mAdapter.setNewInstance(result.getResults());
-            }else{
-                addressList.clear();
-                mAdapter.setNewInstance(result.getResults());
+                mAdapter.repalceAllData(result.getResults());
             }
         }
     }
 
     @Override
     public void deleteAddressSuccess() {
-        mPresenter.fetchAddressList();
+        lazyFetchData();
         EventBus.getDefault().post(new RefreshDataEvent(Constant.EVENT_ADD_ADDRESS_SURE));
     }
 
     @Override
     public void selectAddressSuccess() {
-        mPresenter.fetchAddressList();
+        lazyFetchData();
         EventBus.getDefault().post(new RefreshDataEvent(Constant.EVENT_ADD_ADDRESS_SURE));
     }
 

@@ -16,6 +16,7 @@ import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.project.app.R;
 import com.project.app.adapter.ChoiceCountryAdapter;
 import com.project.app.base.BaseMvpQmuiFragment;
+import com.project.app.bean.AppLocaleBean;
 import com.project.app.bean.CountryCropBean;
 import com.project.app.contract.CCountryContract;
 import com.project.app.presenter.CCountryPresenter;
@@ -50,8 +51,8 @@ public class SelectCountryFragment extends BaseMvpQmuiFragment<CCountryPresenter
     private List<CountryCropBean.CountryItem> mData = new ArrayList<>();
     private ChoiceCountryAdapter mAdapter;
 
-    public static SelectCountryFragment newInstance() {
-        return new SelectCountryFragment();
+    public static com.project.app.fragment.address.SelectCountryFragment newInstance() {
+        return new com.project.app.fragment.address.SelectCountryFragment();
     }
 
     @Override
@@ -69,7 +70,7 @@ public class SelectCountryFragment extends BaseMvpQmuiFragment<CCountryPresenter
         mPresenter.attachView(this);
         mSwipeRefresh.setOnRefreshListener(this);
         QMUIStatusBarHelper.setStatusBarLightMode(getActivity());
-        mSwipeRefresh.setColorSchemeResources(R.color.allwees_theme_color,android.R.color.holo_blue_dark,android.R.color.holo_orange_dark);
+        mSwipeRefresh.setColorSchemeResources(R.color.theme_color,android.R.color.holo_blue_dark,android.R.color.holo_orange_dark);
         rlv_country.setLayoutManager(new LinearLayoutManager(getContext()));
         Drawable drawable = ContextCompat.getDrawable(getActivity(), R.drawable.line_divider);
         rlv_country.addItemDecoration(new SimpleDividerItemDecoration(getContext(),drawable,1));
@@ -83,7 +84,9 @@ public class SelectCountryFragment extends BaseMvpQmuiFragment<CCountryPresenter
                 break;
             case R.id.tv_sureChoiceC:
                 if(mSelectCountry != null){
-                    refreshLocale();
+                    if(mSelectCountry != null){
+                        mPresenter.fetchLocaleInfo(mSelectCountry.getRegion());
+                    }
                     RefreshDataEvent event = new RefreshDataEvent(Constant.EVENT_INTENT_COUNTRY_SELECT_INFO);
                     event.setData(JsonUtils.serialize(mSelectCountry));
                     EventBus.getDefault().post(event);
@@ -91,19 +94,6 @@ public class SelectCountryFragment extends BaseMvpQmuiFragment<CCountryPresenter
                 }
                 break;
         }
-    }
-
-    /**
-     * 自定义
-     */
-    private void refreshLocale() {
-        LocaleUtil.getInstance().setLocaleCustom(true);
-        LocaleUtil.getInstance().setLocalCustomRegion(mSelectCountry.getRegion());
-        LocaleUtil.getInstance().setLocalCustomSymbol(mSelectCountry.getRegion());
-        LocaleUtil.getInstance().setLocalCustomNameEn(mSelectCountry.getNameEn());
-        LocaleUtil.getInstance().setLocaleCustomCountryFlagCloumn(mSelectCountry.getColNum());
-        LocaleUtil.getInstance().setLocaleCustomCountryFlagRow(mSelectCountry.getRowNum());
-        LocaleUtil.getInstance().setCustomPhoneAreaCode(mSelectCountry.getPhoneAreaCode());
     }
 
     @Override
@@ -133,7 +123,7 @@ public class SelectCountryFragment extends BaseMvpQmuiFragment<CCountryPresenter
                     mSelectCountry = item;
                     mChoiceIndex = position;
                     tv_sureChoiceC.setClickable(true);
-                    tv_sureChoiceC.setTextColor(getResources().getColor(R.color.allwees_theme_color));
+                    tv_sureChoiceC.setTextColor(getResources().getColor(R.color.theme_color));
                     for(int i=0;i<mData.size();i++){
                         mData.get(i).setSelect(false);
                     }
@@ -156,6 +146,16 @@ public class SelectCountryFragment extends BaseMvpQmuiFragment<CCountryPresenter
     @Override
     public void fetchFail(String failReason) {
         ToastUtil.showToast(failReason);
+    }
+    //语言切换成功
+    @Override
+    public void fetchLocaleInofSuccess(AppLocaleBean bean) {
+        LocaleUtil.getInstance().setLocaleBean(bean);   //设置语言环境
+    }
+    //语言切换失败
+    @Override
+    public void fetchLocaleInfoFail(String msg) {
+        ToastUtil.showToast(msg);
     }
 
     @Override

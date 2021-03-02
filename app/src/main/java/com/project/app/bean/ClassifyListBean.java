@@ -1,15 +1,16 @@
 package com.project.app.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClassifyListBean {
-    private int current;
-    private int lastPage;
-    private int size;
-    private int total;
-    private int count;
-    private boolean hasMorePages;
-    private List<ClassifyItem> results;
+    private int current = 0;
+    private int lastPage = 0;
+    private int size = 0;
+    private int total = 0;
+    private int count = 0;
+    private boolean hasMorePages = false;
+    private List<ClassifyItem> results = new ArrayList<>();
 
     public int getCurrent() {
         return current;
@@ -68,19 +69,64 @@ public class ClassifyListBean {
     }
 
     public static class ClassifyItem{
-        String uuid;
-        private int status;
-        private String name;
-        private String mainPhoto;
-        private int salesTotal;
-        private double priceOrigin;
-        private double priceRetail;
-        private double priceShip;
-        private int marketingType;
-        private int displayAs;
-        private String statusDesc;
-        private String discountOff;
-        private String currency;
+        String uuid = "";
+        private int status = 0;
+        private String name = "";
+        private String nameEn = "";
+        private String nameAr = "";
+        private String mainPhoto = "";
+        private int salesTotal = 0;
+        private double priceOrigin = 0.0;
+        private double priceRetail = 0.0;
+        private double priceShip = 0.0;
+        private double purchasePrice = 0.0;
+        private int marketingType = 0;
+        private int displayAs = 0;
+        private String statusDesc = "";
+        private String discountOff = "";
+        private String currency = "";
+        private String weight = "";
+        private String manageType = "";
+
+        public String getNameEn() {
+            return nameEn;
+        }
+
+        public void setNameEn(String nameEn) {
+            this.nameEn = nameEn;
+        }
+
+        public String getNameAr() {
+            return nameAr;
+        }
+
+        public void setNameAr(String nameAr) {
+            this.nameAr = nameAr;
+        }
+
+        public double getPurchasePrice() {
+            return purchasePrice;
+        }
+
+        public void setPurchasePrice(double purchasePrice) {
+            this.purchasePrice = purchasePrice;
+        }
+
+        public String getWeight() {
+            return weight;
+        }
+
+        public void setWeight(String weight) {
+            this.weight = weight;
+        }
+
+        public String getManageType() {
+            return manageType;
+        }
+
+        public void setManageType(String manageType) {
+            this.manageType = manageType;
+        }
 
         public String getCurrency() {
             return currency;

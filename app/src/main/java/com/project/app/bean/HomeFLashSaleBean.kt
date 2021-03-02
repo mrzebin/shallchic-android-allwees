@@ -1,4 +1,4 @@
-package com.project.app.bean
+package com.project.app.bean;
 
 /**
  * 首页闪购对象

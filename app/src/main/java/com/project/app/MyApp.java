@@ -1,8 +1,10 @@
 package com.project.app;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Process;
 import android.os.StrictMode;
 import android.util.Log;
 
@@ -15,6 +17,7 @@ import com.hb.basemodel.config.Constant;
 import com.hb.basemodel.utils.AppManager;
 import com.project.app.config.AppEnvironmentResConfig;
 import com.project.app.net.NetWorkMonitorManager;
+import com.project.app.utils.DateUtil;
 import com.qmuiteam.qmui.arch.QMUISwipeBackActivityManager;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.header.ClassicsHeader;
@@ -24,8 +27,12 @@ import com.scwang.smart.refresh.layout.api.RefreshHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.DefaultRefreshFooterCreator;
 import com.scwang.smart.refresh.layout.listener.DefaultRefreshHeaderCreator;
+import com.xiaomi.channel.commonutils.logger.LoggerInterface;
+import com.xiaomi.mipush.sdk.Logger;
+import com.xiaomi.mipush.sdk.MiPushClient;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 import androidx.multidex.MultiDex;
@@ -62,6 +69,8 @@ public class MyApp extends MultiDexApplication {
         configCrash();
         initSmartRefreshLayout();
         initAF();
+        initSharePreferences();
+        initMiuiPush();
     }
 
     private void initAF() {
@@ -88,9 +97,55 @@ public class MyApp extends MultiDexApplication {
                 Log.d("LOG_TAG", "error onAttributionFailure : " + errorMessage);
             }
         };
-        String afKey = getResources().getString(R.string.af_dev_key);
-        AppsFlyerLib.getInstance().init(afKey, conversionListener, getApplicationContext());
+
+        AppsFlyerLib.getInstance().init(Constant.AF_DEV_KEY, conversionListener, getApplicationContext());
         AppsFlyerLib.getInstance().start(this);
+    }
+
+    private void initSharePreferences() {
+        DateUtil.fetchSystemDayId();
+    }
+
+    //注册小米注册
+    private void initMiuiPush() {
+        //初始化push推送服务
+        if(shouldInit()){
+            MiPushClient.registerPush(this, Constant.MIUI_PUSH_APPID, Constant.MIUI_PUSH_APPKEY);
+        }
+
+        //打开Log
+        LoggerInterface newLogger = new LoggerInterface() {
+            @Override
+            public void setTag(String tag) {
+                // ignore
+            }
+
+            @Override
+            public void log(String content, Throwable t) {
+                Log.d(TAG, content, t);
+            }
+
+            @Override
+            public void log(String content) {
+                Log.d(TAG, content);
+            }
+        };
+        Logger.setLogger(this, newLogger);
+    }
+    private String TAG = "MyApp";
+
+
+    private boolean shouldInit() {
+        ActivityManager am = ((ActivityManager) getSystemService(Context.ACTIVITY_SERVICE));
+        List<ActivityManager.RunningAppProcessInfo> processInfos = am.getRunningAppProcesses();
+        String mainProcessName = getApplicationInfo().processName;
+        int myPid = Process.myPid();
+        for (ActivityManager.RunningAppProcessInfo info : processInfos) {
+            if (info.pid == myPid && mainProcessName.equals(info.processName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void initResConfig(Context context){
@@ -109,7 +164,6 @@ public class MyApp extends MultiDexApplication {
             rootDirFile.mkdirs();
         }
     }
-
 
     private void initSmartRefreshLayout() {
         SmartRefreshLayout.setDefaultRefreshHeaderCreator(new DefaultRefreshHeaderCreator() {

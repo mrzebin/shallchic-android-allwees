@@ -22,12 +22,18 @@ public class BaiduPresenter extends BasePresenter<BaiduContract.View> implements
         model.login(name, passowrd, new BaiduContract.Model.ModelListener() {
             @Override
             public void complete(String result) {
+                if(mView == null){
+                    return;
+                }
                 mView.stopLoading();
                 mView.loginSuccess(result);
             }
 
             @Override
             public void fail(String result) {
+                if(mView == null){
+                    return;
+                }
                 mView.stopLoading();
                 mView.loginFail(result);
             }

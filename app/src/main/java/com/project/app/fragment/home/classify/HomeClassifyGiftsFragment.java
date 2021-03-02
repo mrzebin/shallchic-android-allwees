@@ -15,8 +15,7 @@ import com.hb.basemodel.event.RefreshDataEvent;
 import com.hb.basemodel.other.UserUtil;
 import com.hb.basemodel.utils.DataUtil;
 import com.hb.basemodel.utils.RecycerLoadMoreScrollView;
-import com.project.app.config.AppEnvironmentResConfig;
-import com.project.app.utils.StringUtils;
+import com.hb.basemodel.utils.SPManager;
 import com.hb.basemodel.utils.ToastUtil;
 import com.qmuiteam.qmui.arch.QMUIFragment;
 import com.qmuiteam.qmui.util.QMUIDisplayHelper;
@@ -34,12 +33,16 @@ import com.project.app.base.BaseMvpQmuiFragment;
 import com.project.app.bean.FreeGiftCouponBean;
 import com.project.app.bean.HomeFreeGiftBean;
 import com.project.app.bean.MarketGiftInfoBean;
+import com.project.app.config.AppEnvironmentResConfig;
+import com.project.app.config.AppsFlyConfig;
 import com.project.app.contract.NewFreeGiftContract;
 import com.project.app.presenter.NewFreeGiftPresenter;
 import com.project.app.ui.CustomViewPager;
 import com.project.app.ui.TranslatePageTransformer;
 import com.project.app.ui.dialog.GDBuyPopupDialogUtil;
+import com.project.app.utils.AppsFlyEventUtils;
 import com.project.app.utils.ItemSpaceDecoration;
+import com.project.app.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -54,7 +57,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class HomeClassifyGiftsFragment extends BaseMvpQmuiFragment<NewFreeGiftPresenter> implements NewFreeGiftContract.View,SwipeRefreshLayout.OnRefreshListener {
+public class HomeClassifyGiftsFragment extends BaseMvpQmuiFragment<NewFreeGiftPresenter> implements NewFreeGiftContract.View, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.srl_addMore)
     SwipeRefreshLayout mSwipeRefresh;
     @BindView(R.id.sv_more_gifts)
@@ -124,7 +127,7 @@ public class HomeClassifyGiftsFragment extends BaseMvpQmuiFragment<NewFreeGiftPr
     private void initWidget() {
         mSwipeRefresh.setOnRefreshListener(this);
         mSwipeRefresh.setColorSchemeResources(R.color.color_ff45,android.R.color.holo_blue_dark,android.R.color.holo_orange_dark);
-        LinearLayoutManager manager = new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false);
+        LinearLayoutManager manager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL,false);
         rlv_gifts.setLayoutManager(manager);
         mNewFreeAdapter = new NewFreeGiftAdapter(mGiftDatas);
         rlv_gifts.setAdapter(mNewFreeAdapter);
@@ -155,7 +158,6 @@ public class HomeClassifyGiftsFragment extends BaseMvpQmuiFragment<NewFreeGiftPr
 
             }
         });
-
         initViewSprite();
         initTabSegment();
     }
@@ -182,7 +184,7 @@ public class HomeClassifyGiftsFragment extends BaseMvpQmuiFragment<NewFreeGiftPr
         builder.setTypeface(null, Typeface.DEFAULT);
         builder.setNormalColor(mContext.getResources().getColor(R.color.color_ffa752))
                 .setSelectColor(mContext.getResources().getColor(R.color.color_ffa752))
-                .setTextSize(QMUIDisplayHelper.dp2px(mContext,14),QMUIDisplayHelper.dp2px(mContext,16))
+                .setTextSize(QMUIDisplayHelper.dp2px(mContext,14), QMUIDisplayHelper.dp2px(mContext,16))
                 .setDynamicChangeIconColor(false)
                 .skinChangeWithTintColor(false);
 
@@ -206,7 +208,11 @@ public class HomeClassifyGiftsFragment extends BaseMvpQmuiFragment<NewFreeGiftPr
 
             @Override
             public void onTabUnselected(int index) {
-
+                if(index == 0){
+                    AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_NEW_USER_GIFT_BELOW5);
+                }else{
+                    AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_NEW_USER_GIFT_INFLUENCE);
+                }
             }
 
             @Override
@@ -234,6 +240,7 @@ public class HomeClassifyGiftsFragment extends BaseMvpQmuiFragment<NewFreeGiftPr
     public void onClickViewed(View view){
         switch (view.getId()){
             case R.id.tv_getFreeGift:
+                AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_NEW_USER_GIFT_COUPON_GET);
                 if(!UserUtil.getInstance().isLogin()){
                     getContext().startActivity(new Intent(getContext(), LoginActivity.class));
                     return;
@@ -242,6 +249,7 @@ public class HomeClassifyGiftsFragment extends BaseMvpQmuiFragment<NewFreeGiftPr
                 }
                 break;
             case R.id.tv_applyGiftC:
+                AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_NEW_USER_GIFT_APPLY);
                 if(!UserUtil.getInstance().isLogin()){
                     getContext().startActivity(new Intent(getContext(), LoginActivity.class));
                     return;
@@ -327,6 +335,9 @@ public class HomeClassifyGiftsFragment extends BaseMvpQmuiFragment<NewFreeGiftPr
         if(result != null){
             if(result.getCoupon() == null){
                 return;
+            }
+            if(result.getApplied() || result.getCompleted()){
+                SPManager.sPutBoolean(Constant.SP_HOME_POPULAR_FLOAT_GIFT,true);
             }
             MarketGiftInfoBean.CouponItem coupon = result.getCoupon();
             int cStatus = coupon.getStatus();

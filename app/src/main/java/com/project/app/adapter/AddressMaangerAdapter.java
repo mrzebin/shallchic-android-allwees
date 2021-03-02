@@ -1,6 +1,5 @@
 package com.project.app.adapter;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -9,12 +8,12 @@ import android.widget.CheckBox;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.hb.basemodel.utils.JsonUtils;
-import com.project.app.utils.StringUtils;
 import com.project.app.R;
 import com.project.app.activity.HolderActivity;
 import com.project.app.bean.AddressBean;
 import com.project.app.fragment.home.ShippingAddressFragment;
 import com.project.app.utils.LocaleUtil;
+import com.project.app.utils.StringUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -46,56 +45,55 @@ public class AddressMaangerAdapter extends BaseQuickAdapter<AddressBean.AddressI
         String address2        = item.getAddressLine2();
         String phoneNum        = item.getPhone();
 
+        StringBuffer holeName = new StringBuffer();
         if(!TextUtils.isEmpty(item.getFirstName())){
-            helper.setText(R.id.tv_aPeopleName,item.getFirstName()+item.getLastName());
+            holeName.append(item.getFirstName());
+        }
+        if(!TextUtils.isEmpty(item.getLastName())){
+            holeName.append(item.getLastName());
+        }
+        //显示完成的名字
+        if(!TextUtils.isEmpty(holeName.toString())){
+            helper.setText(R.id.tv_aPeopleName,holeName.toString());
         }
 
-        StringBuilder sb_splid = new StringBuilder();
+        StringBuilder holeAddress = new StringBuilder();
         if(!TextUtils.isEmpty(addressStreet)){
-            sb_splid.append(addressStreet + " ");
+            holeAddress.append(addressStreet + " ");
         }
 
         if(!TextUtils.isEmpty(addressCity)){
-            sb_splid.append(addressCity+" ");
+            holeAddress.append(addressCity+" ");
         }
         if(!TextUtils.isEmpty(addressProvince)){
-            sb_splid.append(addressProvince + " ");
+            holeAddress.append(addressProvince + " ");
         }
         if(!TextUtils.isEmpty(addressCountry)){
-            sb_splid.append(addressCountry+" ");
+            holeAddress.append(addressCountry+" ");
         }
 
-        if(languageType.equals("en")){
-            if(!TextUtils.isEmpty(zipCode)){
-                sb_splid.append(zipCode + " ");
-            }
-        }else{
-            if(address1.contains("#")){
-                sb_splid.append(StringUtils.filterZipCode(address1) + " ");   //提取code码
-            }
+        if(!TextUtils.isEmpty(zipCode)){
+            holeAddress.append(zipCode + " ");
+        }
+
+        if(address1.contains("#")){
+            holeAddress.append(StringUtils.filterZipCode(address1) + " ");   //提取code码
         }
 
         if(!TextUtils.isEmpty(note)){
-            sb_splid.append(note + " ");
+            holeAddress.append(note + " ");
         }
 
-        if(languageType.equals("en")){
-            if(!TextUtils.isEmpty(address1)){
-                helper.setText(R.id.tv_firstAM,address1);
-            }
-            helper.setText(R.id.tv_cpSet,sb_splid.toString());
-        }else{
-            if(!TextUtils.isEmpty(address1)){
+        helper.setText(R.id.tv_cpSet,holeAddress.toString());
+
+        if(!TextUtils.isEmpty(address1)){
+            if(address1.contains("#")){
                 helper.setText(R.id.tv_firstAM, StringUtils.filterValidAddress(address1));  //提取地址详情
-            }
-            if(!TextUtils.isEmpty(address1) && address1.contains("#")){
-//                String arAddress = StringUtils.filterValidAddress(address1);   //提取address
-//                sb_splid.append(arAddress);
-                helper.setText(R.id.tv_cpSet,sb_splid.toString());
             }else{
-                helper.setText(R.id.tv_cpSet,sb_splid.toString());
+                helper.setText(R.id.tv_firstAM, address1);  //提取地址详情
             }
         }
+
         if(!TextUtils.isEmpty(phoneNum)){
             String areaNum  = ""; //区号
             if(phoneNum.contains("(")){
@@ -129,14 +127,21 @@ public class AddressMaangerAdapter extends BaseQuickAdapter<AddressBean.AddressI
             Bundle bundle = new Bundle();
             bundle.putInt("type", ShippingAddressFragment.INDEX_ACTION_EDIT);
             bundle.putString("data", JsonUtils.serialize(item));
-            Intent goNewAddress = HolderActivity.of(getContext(), ShippingAddressFragment.class,bundle);
-            getContext().startActivity(goNewAddress);
+            HolderActivity.startFragment(getContext(),ShippingAddressFragment.class,bundle);
         });
         helper.getView(R.id.tv_DeleteAddress).setOnClickListener(view -> {
             if(listener != null){
                 listener.oprDelete(position,item.getUuid());
             }
         });
+    }
+
+    public void repalceAllData(List<AddressBean.AddressItem> data){
+        if(mDatas.size() >0){
+            mDatas.clear();
+        }
+        mDatas.addAll(data);
+        notifyDataSetChanged();
     }
 
     public OpreationAddressListener listener;

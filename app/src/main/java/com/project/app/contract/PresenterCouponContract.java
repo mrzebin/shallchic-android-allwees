@@ -10,7 +10,7 @@ public interface PresenterCouponContract {
         void fetchUseCouponHistory(int page, int pageSize,String url, BaseModelResponeListener listener);
     }
 
-    interface View extends BaseView{
+    interface View extends BaseView {
         void fetchSuccess(RewardDashbBean result);
         void fetchFail(String failReason);
     }

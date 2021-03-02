@@ -16,23 +16,38 @@ public class HomeClassifyPresenter extends BasePresenter<HomeClassifyContract.Vi
 
     @Override
     public void fetchGoodsInfo(int page,int size,String no) {
+        if(mView == null){
+            return;
+        }
         if(!NetStateUtils.isHasNet()){
+            mView.stopLoading();
             mView.fetchNetWorkState(false);
             return;
         }
 
-        if(mView != null && page == 1){
-            mView.startLoading();
-        }
         model.fetchGoodsInfo(page,size,no,new BaseModelResponeListener<ClassifyListBean>() {
             @Override
             public void onSuccess(ClassifyListBean data) {
+                if(mView == null){
+                    return;
+                }
+                mView.stopLoading();
                 mView.fetchCategoryList(data);
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
+                mView.stopLoading();
                 mView.fetchFail(msg);
             }
         });
+    }
+
+    @Override
+    public void onDestoryView() {
+        mView = null;
+        System.gc();
     }
 }

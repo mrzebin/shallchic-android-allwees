@@ -35,7 +35,7 @@ public class ProvinceCityModel implements ProvinceCityContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+//                listener.onFail(e.getMessage());
             }
         });
     }
@@ -58,7 +58,7 @@ public class ProvinceCityModel implements ProvinceCityContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+//                listener.onFail(e.getMessage());
             }
         });
     }

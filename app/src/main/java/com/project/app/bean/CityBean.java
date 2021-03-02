@@ -1,9 +1,9 @@
 package com.project.app.bean;
 
 public class CityBean {
-    public String cName;
-    public String id;
-    public String name;
+    public String cName = "";
+    public String id = "";
+    public String name = "";
 
     public String getcName() {
         return cName;

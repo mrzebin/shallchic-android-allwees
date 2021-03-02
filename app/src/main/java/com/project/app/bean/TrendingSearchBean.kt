@@ -1,4 +1,4 @@
-package com.project.app.bean
+package com.project.app.bean;
 
 class TrendingSearchBean {
     var searchItems:List<SearchItem> = listOf()

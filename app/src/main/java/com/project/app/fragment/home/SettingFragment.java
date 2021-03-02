@@ -9,7 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hb.basemodel.config.Constant;
-import com.hb.basemodel.config.api.UrlConfig;
 import com.hb.basemodel.event.RefreshDataEvent;
 import com.hb.basemodel.other.UserUtil;
 import com.hb.basemodel.utils.AppUtils;
@@ -18,13 +17,14 @@ import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.project.app.R;
 import com.project.app.activity.HolderActivity;
-import com.project.app.activity.LanguageActivity;
 import com.project.app.activity.LoginActivity;
 import com.project.app.base.BaseMvpQmuiFragment;
-import com.project.app.fragment.WebExplorerFragment;
+import com.project.app.config.AppsFlyConfig;
 import com.project.app.fragment.account.AccountSetFragment;
 import com.project.app.fragment.address.AddressManagerFragment;
+import com.project.app.fragment.help.AboutUsFragment;
 import com.project.app.fragment.legal.LegalAndTermsFragment;
+import com.project.app.utils.AppsFlyEventUtils;
 import com.project.app.utils.ImageCropUtils;
 import com.project.app.utils.LocaleUtil;
 
@@ -46,8 +46,6 @@ public class SettingFragment extends BaseMvpQmuiFragment {
     ImageView iv_back;
     @BindView(R.id.ll_logout)
     LinearLayout ll_logout;
-    @BindView(R.id.ll_setLanguate)
-    LinearLayout ll_setLanguate;
     @BindView(R.id.tv_appVersion)
     TextView tv_appVersion;
     @BindView(R.id.iv_locateFlag)
@@ -66,51 +64,37 @@ public class SettingFragment extends BaseMvpQmuiFragment {
         initWidget();
     }
 
-    @OnClick({R.id.iv_back,R.id.ll_setLanguate,R.id.ll_accountSet,R.id.ll_manageAddress,R.id.ll_legalTerm,R.id.ll_contactUs,R.id.ll_aboutUs,R.id.ll_logout})
+    @OnClick({R.id.iv_back,R.id.ll_accountSet,R.id.ll_manageAddress,R.id.ll_legalTerm,R.id.ll_aboutUs,R.id.ll_logout})
     public void onClickViewed(View view){
         switch (view.getId()){
             case R.id.iv_back:
                 popBackStack();
                 break;
-            case R.id.ll_setLanguate:
-                getContext().startActivity(new Intent(getContext(), LanguageActivity.class));
-                break;
             case R.id.ll_accountSet:
-                Intent accountIntent = HolderActivity.of(getContext(), AccountSetFragment.class);
-                getContext().startActivity(accountIntent);
+                HolderActivity.startFragment(getContext(),AccountSetFragment.class);
+                AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_SETTINGS_ACCOUNT);
                 break;
             case R.id.ll_manageAddress:
                 if(UserUtil.getInstance().isLogin()){
                     Bundle bundle = new Bundle();
                     bundle.putString("type","1");
-                    Intent goAddress = HolderActivity.of(getContext(), AddressManagerFragment.class,bundle);
-                    getContext().startActivity(goAddress);
+                    HolderActivity.startFragment(getContext(),AddressManagerFragment.class,bundle);
+                    AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_SETTINGS_ADDRESS_MANAGER);
                 }else{
                     getContext().startActivity(new Intent(getContext(),LoginActivity.class));
                 }
                 break;
             case R.id.ll_legalTerm:
-                Intent goLegal = HolderActivity.of(getContext(), LegalAndTermsFragment.class);
-                getContext().startActivity(goLegal);
-                break;
-            case R.id.ll_contactUs:
+                HolderActivity.startFragment(getContext(),LegalAndTermsFragment.class);
+                AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_SETTINGS_ADDRESS_MANAGER);
                 break;
             case R.id.ll_aboutUs:
-                Bundle bundle = new Bundle();
-                String siteUrl = "";
-                if(LocaleUtil.getInstance().getLanguage().equals("en")) {
-                    siteUrl = UrlConfig.ABOUT_US_URL_EN;
-                }else{
-                    siteUrl = UrlConfig.ABOUT_US_URL;
-                }
-                bundle.putString("webUrl", siteUrl);
-                bundle.putString("type","1");
-                bundle.putString("title",settingItes.get(3));
-                Intent intent = HolderActivity.of(getContext(), WebExplorerFragment.class,bundle);
-                getContext().startActivity(intent);
+                AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_SETTINGS_ABOUTUS);
+                HolderActivity.startFragment(getContext(),AboutUsFragment.class);
                 break;
             case R.id.ll_logout:
                 exitApp();
+                AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_SETTINGS_LOGOUT);
                 break;
         }
     }
@@ -134,7 +118,7 @@ public class SettingFragment extends BaseMvpQmuiFragment {
     private void initWidget() {
         String[] settings     = getContext().getResources().getStringArray(R.array.setItem);
         settingItes.addAll(Arrays.asList(settings));
-        tv_appVersion.setText("v " + AppUtils.getVersionName(getContext()));
+        tv_appVersion.setText("v " + AppUtils.getVersionName(getContext()) + "." + AppUtils.getVersionCode(getContext()));
         switchNationFalg();
         hideShowExitButton();
     }

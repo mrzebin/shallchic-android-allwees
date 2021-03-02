@@ -18,11 +18,16 @@ public class OrderCancelPresenter extends BasePresenter<OrderCancelContract.View
         model.submitCancelReasonToService(orderItemUuid, orderUuid, reason, remarks, type, new BaseModelResponeListener<OrderDetailBean>() {
             @Override
             public void onSuccess(OrderDetailBean data) {
+                if(mView == null){
+                    return;
+                }
                 mView.submitCancalSuccess(data);
             }
-
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.submitCancalFail(msg);
             }
         });

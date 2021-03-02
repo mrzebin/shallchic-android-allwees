@@ -20,15 +20,24 @@ public class GoodsDetailPresenter extends BasePresenter<GoodsDetailContract.View
     @Override
     public void fetchCoverList(String uuid) {
         String url = BaseUrlConfig.getRootHost() + UrlConfig.GOODS_DETAILS_URL + uuid;
+        if(mView == null){
+            return;
+        }
         mView.startLoading();
         model.fetchCoverList(url, new BaseModelResponeListener<GoodsDetailInfoBean>() {
             @Override
             public void onSuccess(GoodsDetailInfoBean response) {
+                if(mView == null){
+                    return;
+                }
                 mView.stopLoading();
                 mView.fetchCoverSuccess(response);
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
                 mView.stopLoading();
                 mView.fetchFile(msg);
             }
@@ -41,10 +50,18 @@ public class GoodsDetailPresenter extends BasePresenter<GoodsDetailContract.View
         model.fetchRelativeBox(url, new BaseModelResponeListener<List<GoodsRelationBean>>() {
             @Override
             public void onSuccess(List<GoodsRelationBean> response) {
+                if(mView == null){
+                    return;
+                }
+                mView.stopLoading();
                 mView.fetchCoverRSuccess(response);
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
+                mView.stopLoading();
                 mView.fetchFile(msg);
             }
         });
@@ -55,6 +72,9 @@ public class GoodsDetailPresenter extends BasePresenter<GoodsDetailContract.View
         model.operationFavoriteAdd(uuid, new BaseModelResponeListener() {
             @Override
             public void onSuccess(Object data) {
+                if(mView == null){
+                    return;
+                }
                 mView.refreshWishFavorite();
             }
             @Override
@@ -69,6 +89,9 @@ public class GoodsDetailPresenter extends BasePresenter<GoodsDetailContract.View
         model.operationFavoriteCancel(uuid, new BaseModelResponeListener() {
             @Override
             public void onSuccess(Object data) {
+                if(mView == null){
+                    return;
+                }
                 mView.refreshRemoveWishFavorite();
             }
             @Override
@@ -80,16 +103,33 @@ public class GoodsDetailPresenter extends BasePresenter<GoodsDetailContract.View
 
     @Override
     public void operationAddGoods(int count, boolean incr, String skuUuid) {
+        if(mView == null){
+            return;
+        }
+        mView.startLoading();
         model.operationAddGoods(count, incr, skuUuid, new BaseModelResponeListener() {
             @Override
             public void onSuccess(Object data) {
+                if(mView == null){
+                    return;
+                }
+                mView.stopLoading();
                 mView.addCartSuccess(data.toString());
             }
             @Override
             public void onFail(String msg) {
+                if(mView == null){
+                    return;
+                }
+                mView.stopLoading();
                 mView.fetchFile(msg);
             }
         });
     }
 
+    @Override
+    public void onDestoryView() {
+        mView = null;
+        System.gc();
+    }
 }

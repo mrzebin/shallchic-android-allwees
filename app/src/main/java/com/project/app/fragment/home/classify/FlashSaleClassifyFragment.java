@@ -16,8 +16,6 @@ import com.hb.basemodel.utils.DataUtil;
 import com.hb.basemodel.utils.RecycerLoadMoreScrollView;
 import com.hb.basemodel.utils.SPManager;
 import com.hb.basemodel.utils.ToastUtil;
-import com.qmuiteam.qmui.arch.QMUIFragment;
-import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.project.app.R;
 import com.project.app.activity.LoginActivity;
 import com.project.app.adapter.FsChildAdapter;
@@ -25,12 +23,18 @@ import com.project.app.base.BaseMvpQmuiFragment;
 import com.project.app.bean.CartBuyDataBean;
 import com.project.app.bean.GoodsDetailInfoBean;
 import com.project.app.bean.HomeFLashSaleBean;
+import com.project.app.config.AppsFlyConfig;
 import com.project.app.contract.FlashSaleContract;
 import com.project.app.presenter.FlashSalePresenter;
+import com.project.app.ui.dialog.DInjectListener;
 import com.project.app.ui.dialog.GDBuyPopupDialogUtil;
 import com.project.app.ui.dialog.GDChooiceDialogUtil;
+import com.project.app.utils.AppsFlyEventUtils;
+import com.qmuiteam.qmui.arch.QMUIFragment;
+import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 
 import org.greenrobot.eventbus.EventBus;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,9 +94,19 @@ public class FlashSaleClassifyFragment extends BaseMvpQmuiFragment<FlashSalePres
         rlv_fsGoods.setLayoutManager(new LinearLayoutManager(getContext()));
         rlv_fsGoods.setAdapter(mAdapter);
 
-        mChooseGoodsUtil = new GDChooiceDialogUtil(getContext(), true, true, (count, isIncrease, skuUuid) -> {
-            if(checkLogin()){
-                mPresenter.operationAddGoods(count,isIncrease,skuUuid);
+        mChooseGoodsUtil = new GDChooiceDialogUtil(getContext(), true, true, new DInjectListener(){
+            @Override
+            public void lookForSizeChart() {
+                if(mData == null){
+                    return;
+                }
+            }
+            @Override
+            public void buy(int count, boolean isIncrease, @NotNull String skuUuid) {
+                if(checkLogin()){
+                    AppsFlyEventUtils.sendAppInnerEvent(AppsFlyConfig.AF_EVENT_FLASH_SALE_BUY_NOW);
+                    mPresenter.operationAddGoods(count,isIncrease,skuUuid);
+                }
             }
         });
 
@@ -102,6 +116,7 @@ public class FlashSaleClassifyFragment extends BaseMvpQmuiFragment<FlashSalePres
                 if(!TextUtils.isEmpty(item.getMainPhoto())){
                     mBuySuccessUtil.lazzyImageUrl(item.getMainPhoto());
                     mPresenter.fetchFSGoodsDetail(item.getUuid());
+                    mChooseGoodsUtil.choiceTargetGoods(item.getUuid());   //同步选择商品的productUuid
                 }
             }
         });
@@ -184,7 +199,6 @@ public class FlashSaleClassifyFragment extends BaseMvpQmuiFragment<FlashSalePres
         ll_endNoData.setVisibility(View.VISIBLE);
         return view;
     }
-
 
     @Override
     public void fetchGoodsInfoSuccess(GoodsDetailInfoBean result) {

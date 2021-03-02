@@ -15,7 +15,7 @@ public class AddMoreGoodsModel implements AddMoreGoodsContract.Model {
     @Override
     public void fetchGoodsList(String categoryNo, int currentPage, int pagetSize, BaseModelResponeListener listener) {
         String requestType = "0";
-        String url = BaseUrlConfig.getRootHost() + UrlConfig.ADD_MORE_GOODS_URL;
+        String url = BaseUrlConfig.getRootHost() + UrlConfig.ADD_MORE_GOODS_URL +categoryNo;
         HashMap<String,String> params = new HashMap<>();
         params.put("categoryNo",categoryNo);
         params.put("current",currentPage+"");
@@ -32,7 +32,7 @@ public class AddMoreGoodsModel implements AddMoreGoodsContract.Model {
             }
             @Override
             public void onFailure(Exception e) {
-                listener.onFail(e.getMessage());
+
             }
         });
     }
